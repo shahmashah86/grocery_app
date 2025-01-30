@@ -1,26 +1,57 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:grocery_app/domain/auth/auth_model/auth_model.dart';
+
+import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 
 import 'package:grocery_app/presentation/screens/admin/homscreen/admin_homescreen.dart';
 
 import 'package:grocery_app/presentation/screens/authentication/registration.dart';
 import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  late final TextEditingController usernameController;
+ late final TextEditingController passwordController;
+ 
+  late FocusNode usernameFocusNode;
+  late FocusNode passwordFocusNode;
+
+
+  @override
+  void initState() {
+    usernameController=TextEditingController();
+    passwordController=TextEditingController();
+    usernameFocusNode=FocusNode();
+    passwordFocusNode=FocusNode();
+    super.initState();
+  }
+  @override
+  void dispose() {
+ 
+    usernameController.dispose();
+    passwordController.dispose();
+    usernameFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.dispose();
+  }
+  
+  @override
   Widget build(BuildContext context) {
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
+   
      final logFormkey = GlobalKey<FormState>();
 
     return Scaffold(
       body: Stack(children: [
-        Container(
+        SizedBox(
           height: double.infinity,
           width: double.infinity,
           child: Image(
@@ -29,7 +60,7 @@ class Login extends StatelessWidget {
           ),
         ),
         Center(
-            child: Container(
+            child: SizedBox(
           height: 300,
           width: 300,
           // color: Colors.blue,
@@ -41,14 +72,13 @@ class Login extends StatelessWidget {
                    if (value == null || value == '') {
                         return "Empty username field";
                       }
-                      if (value.length < 8) {
-                        return "Invalid length";
-                      }
+                     
                       return null;
                     
-                },
+                },focusNode: usernameFocusNode,
                   controller: usernameController,
                   decoration: InputDecoration(
+                    
                       hintText: "username",
                       fillColor: Colors.white,
                       filled: true,
@@ -60,17 +90,17 @@ class Login extends StatelessWidget {
                 SizedBox(
                   height: 40,
                 ),
-                TextFormField(obscureText: true,validator:(value) {
+                TextFormField(validator:(value) {
                    if (value == null || value == '') {
                         return "Empty password field";
                       }
-                      if (value.length < 7) {
+                      if (value.length < 6) {
                         return "Invalid password length";
                       }
                       return null;
                     
                   
-                },
+                },focusNode: passwordFocusNode,
                   controller: passwordController,
                   decoration: InputDecoration(
                       hintText: "password",
@@ -84,14 +114,37 @@ class Login extends StatelessWidget {
                 SizedBox(
                   height: 30,
                 ),
-                Column(children: [
+          BlocConsumer<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                 
+                    if(state is Authsuccess){
+                                  log(state.authModel.isAdmin.toString());
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){return
+              state.authModel.isAdmin==true? AdminHomescreen():HomeScreen();}), (route) => false);
+                    }
+                  },
+                  builder: (context, state) {
+                   
+                    if(state is AuthLoading){
+                       log('circular');
+                      return SizedBox(height: 50,width: 50,child: CircularProgressIndicator(),);
+                    }
+
+                    return Column(children: [
                       TextButton(
                           style: ButtonStyle(
                             backgroundColor:
                                 WidgetStatePropertyAll(Colors.white),
                           ),
                           onPressed: () {
-                          
+                            if(logFormkey.currentState!.validate()){
+                            context.read<AuthBloc>().add((AuthSignin(
+                                username: usernameController.text.trim(),
+                                password: passwordController.text.trim())));
+                                usernameFocusNode.unfocus();
+                                passwordFocusNode.unfocus();
+                                
+                          }
                           },
                           child: Center(child: Text("submit"))),
                       SizedBox(
@@ -109,8 +162,9 @@ class Login extends StatelessWidget {
                                   return Registration();
                                 }),
                               ))
-                    ])
-               
+                    ]);
+                  },
+                )              
               ],
             ),
           )

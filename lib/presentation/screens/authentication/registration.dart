@@ -11,7 +11,7 @@ class Registration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold( body: Stack(children: [
-        Container(
+        SizedBox(
           height: double.infinity,
           width: double.infinity,
           child: Image(
@@ -20,10 +20,10 @@ class Registration extends StatelessWidget {
           ),
         ),
         Center(
-            child: Container(
+            child: SizedBox(
           height: 450,
           width: 300,
-          // color: Colors.blue,
+       
           child: Column(
             children: [
                TextField(

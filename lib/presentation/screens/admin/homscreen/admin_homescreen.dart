@@ -8,10 +8,22 @@ import 'package:grocery_app/presentation/screens/admin/product/productcreate.dar
 
 import 'package:grocery_app/presentation/screens/admin/stockout_screen.dart';
 import 'package:grocery_app/presentation/screens/admin/users_list.dart';
+import 'package:grocery_app/presentation/screens/authentication/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AdminHomescreen extends StatelessWidget {
+class AdminHomescreen extends StatefulWidget {
   const AdminHomescreen({super.key});
 
+  @override
+  State<AdminHomescreen> createState() => _AdminHomescreenState();
+}
+
+class _AdminHomescreenState extends State<AdminHomescreen> {
+  @override
+  void initState() {
+    
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -39,7 +51,17 @@ class AdminHomescreen extends StatelessWidget {
                 
                 ),      Divider(),  InkWell(child: ListTile(title: Text("Products"),),onTap:() => Navigator.push(context, MaterialPageRoute(builder: (context){return Productlist();}))),     Divider(),
                    InkWell(child: ListTile(title: Text("Product Registration"),),onTap:() => Navigator.push(context, MaterialPageRoute(builder: (context){return Productcreate();}))),     Divider(),
-                      ListTile(title: Text("Signout"),)
+                      ListTile(title: Row(
+                        children: [
+                          Text("Signout"),IconButton(onPressed: () async{
+                            SharedPreferences prefs=await SharedPreferences.getInstance();
+                            prefs.clear();
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){return Login();}), (route)=>false);
+                            
+                          }, icon: Icon(Icons.logout))
+                        ],
+                      ),)
           ],
         ),
       ),

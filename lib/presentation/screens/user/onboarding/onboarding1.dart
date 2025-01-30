@@ -1,6 +1,10 @@
+
+
+
+
+
 import 'package:flutter/material.dart';
 import 'package:grocery_app/presentation/screens/user/onboarding/onboarding2.dart';
-
 
 class Onboarding1 extends StatelessWidget {
   const Onboarding1({super.key});
@@ -9,6 +13,7 @@ class Onboarding1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
+     
         Container(
           height: double.infinity,
           width: double.infinity,

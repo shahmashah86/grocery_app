@@ -77,9 +77,7 @@ class UsersList extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.lime)),
               child: ListTile(onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context){return AllOrders();}));},
-                  // shape: RoundedRectangleBorder(side: BorderSide(color: Colors.lime),
-                  //     borderRadius: BorderRadius.circular(15)),
-                  // tileColor: Colors.amber.shade50,
+              
                   leading: CircleAvatar(radius: 40,foregroundImage: AssetImage("assets/banner/person.jpg")
                   ),
                   minTileHeight: 100,
@@ -91,23 +89,7 @@ class UsersList extends StatelessWidget {
                   subtitle: Text(userdetails[index]["email"]!,
                       style: TextStyle(fontSize: 16)),
                   contentPadding: EdgeInsets.all(10),
-                  // trailing: PopupMenuButton(
-                  //   itemBuilder: (BuildContext context) {
-                  //     return <PopupMenuEntry<String>>[
-                  //       PopupMenuItem<String>(
-                  //         value: "Option1",
-                  //         child: Text("Edit"),
-                  //       ),
-                  //       PopupMenuItem<String>(
-                  //         child: Text(
-                  //           "Delete",
-                  //         ),
-                  //         value: "Option2",
-                  //       )
-                  //     ];
-                  //   },
-                  //   icon: Icon(Icons.more_vert),
-                  // )
+       
                   ),
             ),
           );

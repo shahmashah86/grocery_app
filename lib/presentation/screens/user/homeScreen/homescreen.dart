@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/presentation/screens/user/search/searchscreen.dart';
+import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
 
 import 'package:grocery_app/presentation/screens/user/widgets/clipper.dart';
 
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "assets/banner/Offer.jpg"
     ];
     return Scaffold(
+      bottomNavigationBar: BottomNavigation(),
       appBar: AppBar(backgroundColor: Colors.amber.shade200,toolbarHeight: 20,),
 
       body: Column(
@@ -118,7 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 autoPlay: true,
                 viewportFraction: 1),
           ),
+        
         ],
+
       ),
     );
   }
