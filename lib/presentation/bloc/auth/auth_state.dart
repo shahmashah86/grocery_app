@@ -4,7 +4,7 @@ sealed class AuthState extends Equatable {
   const AuthState();
   
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class AuthInitial extends AuthState {}
@@ -40,3 +40,28 @@ final class AuthError extends AuthState {
 
 final class AuthSignOutSuccess extends AuthState {}
 final class AuthSignOutError extends AuthState {}
+final class UsersListstate extends AuthState{
+
+ final List<AuthModel>? users;
+ final bool isLoading;
+
+  const UsersListstate({this.isLoading=false, this.users});
+
+    @override
+  List<Object?> get props => [isLoading,users];
+
+UsersListstate copyWith({bool? isLoading,List<AuthModel>? users}){
+return UsersListstate(
+  isLoading:isLoading??this.isLoading,
+  users: users??this.users
+
+
+);
+}
+}
+
+final class userListError extends AuthState{
+  final String errormsg;
+
+  const userListError(this.errormsg);
+}

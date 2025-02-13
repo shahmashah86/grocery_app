@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "assets/banner/Offer.jpg"
     ];
     return Scaffold(
-      bottomNavigationBar: BottomNavigation(),
+    
       appBar: AppBar(backgroundColor: Colors.amber.shade200,toolbarHeight: 20,),
 
       body: Column(

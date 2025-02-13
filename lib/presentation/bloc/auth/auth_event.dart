@@ -32,3 +32,5 @@ class AuthForgetPassword{
 
   AuthForgetPassword({required this.email});
 }
+
+class listUsers extends AuthEvent{}
