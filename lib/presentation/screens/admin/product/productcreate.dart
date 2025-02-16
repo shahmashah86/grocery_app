@@ -101,7 +101,7 @@ class _ProductcreateState extends State<Productcreate> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber.shade100,
+        backgroundColor: Colors.amber.shade200,
       ),
       body: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -446,6 +446,7 @@ class _ProductcreateState extends State<Productcreate> {
                       }
               
                       if (state is ProductError) {
+                        log('snackbar eror');
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.amber.shade200,

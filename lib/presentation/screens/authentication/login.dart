@@ -19,6 +19,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+   final ValueNotifier<bool> isBannerVisible = ValueNotifier<bool>(false);
   late final TextEditingController usernameController;
  late final TextEditingController passwordController;
  
@@ -72,6 +73,9 @@ class _LoginState extends State<Login> {
                    if (value == null || value == '') {
                         return "Empty username field";
                       }
+                       if (value.length < 6) {
+                        return "Invalid password length";
+                      }
                      
                       return null;
                     
@@ -122,6 +126,54 @@ class _LoginState extends State<Login> {
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){return
               state.authModel.isAdmin==true? AdminHomescreen():HomeScreen();}), (route) => false);
                     }
+                    
+                            if (state is AuthError) {
+                        isBannerVisible.value = true;
+                        log("errror");
+                        log(state.errormsg.toString());
+                        String message =
+                            state.errormsg ?? "An unknown error occurred";
+                        if (message.contains(
+                            'User not registered or check password')) {
+                          message = "Incorrect username or password";
+                        } 
+                        else if (message.contains(
+                            'The email address is already in use by another account.')) {
+                          message = "email address is already in use";
+                        } 
+                        
+                        else {
+                          message =
+                              "Something went wrong. Please try again later.";
+                        }
+                        ScaffoldMessenger.of(context).showMaterialBanner(
+                          MaterialBanner(
+                            backgroundColor: Colors.red.shade300,
+                            leading: const Icon(
+                              Icons.info,
+                              size: 32,
+                            ),
+                            content: Text(
+                              message,
+                              style: TextStyle(fontSize: 13),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  usernameController.clear();
+                                  passwordController.clear();
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentMaterialBanner();
+                                  isBannerVisible.value = false; // Reset visibility
+                                },
+                                child: const Text('Retry'),
+                              ),
+                            ],
+                          ),
+                        );
+                    
+                         // Show banner
+                      }
                   },
                   builder: (context, state) {
                    
@@ -130,6 +182,7 @@ class _LoginState extends State<Login> {
                       return SizedBox(height: 50,width: 50,child: CircularProgressIndicator(),);
                     }
 
+
                     return Column(children: [
                       TextButton(
                           style: ButtonStyle(
@@ -137,7 +190,9 @@ class _LoginState extends State<Login> {
                                 WidgetStatePropertyAll(Colors.white),
                           ),
                           onPressed: () {
+                            
                             if(logFormkey.currentState!.validate()){
+                                    isBannerVisible.value = false;
                             context.read<AuthBloc>().add((AuthSignin(
                                 username: usernameController.text.trim(),
                                 password: passwordController.text.trim())));
@@ -164,6 +219,8 @@ class _LoginState extends State<Login> {
                               ))
                     ]);
                   },
+
+                  
                 )              
               ],
             ),

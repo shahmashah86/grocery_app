@@ -21,5 +21,7 @@ class ApiEndpoints {
   static const getInventoryList='/api/product/getProductInventory';
   static const acknowledgeOrder='/api/order/acknowledgeOrder/';
   static const bannerCraetion='/api/dashboard/createBanners';
+  static const signupUrl='/api/user/signUp';
+  static const userDasboard='/api/dashboard/userDashBoardDatas';
 
 }

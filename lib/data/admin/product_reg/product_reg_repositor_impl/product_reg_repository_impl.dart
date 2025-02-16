@@ -71,7 +71,8 @@ class ProductRegRepositoryImpl extends ProductRegRepository {
       }
     } catch (e) {
       log(e.toString());
-      throw "Something wrong woth the request/code";
+      rethrow;
+      // throw "Something wrong woth the request/code";
     }
   }
 
@@ -177,7 +178,8 @@ class ProductRegRepositoryImpl extends ProductRegRepository {
       }
     } catch (e) {
       log(e.toString());
-      throw "Something wrong woth the request/code";
+      rethrow;
+      // throw "Something wrong woth the request/code";
     }
   }
 }

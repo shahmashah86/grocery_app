@@ -1,16 +1,36 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
+import 'package:grocery_app/presentation/screens/authentication/login.dart';
 
 import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
+import 'package:image_picker/image_picker.dart';
 
-
-
-class Registration extends StatelessWidget {
+class Registration extends StatefulWidget {
   const Registration({super.key});
 
   @override
+  State<Registration> createState() => _RegistrationState();
+}
+
+class _RegistrationState extends State<Registration> {
+   final regFormkey = GlobalKey<FormState>();
+  TextEditingController? nameController;
+  TextEditingController? emailControler;
+  TextEditingController? passwordController;
+
+  @override
+  void initState() {
+    nameController = TextEditingController();
+    passwordController = TextEditingController();
+    emailControler = TextEditingController();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold( body: Stack(children: [
+    return Scaffold(
+      body: Stack(children: [
         SizedBox(
           height: double.infinity,
           width: double.infinity,
@@ -20,37 +40,125 @@ class Registration extends StatelessWidget {
           ),
         ),
         Center(
-            child: SizedBox(
-          height: 450,
-          width: 300,
-       
-          child: Column(
-            children: [
-               TextField(
-                decoration: InputDecoration(hintText: "username",
-                  fillColor: Colors.white,filled: true,
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),
-              ),SizedBox(height: 40,),
-              TextField(
-                decoration: InputDecoration(hintText: "username",
-                  fillColor: Colors.white,filled: true,
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),
-              ),SizedBox(height: 40,),
-              TextField(
-                 decoration: InputDecoration(hintText: "password",
-                  fillColor: Colors.white,filled: true,
-                    enabledBorder: OutlineInputBorder(borderSide:BorderSide.none ),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),),
-                    SizedBox(height: 30,),
-                    TextButton(style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.white),
+          child: SizedBox(
+            height: 450,
+            width: 300,
+            child: Form(
+              child: Column(
+                children: [
+                  TextFormField(
+                    validator:(value) {
+                     if (value == null || value == '') {
+                          return "Empty username field";
+                        }
+                        if (value.length < 6) {
+                          return "Invalid password length";
+                        }
+                        return null;
+                      
+                    
+                  },
+                    controller: nameController,
+                    decoration: InputDecoration(
+                        hintText: "username",
+                        fillColor: Colors.white,
+                        filled: true,
+                        enabledBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        focusedBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none)),
+                  ),
+                  SizedBox(height: 40),
+                  TextFormField(
+                    validator:(value) {
+                     if (value == null || value == '') {
+                          return "Empty password field";
+                        }
+                        // if (value.length < 6) {
+                        //   return "Invalid password length";
+                        // }
+                        return null;
+                      
+                    
+                  },
+                    controller: emailControler,
+                    decoration: InputDecoration(
+                        hintText: "email",
+                        fillColor: Colors.white,
+                        filled: true,
+                        enabledBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        focusedBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none)),
+                  ),
+                  SizedBox(height: 40),
+                  TextFormField(
+                    validator:(value) {
+                     if (value == null || value == '') {
+                          return "Empty email field";
+                        }
+                        if (value.length < 8) {
+                          return "Invalid password length";
+                        }
+                        return null;
+                      
+                    
+                  },
+              
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                        hintText: "password",
+                        fillColor: Colors.white,
+                        filled: true,
+                        enabledBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        focusedBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none)),
+                  ),
+                  SizedBox(height: 30),
 
-                    ),
-                      onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context){return BottomNavigation(); }));}, child: Center(child: Text("submit"))),
-            ],
+BlocConsumer<AuthBloc, AuthState>(
+  listener: (context, state) {
+    // TODO: implement listener
+     if (state is Authsuccess) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Login()),
+                        );
+                      }
+  },
+  builder: (context, state) {
+      return TextButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                WidgetStatePropertyAll(Colors.white),
+                          ),
+                          onPressed: ()  {
+                            if(regFormkey.currentState!.validate()){
+                        context.read<AuthBloc>().add(AuthSignUp(
+                                  name: nameController!.text.trim(),
+                                  username: emailControler!.text.trim(),
+                                  password: passwordController!.text.trim(),
+                                ));
+                            }
+                                  nameController!.clear();
+                                emailControler!.clear();
+                                  passwordController!.clear();
+                            
+                          },
+                          child: Center(child: Text("Submit")),
+                        );
+  },
+)
+
+              
+         
+                ],
+              ),
+            ),
           ),
-        ))
-      ]),);
+        )
+      ]),
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:grocery_app/presentation/screens/admin/homscreen/admin_homescree
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
 import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
 import 'package:grocery_app/presentation/screens/user/onboarding/onboarding1.dart';
+import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){   
         if(tokenFromAuth!=""){
        return isAdmin==true?
-           AdminHomescreen():isAdmin==false? HomeScreen():Login();
+           AdminHomescreen():isAdmin==false?BottomNavigation():Login();
           
         } 
         return Onboarding1();

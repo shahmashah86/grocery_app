@@ -21,12 +21,13 @@ _getDashboard(AdminDasboarddataGet event,Emitter<AdminDashboardState> emit) asyn
   try{
 
     final response=await adminRepository.getAdminDashboardData();
+    emit(AdminDashboardLoading());
     log(response.toString());
     emit(AdminDashboardsuccess(dashboardData: response));
   }
   catch(e){
        emit(AdminDashboardError(message: e.toString()));
-      log(e.toString());
+      log(e.toString(),name: 'something wrong');
 
   }
 

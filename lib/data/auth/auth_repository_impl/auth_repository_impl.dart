@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:grocery_app/core/constant/api_endpoints.dart';
 import 'package:grocery_app/data/auth/auth_dtos/auth_dto.dart';
 import 'package:grocery_app/domain/auth/auth_model/auth_model.dart';
@@ -77,16 +78,17 @@ class AuthRepositoryImpl implements AuthRepository {
         throw "Something went wrong in response";
       }
     }
-    on DioException catch(e){
-      log(e.response?.statusCode.toString()?? "Other code");
-      log(e.response?.data.toString()?? "Other code");
-      throw "Something wrong woth the request/code";
-    }
+    // on DioException catch(e){
+    //   log(e.response?.statusCode.toString()?? "Other code");
+    //   log(e.response?.data.toString()?? "Other code",name: 'msg');
+    //  rethrow;
+    // }
     
     
      catch (e) {
-      log(e.toString());
-      throw "Something wrong woth the request/code";
+      log(e.toString(),name: 'error from impl');
+      rethrow;
+      // throw "Something wrong woth the request/code";
     }
   }
 
@@ -150,8 +152,62 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } catch (e) {
       log(e.toString(),name: 'error from repository');
-      throw "Something wrong woth the request/code";
+     rethrow;
     }
  
+  }
+  
+  @override
+  Future signupWithEmailandPass({required name, required username, required password}) async {
+    String? apiKeyForAuth = await readApikeyFromPref();
+    log("Retrieved API Key: $apiKeyForAuth", name: "name");
+
+    if (apiKeyForAuth == null || apiKeyForAuth == "") {
+      // log(apiKeyForAuth.toString(),name: "inside post if null");
+
+      await createApikey();
+        apiKeyForAuth = await readApikeyFromPref();
+
+    }
+
+    try {
+      // log(apiKeyForAuth.toString(),name: "inside post after ap creation");
+
+      log("post");
+      Map<String, dynamic> data = {"userName":name,"email": username, "password": password,'isAdmin':false};
+      final Response response = await Apiservice.post(
+          data: data,
+          path: ApiEndpoints.signupUrl,
+          headers: {"Authorization": "Bearer $apiKeyForAuth"});
+      log(response.data.toString());
+      if (response.statusCode == 200) {
+        String token = response.data['token'];
+        bool admin = response.data['isAdmin'];
+         addTokenTopref(token);
+        addAdminToPref(admin);
+            log(token,name: "authtoken");
+        AuthDto dto = AuthDto.fromJson(response.data);
+        
+       
+       
+        log(dto.toString(),name: "auth response");
+    
+        return response.data;
+      } else {
+        throw "Something went wrong in response";
+      }
+    }
+    on DioException catch(e){
+      log(e.response?.statusCode.toString()?? "Other code");
+      log(e.response?.data.toString()?? "Other code");
+      throw "Something wrong woth the request/code";
+    }
+    
+    
+     catch (e) {
+      log(e.toString());
+      throw "Something wrong woth the request/code";
+    }
+  
   }
 }

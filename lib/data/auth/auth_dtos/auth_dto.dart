@@ -8,7 +8,7 @@ import 'package:grocery_app/domain/auth/auth_model/auth_model.dart';
 
 class AuthDto extends Equatable {
   final String? token;
-  final String name;
+  final String? name;
   final int id;
   final String email;
   final bool isAdmin;

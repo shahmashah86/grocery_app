@@ -47,7 +47,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
       }
     } catch (e) {
       log(e.toString());
-      throw "Something wrong woth the request/code";
+      rethrow;
     }
   }
 
@@ -65,16 +65,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
 
       
       'banners':fileList,
-      // [await MultipartFile.fromFile(imageFile!.path,
-      //     contentType: DioMediaType("image", '*')
-      
-      //     ),
-      //     await MultipartFile.fromFile(imageFile!.path,
-      //     contentType: DioMediaType("image", '*')
-      
-      //     ),
-          
-      //     ]
+    
     });
 
 

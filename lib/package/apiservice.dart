@@ -32,7 +32,7 @@ class Apiservice {
       log(e.response?.statusMessage.toString()?? "Other code");
       log(e.response?.data.toString()?? "Other code");
       log("ttt");
-      throw Exception(e);
+      throw Exception(e.response!.data);
     }
   }
 
@@ -69,7 +69,13 @@ class Apiservice {
       
     }
     on DioException catch (e) {
-      log(e.toString());
+      log(e.toString(),name: 'eror');
+      if(e.type==DioExceptionType.connectionError){
+        return Future.error("Connnection error:Please check your internet connection");
+      }
+        if(e.type==DioExceptionType.connectionTimeout){
+        return Future.error("Please check your internet connection and try again");
+      }
          log(e.response?.statusCode.toString()?? "Other code");
       log(e.response?.statusMessage.toString()?? "Other code");
       log(e.response?.data.toString()?? "Other code");

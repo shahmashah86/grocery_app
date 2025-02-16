@@ -9,6 +9,7 @@ import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 import 'package:grocery_app/presentation/bloc/get_order/get_orderby_id_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
+import 'package:grocery_app/presentation/bloc/user_dashboard/user_dashboard_bloc.dart';
 import 'package:grocery_app/presentation/screens/splash_screen/splash_screen.dart';
 import 'injection/di.dart' as di;
 
@@ -22,7 +23,8 @@ void main() {
       BlocProvider.value(value: di.getIt<OrdersBloc>()),
       BlocProvider.value(value: di.getIt<CategoryBloc>()),
       BlocProvider.value(value: di.getIt<ProductBloc>()),
-         BlocProvider.value(value: di.getIt<GetOrderbyIdBloc>())
+         BlocProvider.value(value: di.getIt<GetOrderbyIdBloc>()),
+         BlocProvider.value(value: di.getIt<UserDashboardBloc>()),
   ], child: const MyApp()));
 }
 

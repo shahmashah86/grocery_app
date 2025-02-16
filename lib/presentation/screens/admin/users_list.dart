@@ -32,17 +32,17 @@ class _UsersListState extends State<UsersList> {
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          if(state is AuthLoading){
-            log("inside loading",name: 'userlistscreen');
-      return SpinKitThreeBounce(color: Colors.amberAccent,)
-;
-          }
+//           if(state is AuthLoading){
+//             log("inside loading",name: 'userlistscreen');
+//       return SpinKitThreeBounce(color: Colors.amberAccent,)
+// ;
+//           }
 if(state is UsersListstate && state.isLoading==true){
-  return CircularProgressIndicator();
+  return Center(child: CircularProgressIndicator());
 }
 
 
-          if(state is UsersListstate){
+       else if(state is UsersListstate){
           List<AuthModel>? users=state.users;
 
              return ListView.builder(
@@ -68,8 +68,8 @@ if(state is UsersListstate && state.isLoading==true){
                       leading: CircleAvatar(
                           radius: 40,
                     
-                          // foregroundImage:
-                              // NetworkImage(users[index].image??users[index].name![0])
+                          foregroundImage:
+                              NetworkImage(users[index].image??users[index].name![0])
                               ),
                       minTileHeight: 100,
                       minVerticalPadding: 20,
@@ -87,10 +87,10 @@ if(state is UsersListstate && state.isLoading==true){
             },
           );
           }
-          if(state is userListError){
-            return Center(child: Text("Something is wrong!! try again"));
+      else  if(state is UsersListError){
+            return Center(child: Text(state.errormsg));
           }
- return Center(child: Text('please wait and try again'));
+ return Center(child: CircularProgressIndicator(),);
      
         },
       ),

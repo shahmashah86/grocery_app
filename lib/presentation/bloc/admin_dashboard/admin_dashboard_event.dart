@@ -14,8 +14,8 @@ class AdminDasboarddataGet  extends AdminDashboardEvent{
 }
 class AdminbannerCreation extends AdminDashboardEvent {
 
-  List<File> imageFile;
-  AdminbannerCreation({
+ final List<File> imageFile;
+  const AdminbannerCreation({
     required this.imageFile,
   });
 }

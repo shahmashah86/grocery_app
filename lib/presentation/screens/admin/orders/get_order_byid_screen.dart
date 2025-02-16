@@ -21,7 +21,7 @@ class _GetOrderByidScreenState extends State<GetOrderByidScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.amber.shade200,),
+      appBar: AppBar(  backgroundColor: Colors.amber.shade200,),
       body: Column(
         children: [
           BlocBuilder<GetOrderbyIdBloc, GetOrderbyIdState>(

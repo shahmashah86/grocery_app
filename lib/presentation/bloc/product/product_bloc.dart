@@ -59,6 +59,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductLoaded(message: response));
       }
     } catch (e) {
+      log("error: e.toString()");
       emit(ProductError(msg: e.toString()));
     }
   }
@@ -106,10 +107,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
                   ..removeWhere(
                       (element) => element.products.id == event.idTodelete)));
       }
-    } catch (e) {
-      emit(ProductError(msg: e.toString()));
     }
+
+     catch (e)
+  {
+      emit(ProductError(msg: e.toString()));
+    }   
   }
+
+
 
     _uploadImage(
       ProductimageUpload event, Emitter<ProductState> emit) async {
@@ -131,20 +137,27 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductError(msg: e.toString()));
     }
   }
+
   _getInventory(
       ProductstockGet event, Emitter<ProductState> emit) async {
+
     final currentstate = state;
 
     try {
+
       final response =
           await productRegRepository.getInventoryList();
       if (currentstate is ProductLoaded) {
+              log('current state is product loaded');
         emit(currentstate.copyWith(
           isLoading: true,
         ));
 
         emit(currentstate.copyWith(stockList: response, isLoading: false));
-      } else {
+      } 
+      else {
+        emit(ProductLoading());
+        log('product loading',name: 'bloc');
         emit(ProductLoaded(stockList: response));
       }
     } catch (e) {

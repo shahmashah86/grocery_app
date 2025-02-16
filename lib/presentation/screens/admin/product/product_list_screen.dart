@@ -266,7 +266,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
             if (state is ProductError) {
               return Center(
-                child: Text("Something is wrong while loading"),
+                child: Text(state.msg.toString()),
               );
             }
             return Text("please wait or try again");

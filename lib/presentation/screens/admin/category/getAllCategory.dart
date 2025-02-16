@@ -47,11 +47,11 @@ class _GetallcategoryState extends State<Getallcategory> {
           }));
         },
         child: Icon(Icons.add),
-        backgroundColor: Colors.amber.shade200,
+        backgroundColor:  Colors.amber.shade200,
         hoverColor: Colors.white,
       ),
       appBar: AppBar(
-        backgroundColor: Colors.amber.shade100,
+        backgroundColor: Colors.amber.shade200,
       ),
       body: BlocConsumer<CategoryBloc, CategoryState>(
         listener: (context, state) {
@@ -239,7 +239,7 @@ context.read<CategoryBloc>().add(CategoryDelete(id:id ));
 
         if(state is CategoryError){
           log(state.msg,name: 'CategoryError while getting all Catgeory');
-          return Center(child: Text("something went wrong"),);
+          return Center(child: Text(state.msg),);
 
         }
           return SpinKitThreeBounce(color: Colors.amberAccent,);

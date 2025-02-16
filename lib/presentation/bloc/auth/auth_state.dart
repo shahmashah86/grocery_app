@@ -19,24 +19,24 @@ Authsuccess copywith({AuthModel? authModel}){
   return Authsuccess(authModel: authModel??this.authModel);
 }
 }
+class AuthError extends AuthState {
+  final String errormsg;
+  final DateTime timestamp;
 
-final class AuthError extends AuthState {
+  AuthError({required this.errormsg, DateTime? timestamp})
+      : timestamp = timestamp ?? DateTime.now(); // Ensure it's never null
 
-   
-   final String? errormsg;
+  @override
+  List<Object> get props => [errormsg, timestamp];
 
-  const AuthError({this.errormsg});
-    @override
-  List<Object> get props => [errormsg!];
-
-  AuthError copyWith({
-   String? errormsg
-  }) {
-    return AuthError(errormsg: errormsg??this.errormsg);
+  AuthError copyWith({String? errormsg, DateTime? timestamp}) {
+    return AuthError(
+      errormsg: errormsg ?? this.errormsg,
+      timestamp: timestamp ?? DateTime.now(), // Ensure a fresh state is emitted everytime
+    );
   }
-
-
 }
+
 
 final class AuthSignOutSuccess extends AuthState {}
 final class AuthSignOutError extends AuthState {}
@@ -60,8 +60,10 @@ return UsersListstate(
 }
 }
 
-final class userListError extends AuthState{
+final class UsersListError extends AuthState{
   final String errormsg;
 
-  const userListError(this.errormsg);
+  const UsersListError(this.errormsg);
+    @override
+  List<Object> get props => [errormsg];
 }

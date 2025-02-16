@@ -48,7 +48,7 @@ class OrderRepositoryImpl extends OrderRespository  {
       }
     } catch (e) {
       log(e.toString());
-      throw "Something wrong woth the request/code";
+rethrow;
     }
  
   }

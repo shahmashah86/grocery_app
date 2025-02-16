@@ -30,7 +30,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       }
 
      catch(e){
-       emit(OrdersError(message: e.toString()));
+       emit(OrdersError(errormessage: e.toString()));
       log(e.toString());
 
   }
@@ -53,7 +53,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       }
 
      catch(e){
-       emit(OrdersError(message: e.toString()));
+       emit(OrdersError(errormessage: e.toString()));
       log(e.toString());
 
   }
@@ -83,7 +83,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       }
 
      catch(e){
-       emit(OrdersError(message: e.toString()));
+       emit(OrdersError(errormessage: e.toString()));
       log(e.toString());
 
   }

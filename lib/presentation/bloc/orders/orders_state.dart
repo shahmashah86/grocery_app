@@ -44,7 +44,7 @@ final class Orderssuccess extends OrdersState {
 }
 
 final class OrdersError extends OrdersState {
-  final String? message;
+  final String? errormessage;
 
-  const OrdersError({this.message});
+  const OrdersError({this.errormessage});
 }

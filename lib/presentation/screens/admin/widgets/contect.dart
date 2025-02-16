@@ -4,31 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/domain/admin/dashboard/common/model/order_model.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
-import 'package:grocery_app/presentation/screens/admin/acknowledge.dart';
+
 import 'package:grocery_app/presentation/screens/admin/orders/get_order_byid_screen.dart';
 
 class Content extends StatelessWidget {
   const Content({super.key, this.order, this.fromallordersScreen = false});
   final List<OrdersModel>? order;
-  // final List<OrdersModel>? ordersList;
+
   final bool fromallordersScreen;
 
   @override
   Widget build(BuildContext context) {
-       List<int> acknowldegedId=[];
+  ValueNotifier<List<bool>> isAcknowledged = ValueNotifier(order!.map((o) => o.acknowledged!).toList());
+
+
+    //  List<int> acknowldegedId=[];
     return ListView.builder(
       itemCount: order!.length,
       itemBuilder: (context, index) {
-        if(order![index].acknowledged==true){
-          acknowldegedId.add(index);
-        
-        }
-          log(acknowldegedId.toString());
+        // log(acknowldegedId.toString());
         return Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 10),
           child: InkWell(
             onTap: () {
-           
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return GetOrderByidScreen(orderId: order![index].id!);
               }));
@@ -125,9 +123,7 @@ class Content extends StatelessWidget {
                       height: 10,
                     ),
                     BlocBuilder<OrdersBloc, OrdersState>(
-                     
-                      builder: (context, state) {
-
+                        builder: (context, state) {
                       //    if(state is Orderssuccess && state.message!=null){
                       //     log('sucess');
                       //   return Row(
@@ -144,26 +140,38 @@ class Content extends StatelessWidget {
                       //     ],
                       //   );
                       // }
-                  return    Row(
+                      return ValueListenableBuilder(
+                        valueListenable: isAcknowledged,
+                        builder: (context, value, child) => Row(
                           children: [
                             Spacer(),
-                            TextButton(focusNode: FocusNode(),
+                            TextButton(
+                                focusNode: FocusNode(),
                                 style: ButtonStyle(),
                                 onPressed: () {
-                                  context.read<OrdersBloc>().add(
-                                      Orderacknowledge(
-                                          orderId: order![index].id));
-                                  
+                                  if (!value[index]) {
+                                       List<bool> updatedList = List.from(value);
+                                     updatedList[index] = true;
+                                  isAcknowledged.value=updatedList;
+                                    context.read<OrdersBloc>().add(
+                                        Orderacknowledge(
+                                            orderId: order![index].id));
+                                  }
                                 },
-                                child:Text(order![index].acknowledged==true?"Acknowledged":'Acknowledge',style: TextStyle(
-                      color:  order![index].acknowledged==true?Colors.green:Colors.red
-                                ),))
+                                child: Text(
+                                  value[index]
+
+                                      ? "Acknowledged"
+                                      : 'Acknowledge',
+                                  style: TextStyle(
+                                      color:value[index]== true
+                                          ? Colors.green
+                                          : Colors.red),
+                                ))
                           ],
-                        );
-                      
-                      
-                      }
-                    )
+                        ),
+                      );
+                    })
                   ],
                 ),
               ),

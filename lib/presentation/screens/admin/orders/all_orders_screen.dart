@@ -45,7 +45,7 @@ class _AllOrdersState extends State<AllOrders> {
   
           }
           if(state is OrdersError){
-            return Text(state.message!);
+            return Text(state.errormessage!);
           }
           return
   Text("something went wrong");

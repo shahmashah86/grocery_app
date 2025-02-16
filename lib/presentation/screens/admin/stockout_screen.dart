@@ -12,19 +12,7 @@ class StockoutScreen extends StatelessWidget {
   // ValueNotifier to track if sorting is ascending
   ValueNotifier<bool> isSortAsc = ValueNotifier(true);
 
-  // Original stock data
-  // List<Map<String, dynamic>> originalStock = [
-  //   {"Prodname": "Apple", "qty": 47},
-  //   {"Prodname": "Orange", "qty": 387},
-  //   {"Prodname": "Egg", "qty": 427},
-  //   {"Prodname": "Ruled notebook", "qty": 17},
-  //   {"Prodname": "Lays", "qty": 1},
-  //   {"Prodname": "Lays", "qty": 17},
-  //   {"Prodname": "Lays", "qty": 17},
-  //   {"Prodname": "Lays", "qty": 17},
-  //   {"Prodname": "Lays", "qty": 17},
-  //   {"Prodname": "Lays", "qty": 17},
-  // ];
+
     List<ProductsModel>? stocks;
 
   // ValueNotifier managing the current stock displayed in the table
@@ -52,15 +40,16 @@ class StockoutScreen extends StatelessWidget {
                     color: Colors.transparent,
                   )
                 : TextButton(
-                    onPressed: () {
-                      log(isSorted.value.toString());
-                      // Reset stock to the original list
-                      stock.value = stocks!;
-                      isSortAsc.value =
-                          true; // Reset sorting to ascending to maintain the ascending state while initial loading
-                      currentSortColumnIndex.value = null; //column index
-                      isSorted.value = false;
-                    },
+                  onPressed: () {
+  log(isSorted.value.toString());
+
+  stock.value = List.from(stocks!); // Restore the original list
+  isSortAsc.value = true; // Reset sorting order to ascending
+  currentSortColumnIndex.value = null; // Clear sorted column index
+  isSorted.value = false; // Mark as unsorted
+},
+
+               
                     child: Text("Reset"),
                   ),
           ),
@@ -72,7 +61,7 @@ class StockoutScreen extends StatelessWidget {
           icon: const Icon(Icons.chevron_left),
           iconSize: 30,
         ),
-        backgroundColor: Colors.amber.shade100,
+         backgroundColor: Colors.amber.shade200,
         title: const Text("Inventory details"),
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
@@ -80,9 +69,14 @@ class StockoutScreen extends StatelessWidget {
      
         
         builder: (context, state) {
+          if(state is ProductLoading){
+            return CircularProgressIndicator();
+          }
              if(state is ProductLoaded){
-            stocks= state.stockList;
-              stock.value = stocks??[];
+                stocks = List.from(state.stockList!); // Keep original data into stocks
+  stock.value = List.from(stocks!); // Initialize stock with fresh unsorted data
+            // stocks= state.stockList;
+            //   stock.value = stocks??[];
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -95,8 +89,8 @@ class StockoutScreen extends StatelessWidget {
                         valueListenable: isSortAsc,
                         builder: (context, isAscending, _) {
                           return DataTable(
-                            sortColumnIndex: currentSortColumnIndex.value,
-                            sortAscending: isAscending,
+                            sortColumnIndex: currentSortColumnIndex.value,//to show ths filter icon on column only when needed
+                            sortAscending: !isAscending,//show the arrow in ascending or descending
                             headingRowColor: WidgetStateColor.resolveWith(
                                 (states) => Colors.amber.shade50),
                             columns: [
@@ -116,25 +110,24 @@ class StockoutScreen extends StatelessWidget {
                                   ],
                                 ),
                                 onSort: (columnIndex, _) {
-                                  // Sorting logic
-                                  if (columnIndex == 1) {
-                                    if (isAscending) {
-                                      currentStock!.sort((a, b) =>
-                                          a.stockQuantity!.compareTo(b.stockQuantity as double));
-                                    } else {
-                                      currentStock!.sort((a, b) =>
-                                          b.stockQuantity!.compareTo(a.stockQuantity as double));
-                                    }
-                                    isSortAsc.value =
-                                        !isAscending; // pressing toggle the sorting order to ascending and descending viceversa
-                                    currentSortColumnIndex.value =
-                                        columnIndex; // Update the sorted column
-                                    stock.value = List.from(currentStock);
-                                    // Notify the changes
-                                    isSorted.value = true;
-                                    log(isSorted.toString());
-                                  }
-                                },
+  if (columnIndex == 1) {
+    // Make a new sorted copy (without modifying original data)
+    List<ProductsModel> sortedList = List.from(stock.value!);
+
+    sortedList.sort((a, b) {
+      return isSortAsc.value
+          ? a.stockQuantity!.compareTo(b.stockQuantity!)
+          : b.stockQuantity!.compareTo(a.stockQuantity!);
+    });
+
+    isSortAsc.value = !isSortAsc.value; // Toggle sorting order
+    currentSortColumnIndex.value = columnIndex; // Set sorted column index
+    stock.value = List.from(sortedList); // Explicitly update stock
+    isSorted.value = true; // Mark sorting as applied
+  }
+},
+
+                            
                               ),
                             ],
                             rows: currentStock!.map((element) {
@@ -157,6 +150,9 @@ class StockoutScreen extends StatelessWidget {
               ],
             ),
           );
+             }
+             if(state is ProductError){
+              return Text(state.msg.toString());
              }
              return Text("Loading");
         },
