@@ -15,9 +15,9 @@ class UserDashboardBloc extends Bloc<UserDashboardEvent, UserDashboardState> {
   }
   _getUserDashboard(UserDasboardGet event,Emitter<UserDashboardState> emit) async {
   try{
-
+  emit(UserDashboardLoading());
     final response=await userRepository.getUserDasboard();
-    emit(UserDashboardLoading());
+  
     log(response.toString());
     emit(UserDashboardsuccess(dashboardData: response));
   }

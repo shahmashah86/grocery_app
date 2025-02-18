@@ -16,21 +16,24 @@ final List<ProductRegModel>? productList;
 final List<ProductsModel>? stockList;
  final bool isLoading;
  final bool isError;
+ final List<ProductsModel>? searchList;
 
- const ProductLoaded({this.productId,this.productList, this.message='',this.isLoading=false,this.isError=false,this.stockList});
+ const ProductLoaded({this.productId,this.productList, this.message='',this.isLoading=false,this.isError=false,this.stockList,this.searchList});
 
   @override
-  List<Object?> get props => [message, productList, isLoading, isError,stockList];
+  List<Object?> get props => [message, productList, isLoading, isError,stockList,searchList];
 
 ProductLoaded copyWith(
-      {String? message, bool? isLoading,bool? isError,List<ProductRegModel>? productList,List<ProductsModel>? stockList,int? productId}) {
+      {String? message, bool? isLoading,bool? isError,List<ProductRegModel>? productList,List<ProductsModel>? stockList,int? productId,List<ProductsModel>? searchList}) {
     return ProductLoaded(
       stockList: stockList??this.stockList,
       productId:productId??this.productId,
       productList: productList??this.productList,
         message: message ?? this.message,
         isLoading: isLoading ?? this.isLoading,
-        isError: isError??this.isError);
+        isError: isError??this.isError,
+        searchList: searchList??this.searchList
+        );
   }
   
 }

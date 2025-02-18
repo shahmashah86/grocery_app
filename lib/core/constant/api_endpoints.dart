@@ -1,12 +1,13 @@
 
 
 class ApiEndpoints {
+
   static const baseurl ="https://grocery-app-1h07.onrender.com";
   static const createApiKey = "/createApiKey";
   static const signinUrl="/api/user/signIn";
   static const adminDasboard="/api/dashboard/adminDashBoardDatas";
   static const allorders="/api/order/listAllOrders";
-   static const listAllCategories='/api/category/listAllCategories';
+  static const listAllCategories='/api/category/listAllCategories';
   static const productRegistration='/api/product/createProduct';
   static const createCategory='/api/category/createCategory';
   static const updateCategory='/api/category/updateACategory/';
@@ -23,5 +24,7 @@ class ApiEndpoints {
   static const bannerCraetion='/api/dashboard/createBanners';
   static const signupUrl='/api/user/signUp';
   static const userDasboard='/api/dashboard/userDashBoardDatas';
+  static const listproductundercategory='/api/product/listAllProductsUnderACategory/';
+  static const searchProduct='/api/product/searchProducts';
 
 }

@@ -182,4 +182,31 @@ class ProductRegRepositoryImpl extends ProductRegRepository {
       // throw "Something wrong woth the request/code";
     }
   }
+  
+  @override
+  Future getproductbysearch(String prodName) async {
+     try {
+      String? token = await readtokenFromPref();
+      final Response response = await Apiservice.get(
+        queryParameters: {'productName':prodName},
+          path: ApiEndpoints.searchProduct,
+          headers: {"Authorization": "Bearer $token"});
+      log(response.toString(), name: 'productsearch');
+      if (response.statusCode == 200) {
+        log("inside response of search product");
+        List<dynamic> listOfproducts = response.data as List<dynamic>;
+        return listOfproducts
+            .map((e) => ProductsDto.fromJson(e).toModel())
+            .toList();
+      } else {
+        throw "Something went wrong in response";
+      }
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+      // throw "Something wrong woth the request/code";
+    }
+   
+  }
+  
 }

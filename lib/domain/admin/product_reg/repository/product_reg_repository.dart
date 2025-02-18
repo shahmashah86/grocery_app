@@ -10,4 +10,5 @@ abstract class ProductRegRepository {
   Future productDeletion(int id);
   Future uploadImage({int id,String productName,File? imageFile});
   Future  getInventoryList();
+  Future getproductbysearch(String prodName);
 }

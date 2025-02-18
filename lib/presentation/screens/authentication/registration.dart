@@ -21,6 +21,8 @@ class _RegistrationState extends State<Registration> {
 
   @override
   void initState() {
+
+                
     nameController = TextEditingController();
     passwordController = TextEditingController();
     emailControler = TextEditingController();

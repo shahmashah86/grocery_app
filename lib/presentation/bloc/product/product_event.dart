@@ -49,3 +49,12 @@ final class ProductstockGet extends ProductEvent{
 const  ProductstockGet();
 }
 
+final class Productsearch extends ProductEvent{
+
+ 
+  final String productName;
+ 
+
+const  Productsearch({required this.productName,});
+}
+

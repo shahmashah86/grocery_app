@@ -17,9 +17,11 @@ final class CategoryLoaded extends CategoryState {
   final bool isLoading;
   final bool isError;
   final String? errorMsg;
+  final List<ProductsModel>? produnderCategory;
 
   const CategoryLoaded(
       {this.categoryList,
+      this. produnderCategory,
       this.message,
       this.isLoading = false,
       this.isError = false,
@@ -27,11 +29,12 @@ final class CategoryLoaded extends CategoryState {
 
   @override
   List<Object?> get props =>
-      [categoryList, message, isLoading, isError, errorMsg];
+      [categoryList, message, isLoading, isError, errorMsg,produnderCategory];
 
   CategoryLoaded copyWith(
-      {List<CategoryModel>? categoryList, String? message, bool? isLoading,String? errorMsg}) {
+      {List<CategoryModel>? categoryList, String? message, bool? isLoading,String? errorMsg,List<ProductsModel>? produnderCategory }) {
     return CategoryLoaded(
+       produnderCategory:produnderCategory??this.produnderCategory,
         categoryList: categoryList ?? this.categoryList,
         message: message ?? this.message,
         isLoading: isLoading ?? this.isLoading,

@@ -19,6 +19,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<productDeletion>(_productdelete);
     on<ProductimageUpload>(_uploadImage);
     on<ProductstockGet>(_getInventory);
+     on<Productsearch>(_getproductbysearch);
   }
 
   _productList(ProductList event, Emitter<ProductState> emit) async {
@@ -164,6 +165,67 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductError(msg: e.toString()));
     }
   }
+  _getproductbysearch(
+      Productsearch event, Emitter<ProductState> emit) async {
+
+
+
+    try {
+     final currentstate = state;
+
+     
+      if (currentstate is ProductLoaded) {
+        
+              log('current state is product loaded');
+        emit(currentstate.copyWith(
+          isLoading: true,
+        ));
+         final response =
+          await productRegRepository.getproductbysearch(event.productName);
+
+        emit(currentstate.copyWith(searchList: response, isLoading: false));
+      } 
+      // else {
+        emit(ProductLoading());
+     final response =
+          await productRegRepository.getproductbysearch(event.productName);
+        log('product loading',name: 'bloc');
+        emit(ProductLoaded(searchList: response,isLoading: false));
+      // }
+    } catch (e) {
+      emit(ProductError(msg: e.toString()));
+    }
+
+
+
+
+    // final currentstate = state;
+
+    // try {
+    //    if (state is ProductInitial) {
+    //     emit(ProductLoading());
+    //   }
+
+    //   final response =
+    //       await productRegRepository.getproductbysearch(event.productName);
+    //   if (currentstate is ProductLoaded) {
+    //           log('current state is product loaded');
+    //     emit(currentstate.copyWith(
+    //       isLoading: true,
+    //     ));
+
+    //     emit(currentstate.copyWith(searchList: response, isLoading: false));
+    //   } 
+    //   else {
+    //     emit(ProductLoading());
+    //     log('product loading',name: 'bloc');
+    //     emit(ProductLoaded(searchList: response,isLoading: false));
+    //   }
+    // } catch (e) {
+    //   emit(ProductError(msg: e.toString()));
+    // }
+  }
+  
   
 
 

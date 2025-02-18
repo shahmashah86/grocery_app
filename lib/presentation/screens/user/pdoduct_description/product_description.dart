@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
 class ProductDescription extends StatelessWidget {
@@ -20,14 +22,14 @@ class ProductDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(imgpath??""), fit: BoxFit.cover),
+        Container(decoration: BoxDecoration(
+          
             color: Colors.amber.shade100,
           ),
           height: MediaQuery.of(context).size.height * 0.48,
-          width: double.infinity,
+          width: double.infinity,child: CachedNetworkImage(imageUrl: imgpath??"",fit: BoxFit.cover,
+          errorWidget: (context, url, error) => Icon(Icons.error,size: 50,color: Colors.black38,),
+          placeholder: (context, url) => SpinKitPulse(color: Colors.white,),),
         ),
         Column(
           children: [
@@ -78,7 +80,7 @@ class ProductDescription extends StatelessWidget {
                           Quantity()
                         ],
                       ),SizedBox(height: 5,),
-                      Container(height:50 ,
+                      SizedBox(height:50 ,
                         child: TextButton(
                             style: ButtonStyle(
                                 shape: WidgetStatePropertyAll(

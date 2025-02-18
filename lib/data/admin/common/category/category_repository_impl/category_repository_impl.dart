@@ -3,8 +3,11 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:grocery_app/core/constant/api_endpoints.dart';
 import 'package:grocery_app/data/admin/common/category/dtos/category_dto.dart';
+import 'package:grocery_app/data/admin/product_reg/dtos/product_reg_dto.dart';
+import 'package:grocery_app/data/admin/product_reg/dtos/products_dto.dart';
 import 'package:grocery_app/domain/admin/common/category/model/category_model.dart';
 import 'package:grocery_app/domain/admin/common/category/repository/category_reposotory.dart';
+import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
 import 'package:grocery_app/package/apiservice.dart';
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -101,10 +104,11 @@ class CategoryRepositoryImpl implements CategoryRepository {
   Future deleteCategory({required int id})async {
      try{
       String? token = await readtokenFromPref();
-         Map<String, dynamic> categoryDelete = {"id":id};
+        //  Map<String, dynamic> categoryDelete = {"id":id};
          String path='${ApiEndpoints.deleteCategory}$id';
          final Response response= await Apiservice.delete(path:path,
-         data: categoryDelete,headers:  {"Authorization": "Bearer $token"}      
+        //  data: categoryDelete,
+         headers:  {"Authorization": "Bearer $token"}      
          );
 
          if(response.statusCode==200){
@@ -125,5 +129,35 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
     
 
+  }
+  
+  @override
+  Future<List<ProductsModel>> listallCategories(int id)  async{
+     try{
+      String? token = await readtokenFromPref();
+        //  Map<String, dynamic> categoryDelete = {"id":id};
+         String path='${ApiEndpoints.listproductundercategory}$id';
+         final Response response= await Apiservice.get(path:path,
+        headers:  {"Authorization": "Bearer $token"}      
+         );
+
+         if(response.statusCode==200){
+
+              log("inside response of productsunderacategory");
+        List<dynamic> productofCategory=(response.data);
+        return productofCategory.map((e)=>ProductsDto.fromJson(e).toModel()).toList();
+           
+         }
+          else {
+        throw "Something went wrong in response";
+      }
+
+  }
+  catch(e){
+          log(e.toString());
+      throw "Something wrong woth the request/code";
+
+  }
+   
   }
 }

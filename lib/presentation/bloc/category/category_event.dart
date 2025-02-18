@@ -38,3 +38,13 @@ class CategoryDelete extends CategoryEvent {
   @override
   List<Object> get props => [id];
 }
+
+class CategorylistbyId extends CategoryEvent {
+  int id;
+  CategorylistbyId({
+    required this.id,
+  });
+
+ 
+}
+

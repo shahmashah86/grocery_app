@@ -37,7 +37,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> signinWithEmailandPass(
+  Future<Map<String, dynamic>> signinWithUserandPass(
       {required String username, required String password}) async {
     log(username);
     String? apiKeyForAuth = await readApikeyFromPref();
@@ -158,7 +158,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
   
   @override
-  Future signupWithEmailandPass({required name, required username, required password}) async {
+  Future signupWithUserandPass({required name, required username, required password}) async {
     String? apiKeyForAuth = await readApikeyFromPref();
     log("Retrieved API Key: $apiKeyForAuth", name: "name");
 
