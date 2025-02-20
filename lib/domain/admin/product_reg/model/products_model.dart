@@ -34,15 +34,16 @@ class ProductsModel extends Equatable {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id':id,
+      'id': id,
       'productName': productName,
       'productDescription': productDescription,
-      'price':price,
+      'price': price,
       'image': image,
       'unit': unit,
       'isAvailable': isAvailable,
       'isTrending': isTrending,
-      'stockQuantity':stockQuantity
+      'stockQuantity': stockQuantity,
+      'quantity': quantity,
     };
   }
 
@@ -50,4 +51,21 @@ class ProductsModel extends Equatable {
 
 
 
+
+  factory ProductsModel.fromMap(Map<String, dynamic> map) {
+    return ProductsModel(
+      id: map['id'],
+      productName: map['productName'],
+      productDescription: map['productDescription'] ,
+      price: map['price'],
+      image: map['image'] ,
+      unit: map['unit'],
+      isAvailable: map['isAvailable'],
+      isTrending: map['isTrending'],
+      stockQuantity: map['stockQuantity'] ,
+      quantity: map['quantity'] 
+    );
+  }
+
+  
 }

@@ -8,38 +8,32 @@ import 'package:grocery_app/package/apiservice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DasboardRepoImpl implements DasboardRepo {
-          Future<String?> readtokenFromPref() async {
+  Future<String?> readtokenFromPref() async {
     // log("From onboarding");
-    
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String tokenFromAuth = prefs.getString('tokenValue') ?? "";
-    
+
     return tokenFromAuth;
   }
 
-
-
   @override
-  Future getUserDasboard()  async{
-
-     try {
-  
-      String? token= await readtokenFromPref();
+  Future getUserDasboard() async {
+    try {
+      String? token = await readtokenFromPref();
 
       log("userDashboard");
 
       final Response response = await Apiservice.get(
-      
           path: ApiEndpoints.userDasboard,
           headers: {"Authorization": "Bearer $token"});
       if (response.statusCode == 200) {
         log("inside response");
-        
-        UserDasboardDto dashboardData=UserDasboardDto.fromMap(response.data);
-       
+
+        UserDasboardDto dashboardData = UserDasboardDto.fromMap(response.data);
+
         return dashboardData.toModel();
-       
       } else {
         throw "Something went wrong in response";
       }
@@ -47,7 +41,5 @@ class DasboardRepoImpl implements DasboardRepo {
       log(e.toString());
       rethrow;
     }
- 
-  
   }
 }

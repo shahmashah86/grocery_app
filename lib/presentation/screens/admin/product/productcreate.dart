@@ -192,7 +192,7 @@ class _ProductcreateState extends State<Productcreate> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a value';
                       }
-                      else if(int.parse(value)<0)
+                      else if(double.parse(value)<0)
                       {
                        return 'Please enter a  valid quantity';
                       }

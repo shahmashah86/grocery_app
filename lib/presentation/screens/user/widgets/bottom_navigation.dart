@@ -63,14 +63,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 selectedFontSize:12 ,
                 // unselectedFontSize: ,
                 unselectedIconTheme: IconThemeData(color: Colors.white),
-                selectedLabelStyle: TextStyle(color: Colors.amberAccent),
+                selectedLabelStyle: TextStyle(color: Colors.black),
                     // selectedItemColor: Colors.black54,
                     onTap: (value) =>_currentindex.value=value,
                     currentIndex: _currentindex.value,
                     type: BottomNavigationBarType.fixed,
                     backgroundColor:
                     // const Color.fromARGB(255, 255, 244, 212),
-                     Colors.amberAccent,
+                     Colors.amberAccent.shade200,
                     items: [
                       BottomNavigationBarItem(
                           label: 'Home',

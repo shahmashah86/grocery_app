@@ -2,6 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:grocery_app/data/databases/entity/cart_entity.dart';
+
+
+import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
+import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
+import 'package:grocery_app/main.dart';
+import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/pdoduct_description/product_description.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
@@ -40,20 +47,23 @@ class CategoryContent extends StatelessWidget {
             }
 
             if (state is CategoryLoaded) {
+               List<ProductsModel>? categorywiseProducts=state.produnderCategory;
               return StaggeredGridView.countBuilder(
                 padding: EdgeInsets.only(left: 8, right: 8),
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 crossAxisCount: 2,
                 itemBuilder: (context, index) {
+                  
+                 
                   return InkWell(
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return ProductDescription(
-                        description:state.produnderCategory![index].productDescription??"",
-                        imgpath: state.produnderCategory![index].image??"",
-                        producName: state.produnderCategory![index].productName??"",
-                        price: state.produnderCategory![index].price.toString()??""
+                        description:categorywiseProducts?[index].productDescription??'',
+                        imgpath:categorywiseProducts?[index].image??"",
+                        producName: categorywiseProducts?[index].productName??"",
+                        price: categorywiseProducts?[index].price.toString()??""
 
                       );
                     }
@@ -71,7 +81,7 @@ class CategoryContent extends StatelessWidget {
                           placeholder:(context, url) => SpinKitPulse(color: Colors.white,) ,
                               imageUrl:
                               
-                                  state.produnderCategory?[index].image??"",
+                                  categorywiseProducts?[index].image??"",
                                        errorWidget: (context, url, error) => Icon(Icons.error,size: 50,color: Colors.black38,),),
                                   
                                   
@@ -87,8 +97,8 @@ class CategoryContent extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        state.produnderCategory?[index]
-                                                .productDescription ??"",
+                                      categorywiseProducts?[index]
+                                                .productName ??"",
                                           
                                         // searchList[index]['Text'],
                                         style: TextStyle(
@@ -96,19 +106,66 @@ class CategoryContent extends StatelessWidget {
                                             color: Colors.black),
                                       ),
                                       Text(
-                                          state.produnderCategory?[index]
+                                          categorywiseProducts?[index]
                                                   .productDescription ??
                                               "",
                                           overflow: TextOverflow.ellipsis),
-                                      Text(state
-                                          .produnderCategory?[index].price
+                                      Text(categorywiseProducts?[index].price
                                           .toString()??"")
                                     ]),
                               ),
                             ),
                             // Spacer(),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                
+                                
+                              CartModel cartItems=CartModel(id: categorywiseProducts?[index].id??0, prodName: categorywiseProducts?[index].productName??'', price: categorywiseProducts?[index].price??0, url: categorywiseProducts?[index].image??'');
+
+                               bool itemExists = cartBox.values.any(
+                                            (item) => item.id == cartItems.id);
+
+                                        if (!itemExists) {
+                                      
+                                       context.read<CartBloc>().add(CartItemAdd(cartItems: cartItems));
+                                        
+
+                                       
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          content: Text(
+                                            "Product added to cart!",
+                                          ),
+                                          duration: Duration(seconds: 1),
+                                          behavior: SnackBarBehavior.floating,
+                                          // backgroundColor: Colors.lime.shade500
+                                        ));
+
+
+                                        }
+                                        else{
+                                           ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          content: Text(style: TextStyle(color: Colors.red),
+                                            "Product already in cart!",
+                                          ),
+                                          duration: Duration(seconds: 1),
+                                          behavior: SnackBarBehavior.floating,
+                                          // backgroundColor: Colors.lime.shade500
+                                        ));
+
+                                        }
+
+
+                                       
+                                },
                                 icon: Icon(Icons.shopping_cart)),
                           ],
                         )
@@ -117,7 +174,7 @@ class CategoryContent extends StatelessWidget {
                   );
                 },
                 staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-                itemCount:state.produnderCategory?.length??0 ,
+                 itemCount: categorywiseProducts?.length??0,
               );
             }
             if(state is CategoryError){

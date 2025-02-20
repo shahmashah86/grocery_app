@@ -10,38 +10,33 @@ import 'package:grocery_app/package/apiservice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardRepositoryImpl implements DashboardRepository {
-
-    Future<String?> readtokenFromPref() async {
+  Future<String?> readtokenFromPref() async {
     // log("From onboarding");
-    
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String tokenFromAuth = prefs.getString('tokenValue') ?? "";
-    
+
     return tokenFromAuth;
   }
 
-
-
   @override
-  Future<AdmindasboardModel> getAdminDashboardData()async {
-     try {
-  
-      String? token= await readtokenFromPref();
+  Future<AdmindasboardModel> getAdminDashboardData() async {
+    try {
+      String? token = await readtokenFromPref();
 
       log("AdminDashboard");
 
       final Response response = await Apiservice.get(
-      
           path: ApiEndpoints.adminDasboard,
           headers: {"Authorization": "Bearer $token"});
       if (response.statusCode == 200) {
         log("inside response");
-        
-        AdminDasboardDto dashboardData=AdminDasboardDto.fromJson(response.data);
-       
+
+        AdminDasboardDto dashboardData =
+            AdminDasboardDto.fromJson(response.data);
+
         return dashboardData.toModel();
-       
       } else {
         throw "Something went wrong in response";
       }
@@ -51,36 +46,29 @@ class DashboardRepositoryImpl implements DashboardRepository {
     }
   }
 
-
-
-
   @override
-  bannercreation(List<File?> imageFile)  async{
-     List<MultipartFile> fileList = [];
-     for (var file in imageFile) {
-      fileList.add(await MultipartFile.fromFile(file!.path,contentType:DioMediaType("image", '*') ));
+  bannercreation(List<File?> imageFile) async {
+    List<MultipartFile> fileList = [];
+    for (var file in imageFile) {
+      fileList.add(await MultipartFile.fromFile(file!.path,
+          contentType: DioMediaType("image", '*')));
     }
     log(fileList.toString());
     FormData formData = FormData.fromMap({
-
-      
-      'banners':fileList,
-    
+      'banners': fileList,
     });
-
 
     try {
       String? token = await readtokenFromPref();
       String path = ApiEndpoints.bannerCraetion;
       final Response response = await Apiservice.post(
-          data: formData,
-          path: path,
-          headers: {
-            "Authorization": "Bearer $token",
-            'Content-Type': 'multipart/form-data'
-          },
-          );
-
+        data: formData,
+        path: path,
+        headers: {
+          "Authorization": "Bearer $token",
+          'Content-Type': 'multipart/form-data'
+        },
+      );
 
       log(response.toString(), name: 'response of image registration');
       if (response.statusCode == 200) {
@@ -93,7 +81,5 @@ class DashboardRepositoryImpl implements DashboardRepository {
       log(e.toString());
       throw "Something wrong woth the request/code";
     }
- 
   }
- 
 }
