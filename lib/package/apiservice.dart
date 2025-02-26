@@ -21,6 +21,7 @@ class Apiservice {
       
 
     try {
+      log(path);
       final Response response =
           await dio.post(path,data: data,options: Options(headers: headers,responseType: ResponseType.json),
            );
@@ -51,6 +52,9 @@ class Apiservice {
     } 
     on DioException catch (e) {
       log("inside put apiservice");
+       log(e.response?.statusCode.toString()?? "Other code");
+      log(e.response?.statusMessage.toString()?? "Other code");
+      log(e.response?.data.toString()?? "Other code");
       throw Exception(e);
     }
   }
@@ -97,6 +101,9 @@ class Apiservice {
     } 
     on DioException catch (e) {
       log("inside delete apiservice");
+           log(e.response?.statusCode.toString()?? "Other code");
+      log(e.response?.statusMessage.toString()?? "Other code");
+      log(e.response?.data.toString()?? "Other code");
       throw Exception(e);
     }
   }

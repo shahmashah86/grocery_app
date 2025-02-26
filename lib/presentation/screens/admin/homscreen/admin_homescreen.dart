@@ -3,10 +3,11 @@ import 'dart:developer';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grocery_app/domain/admin/dashboard/common/model/order_model.dart';
 
-import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
+
 import 'package:grocery_app/domain/common/enums/enums.dart';
+import 'package:grocery_app/domain/orders/model/order_model.dart';
+import 'package:grocery_app/domain/products/model/products_model.dart';
 
 import 'package:grocery_app/presentation/bloc/admin_dashboard/admin_dashboard_bloc.dart';
 
@@ -43,7 +44,7 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
 
   @override
   Widget build(BuildContext context) {
-    int totalsales = 0;
+  
     return Scaffold(
       // backgroundColor: const Color.fromARGB(255, 252, 250, 245),
       drawer: Drawer(
@@ -261,11 +262,16 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
             ),
             BlocBuilder<OrdersBloc, OrdersState>(
               builder: (context, state) {
-                if (state is Orderssuccess) {
+                if(state is OrdersLoading){
+                  log('ordersloading...');
+                    return CircularProgressIndicator();
+                }
+                      int totalsales = 0; 
+                if (state is Orderssuccess && state.allordersList.isNotEmpty) {
                   List<OrdersModel>? orders = state.allordersList;
                   for (var i = 0; i < orders!.length; i++) {
                     if (orders[i].acknowledged == true) {
-                      totalsales += int.parse(orders[i].totalAmount);
+                      totalsales += int.parse(orders[i].totalAmount.toString());
                     }
                   }
                   log(totalsales.toString());
@@ -312,10 +318,12 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                     ),
                   );
                 }
+                // if(state is Orderssuccess && state.iserror)
                 if(state is OrdersError){
                   return Text(state.errormessage.toString());
                 }
-                return CircularProgressIndicator();
+                
+                return Text('loading');
               },
             ),
             BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
@@ -468,7 +476,7 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                   return CircularProgressIndicator();
                 }
                 if (state is AdminDashboardError) {
-                  return Text(state.message.toString());
+                  return Text(state.errormessage.toString());
                 }
                 return (Text('please wait or load again'));
               },

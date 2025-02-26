@@ -3,8 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grocery_app/data/admin/dasboard/dtos/admin_dasboard_dto.dart';
+
 import 'package:grocery_app/presentation/bloc/admin_dashboard/admin_dashboard_bloc.dart';
+import 'package:grocery_app/presentation/screens/admin/banner/list_banners_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateBannerScreen extends StatefulWidget {
@@ -36,7 +37,12 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.amber.shade200,
-          actions: [
+          actions: [IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context){
+              return ListBannersScreen();
+            }));
+
+          }, icon: Icon(Icons.list)),
             IconButton(
               onPressed: () async {
                 await getImage();
@@ -63,6 +69,7 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
                               if(state is AdminDashboardError){
                                               return Center(child: Text("Error in uplaoding please try again"));
                                             }
+                                        
                     return Column(
                                     children: [
                                       Expanded(
@@ -112,9 +119,12 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
                                       TextButton(
                                           onPressed: () {
                                             log(selectedImages.value.toString());
+                                   
                                             context.read<AdminDashboardBloc>().add(
                                                 AdminbannerCreation(
                                                     imageFile: selectedImages.value));
+
+                                                           
                                           },
                                           child: Text("upload"))
                                     ],

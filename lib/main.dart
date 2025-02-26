@@ -9,7 +9,7 @@ import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
-import 'package:grocery_app/presentation/bloc/get_order/get_orderby_id_bloc.dart';
+
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 import 'package:grocery_app/presentation/bloc/user_dashboard/user_dashboard_bloc.dart';
@@ -32,7 +32,7 @@ cartBox=  await Hive.openBox<CartEntity>("cartBox");
       BlocProvider.value(value: di.getIt<OrdersBloc>()),
       BlocProvider.value(value: di.getIt<CategoryBloc>()),
       BlocProvider.value(value: di.getIt<ProductBloc>()),
-         BlocProvider.value(value: di.getIt<GetOrderbyIdBloc>()),
+        //  BlocProvider.value(value: di.getIt<GetOrderbyIdBloc>()),
          BlocProvider.value(value: di.getIt<UserDashboardBloc>()),
                 BlocProvider.value(value: di.getIt<CartBloc>()),
   ], child: const MyApp()));

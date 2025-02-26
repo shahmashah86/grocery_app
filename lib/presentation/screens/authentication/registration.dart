@@ -15,7 +15,7 @@ class Registration extends StatefulWidget {
 
 class _RegistrationState extends State<Registration> {
    final regFormkey = GlobalKey<FormState>();
-  TextEditingController? nameController;
+  TextEditingController? usernameController;
   TextEditingController? emailControler;
   TextEditingController? passwordController;
 
@@ -23,7 +23,7 @@ class _RegistrationState extends State<Registration> {
   void initState() {
 
                 
-    nameController = TextEditingController();
+    usernameController = TextEditingController();
     passwordController = TextEditingController();
     emailControler = TextEditingController();
     super.initState();
@@ -60,7 +60,7 @@ class _RegistrationState extends State<Registration> {
                       
                     
                   },
-                    controller: nameController,
+                    controller: usernameController,
                     decoration: InputDecoration(
                         hintText: "username",
                         fillColor: Colors.white,
@@ -74,11 +74,9 @@ class _RegistrationState extends State<Registration> {
                   TextFormField(
                     validator:(value) {
                      if (value == null || value == '') {
-                          return "Empty password field";
+                          return "Empty email field";
                         }
-                        // if (value.length < 6) {
-                        //   return "Invalid password length";
-                        // }
+                        
                         return null;
                       
                     
@@ -97,7 +95,7 @@ class _RegistrationState extends State<Registration> {
                   TextFormField(
                     validator:(value) {
                      if (value == null || value == '') {
-                          return "Empty email field";
+                          return "Empty password field";
                         }
                         if (value.length < 8) {
                           return "Invalid password length";
@@ -136,14 +134,14 @@ BlocConsumer<AuthBloc, AuthState>(
                                 WidgetStatePropertyAll(Colors.white),
                           ),
                           onPressed: ()  {
-                            if(regFormkey.currentState!.validate()){
+                        //     if(regFormkey.currentState!.validate()){
                         context.read<AuthBloc>().add(AuthSignUp(
-                                  name: nameController!.text.trim(),
-                                  username: emailControler!.text.trim(),
+                                  username: usernameController!.text.trim(),
+                                  email: emailControler!.text.trim(),
                                   password: passwordController!.text.trim(),
                                 ));
-                            }
-                                  nameController!.clear();
+                        //     }
+                                  usernameController!.clear();
                                 emailControler!.clear();
                                   passwordController!.clear();
                             

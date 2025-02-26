@@ -1,17 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:grocery_app/domain/admin/common/category/model/category_model.dart';
+import 'package:grocery_app/domain/category/model/category_model.dart';
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/bloc/user_dashboard/user_dashboard_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/search/searchscreen.dart';
-import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
 import 'package:grocery_app/presentation/screens/user/widgets/category_content.dart';
-
 import 'package:grocery_app/presentation/screens/user/widgets/clipper.dart';
 
 class HomeScreen extends StatefulWidget {

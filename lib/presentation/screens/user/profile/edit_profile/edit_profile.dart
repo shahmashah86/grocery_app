@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 
-class EditProfile extends StatelessWidget {
-  const EditProfile({super.key});
+class EditProfile extends StatefulWidget {
+  final String? phoneNumber;
+  final String? email;
+  final bool toEdit;
+  const EditProfile({super.key,this.phoneNumber,this.email,this.toEdit=false});
+  
 
   @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+      TextEditingController phoneNumbercontroller=TextEditingController();
+         TextEditingController emailController=TextEditingController();
+  @override
+  void initState() {
+    phoneNumbercontroller.text=widget.phoneNumber??'';
+        emailController.text=widget.email??'';
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor:
           const Color.fromARGB(255, 248, 237, 202).withOpacity(0.4),
@@ -29,24 +48,27 @@ class EditProfile extends StatelessWidget {
                         icon: Icon(Icons.close))
                   ],
                 ),
+                Container(decoration: BoxDecoration(
+                        border:
+                            Border.all(color: Colors.amber.shade200, width: 2)),
+                    height: 50,
+                    width: MediaQuery.sizeOf(context).width * 0.94, child: TextFormField(controller: phoneNumbercontroller,)),
                 Container(
                     decoration: BoxDecoration(
                         border:
                             Border.all(color: Colors.amber.shade200, width: 2)),
                     height: 50,
-                    width: MediaQuery.sizeOf(context).width * 0.94),
+                    width: MediaQuery.sizeOf(context).width * 0.94
+                    ,child: TextFormField(controller: emailController,),
+                    ),
                 Container(
                     decoration: BoxDecoration(
                         border:
                             Border.all(color: Colors.amber.shade200, width: 2)),
                     height: 50,
-                    width: MediaQuery.sizeOf(context).width * 0.94),
-                Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.amber.shade200, width: 2)),
-                    height: 50,
-                    width: MediaQuery.sizeOf(context).width * 0.94),
+                    width: MediaQuery.sizeOf(context).width * 0.94,
+                    child: TextFormField(),
+                    ),
                 Container(
                     decoration: BoxDecoration(
                         border:
@@ -57,7 +79,12 @@ class EditProfile extends StatelessWidget {
                       maxLines: 5,
                       readOnly: true,
                       
-                    ))
+                    )),
+                    widget.toEdit==true?
+                    ElevatedButton(onPressed: (){
+
+                    }, child: Text("save")):Text('')
+
               ],
             ),
           ),

@@ -8,21 +8,43 @@ sealed class OrdersEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class OrdersListGet extends OrdersEvent{
-  
-}
-class OrdersbyUser extends OrdersEvent{
- final int userId;
+class OrdersListGet extends OrdersEvent {}
 
- const OrdersbyUser({required this.userId});
+class OrdersbyUser extends OrdersEvent {
+  final int userId;
+
+  const OrdersbyUser({required this.userId});
+
+  @override
+  List<Object> get props => [userId];
 }
 
 class Orderacknowledge extends OrdersEvent {
-  final int? orderId;
+  final int orderId;
 //  final List<int> acknowldegedOrders;
   const Orderacknowledge({
     required this.orderId,
     // required this.acknowldegedOrders,
   });
-  
+
+  @override
+  List<Object> get props => [orderId];
+}
+
+class OrderPlaced extends OrdersEvent {
+  final PlaceOrderModel orders;
+
+  const OrderPlaced({required this.orders});
+  @override
+  List<Object> get props => [orders];
+}
+
+class OrderbyId extends OrdersEvent {
+  final int orderId;
+  const OrderbyId({
+    required this.orderId,
+  });
+
+  @override
+  List<Object> get props => [orderId];
 }

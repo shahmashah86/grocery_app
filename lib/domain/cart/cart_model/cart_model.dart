@@ -1,41 +1,18 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:grocery_app/data/databases/entity/cart_entity.dart';
+import 'package:equatable/equatable.dart';
 
-class CartModel {
-
+class CartModel extends Equatable {
   final int id;
-    final String prodName;
- 
+  final String prodName;
   final double price;
- 
   final int quantity;
+  final String? url;
 
-  final String url;
-
-
-  CartModel({required this.id, required this.prodName, required this.price, this.quantity=1, required this.url});
-  
-  
-  CartEntity toEntity(){
-    return CartEntity(id: id,
-    prodName: prodName,
-    price: price,
-    quantity: quantity,
-    url: url
-    );
-  }
-
-  CartModel fromEntity(CartEntity entity){
-    return CartModel(id: id, prodName: prodName, price: price, url: url);
-  }
-
-
-  factory CartModel.fromEntity(CartEntity entity)
-{
-  return CartModel(id: entity.id, prodName: entity.prodName, price: entity.price, url:entity.url,quantity: entity.quantity);
-}  
-  
-  
+  CartModel(
+      {required this.id,
+      required this.prodName,
+      required this.price,
+      this.quantity = 1,
+      this.url});
 
   CartModel copyWith({
     int? id,
@@ -52,4 +29,18 @@ class CartModel {
       url: url ?? this.url,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'productId': id,
+      'productName': prodName,
+      'soldPrice': price,
+      'quantity': quantity,
+      "imageUrl": url
+    };
   }
+  
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id,price,prodName,quantity,url];
+}

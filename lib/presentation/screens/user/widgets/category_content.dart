@@ -2,14 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:grocery_app/data/databases/entity/cart_entity.dart';
 
-
-import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
 import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
+import 'package:grocery_app/domain/products/model/products_model.dart';
+
+
 import 'package:grocery_app/main.dart';
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
+
 import 'package:grocery_app/presentation/screens/user/pdoduct_description/product_description.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';

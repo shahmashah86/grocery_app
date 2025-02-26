@@ -12,10 +12,20 @@ class AdminDasboarddataGet  extends AdminDashboardEvent{
 
 
 }
+class UserDashboardGet extends AdminDashboardEvent{
+
+}
 class AdminbannerCreation extends AdminDashboardEvent {
 
  final List<File> imageFile;
   const AdminbannerCreation({
     required this.imageFile,
+  });
+}
+class AdminbannerDeletion extends AdminDashboardEvent {
+
+ final int indextoDelete;
+  const AdminbannerDeletion({
+    required this.indextoDelete,
   });
 }

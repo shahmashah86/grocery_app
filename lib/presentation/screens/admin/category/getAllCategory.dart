@@ -1,13 +1,10 @@
 
 
 import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:grocery_app/domain/admin/common/category/model/category_model.dart';
+import 'package:grocery_app/domain/category/model/category_model.dart';
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 import 'package:grocery_app/presentation/screens/admin/category/addCategory.dart';
 
@@ -22,22 +19,12 @@ class _GetallcategoryState extends State<Getallcategory> {
   @override
   void initState() {
     context.read<CategoryBloc>().add(CategoryGet());
-      // Future.delayed(Duration(seconds: 2),(){
-      //       // SpinKitThreeBounce(size: 20,color:  Color.fromARGB(255, 220, 215, 215),);
-
-      // });
-    
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> Items = [
-      {'id': 1, "name": "Food"},
-      {'id': 2, "name": "Foods"},
-      {'id': 3, "name": "Foodss"},
-      {'id': 3, "name": "Foodss"},
-    ];
+ 
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -46,9 +33,9 @@ class _GetallcategoryState extends State<Getallcategory> {
             return Addcategory(buttonMode:  CategoryAddButtonMode.add);
           }));
         },
-        child: Icon(Icons.add),
         backgroundColor:  Colors.amber.shade200,
         hoverColor: Colors.white,
+        child: Icon(Icons.add),
       ),
       appBar: AppBar(
         backgroundColor: Colors.amber.shade200,

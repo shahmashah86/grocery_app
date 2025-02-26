@@ -11,8 +11,8 @@ sealed class CategoryEvent extends Equatable {
 class CategoryGet extends CategoryEvent {}
 
 class CategoryCreate extends CategoryEvent {
-  String categeoryName;
-  CategoryCreate({
+  final String categeoryName;
+  const CategoryCreate({
     required this.categeoryName,
   });
   @override
@@ -20,9 +20,9 @@ class CategoryCreate extends CategoryEvent {
 }
 
 class CategoryUpdate extends CategoryEvent {
-  String categoryName;
-  int id;
-  CategoryUpdate({
+  final String categoryName;
+  final int id;
+  const CategoryUpdate({
     required this.id,
     required this.categoryName,
   });
@@ -31,8 +31,8 @@ class CategoryUpdate extends CategoryEvent {
 }
 
 class CategoryDelete extends CategoryEvent {
-  int id;
-  CategoryDelete({
+ final int id;
+  const CategoryDelete({
     required this.id,
   });
   @override
@@ -40,8 +40,8 @@ class CategoryDelete extends CategoryEvent {
 }
 
 class CategorylistbyId extends CategoryEvent {
-  int id;
-  CategorylistbyId({
+ final int id;
+  const CategorylistbyId({
     required this.id,
   });
 

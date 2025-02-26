@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:grocery_app/domain/admin/common/category/model/category_model.dart';
-import 'package:grocery_app/domain/admin/common/category/repository/category_reposotory.dart';
-import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
+import 'package:grocery_app/domain/category/model/category_model.dart';
+import 'package:grocery_app/domain/category/repository/category_reposotory.dart';
+import 'package:grocery_app/domain/products/model/products_model.dart';
 
 part 'category_event.dart';
 part 'category_state.dart';
@@ -20,22 +20,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<CategorylistbyId>(_productByCategory);
   }
   _getCategory(CategoryGet event, Emitter<CategoryState> emit) async {
-    final currentstate = state;
-    // try{
-    //    final response = await categoryRepository.getAllCategories();
-    // if(currentstate is CategoryLoaded){
-
-    //     emit(currentstate.copyWith(categoryList: response));
-
-    // }
-    //  emit(CategoryLoading());
-    //  emit(CategoryLoaded(categoryList: response,));
-
-    // }
-    // catch(e){
-    //     emit(CategoryError(e.toString()));
-
-    // }
+   
 
     try {
       emit(CategoryLoading());

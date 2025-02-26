@@ -39,6 +39,6 @@ class CartItemToupdate extends CartEvent {
   List<Object> get props => [indextoUpdate,itemtoUpdate];
 }
 class CartItemclear extends CartEvent{
-  
+
   
 }

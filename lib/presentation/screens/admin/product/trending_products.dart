@@ -1,10 +1,9 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:grocery_app/domain/products/model/products_model.dart';
 
-import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
 
 
 class TrendingProducts extends StatelessWidget {

@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grocery_app/domain/admin/product_reg/model/product_reg_model.dart';
-import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
+import 'package:grocery_app/domain/products/model/products_model.dart';
+
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 
 class StockoutScreen extends StatelessWidget {
@@ -70,11 +70,15 @@ class StockoutScreen extends StatelessWidget {
         
         builder: (context, state) {
           if(state is ProductLoading){
-            return CircularProgressIndicator();
+            log('loading');
+            return Center(child: CircularProgressIndicator());
           }
              if(state is ProductLoaded){
-                stocks = List.from(state.stockList!); // Keep original data into stocks
-  stock.value = List.from(stocks!); // Initialize stock with fresh unsorted data
+              if(state.isLoading){
+                return Center(child: CircularProgressIndicator());
+              }
+                stocks = state.stockList; // Keep original data into stocks
+  stock.value =stocks; // Initialize stock with fresh unsorted data
             // stocks= state.stockList;
             //   stock.value = stocks??[];
           return SingleChildScrollView(

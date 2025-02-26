@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grocery_app/domain/common/model/order_byid_model/order_byid_model.dart';
-import 'package:grocery_app/presentation/bloc/get_order/get_orderby_id_bloc.dart';
+import 'package:grocery_app/domain/common/enums/enums.dart';
+import 'package:grocery_app/domain/orders/model/order_model.dart';
+
+import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 
 class GetOrderByidScreen extends StatefulWidget {
   final int orderId;
@@ -14,179 +18,158 @@ class GetOrderByidScreen extends StatefulWidget {
 class _GetOrderByidScreenState extends State<GetOrderByidScreen> {
   @override
   void initState() {
-    context.read<GetOrderbyIdBloc>().add(GetOrderEvent(id: widget.orderId));
+    context.read<OrdersBloc>().add(OrderbyId(orderId: widget.orderId));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  backgroundColor: Colors.amber.shade200,),
-      body: Column(
-        children: [
-          BlocBuilder<GetOrderbyIdBloc, GetOrderbyIdState>(
-            builder: (context, state) {
-              if(state is GetAnOrderbyIdLoaded){
-                final OrderByidModel order=state.orderById;
-                     return Card(
-                       child: Container(
-                         padding: EdgeInsets.only(left: 8, right: 9,top: 8),
-                         height: MediaQuery.sizeOf(context).height * .8,
-                         decoration: BoxDecoration(
-                           color: const Color.fromARGB(255, 251, 247, 233),
-                           borderRadius: BorderRadius.circular(10),
-                         ),
-                         width: double.infinity,
-                         child: Column(
-                           children: [
-                             Row(
-                               children: [
-                                 Text(order.order.dateTime,
-                                   style: TextStyle(
-                                       fontSize: 20, ),
-                                 )
-                               ],
-                             ),
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                               children: [
-                                 Text(
-                                   "User Id",
-                                   style: TextStyle(color: Colors.black54),
-                                 ),
-                                 Spacer(),
-                                 Text(
-                                  order.order.userId.toString(),
-                                   style: TextStyle(
-                                     fontSize: 20,
-                                   ),
-                                 ),
-                               ],
-                             ),
-                             Divider(thickness: .5),
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                               children: [
-                                 Text("Total Items",
-                                     style: TextStyle(color: Colors.black54)),
-                                 Spacer(),
-                                 Text(
-                                   order.order.totalItems.toString(),
-                                   style: TextStyle(
-                                     fontSize: 20,
-                                   ),
-                                 ),
-                               ],
-                             ),
-                             Divider(thickness: .5),
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                               children: [
-                                 Text("Total Amount",
-                                     style: TextStyle(color: Colors.black54)),
-                                 Spacer(),
-                                 Text(
-                                   order.order.totalAmount,
-                                   style: TextStyle(
-                                     fontSize: 20,
-                                   ),
-                                 ),
-                               ],
-                             ),
-                             Divider(
-                               thickness: .5,
-                             ),
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                               children: [
-                                 Text("Acknowledged",
-                                     style: TextStyle(color: Colors.black54)),
-                                 Spacer(),
-                                 Text(
-                                   order.order.acknowledged.toString(),
-                                   style: TextStyle(
-                                     fontSize: 20,
-                                   ),
-                                 ),
-                               ],
-                             ),
-                              Divider(thickness: .5),
-                             Expanded(
-                               child: ListView.builder(itemCount: order.product.length,
-                                itemBuilder: (context, index) => 
-                                 Column(
-                                   children: [
+      appBar: AppBar(
+        backgroundColor: Colors.amber.shade200,
+      ),
+      body: BlocBuilder<OrdersBloc, OrdersState>(
+        builder: (context, state) {
+          if (state is Orderssuccess) {
+            log(state.isLoading.toString(),name: 'loading state of order by id of user');
+            if (state.isLoading==true) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (state.isLoading==false&& state.ordersbyId.isNotEmpty) {
+              final OrdersModel order = state.ordersbyId.first;
+              log(order.toString(), name: 'inside getorderby id');
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                order.dateTime,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              )
+                            ],
+                          ),
+                       
+                          Divider(thickness: .5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Total Items",
+                                  style: TextStyle(color: Colors.black54)),
+                              Spacer(),
+                              Text(
+                                order.totalItems.toString() ,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Divider(thickness: .5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Total Amount",
+                                  style: TextStyle(color: Colors.black54)),
+                              Spacer(),
+                              Text(
+                                order?.totalAmount.toString() ?? '',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                                   
+                          Divider(thickness: .7),
+                         ...List.generate( order!.product!.length, (index){
+                          return  Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Product",
+                                          style:
+                                              TextStyle(color: Colors.black54)),
+                                      Spacer(),
+                                      Text(
+                                        order?.product?[index].products!
+                                                .productName ??
+                                            '',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                 
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("quantity",
+                                          style:
+                                              TextStyle(color: Colors.black54)),
+                                      Spacer(),
+                                      Text(
+                                        order?.product?[index].quantity
+                                                .toString() ??
+                                            '',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                 
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Price",
+                                          style:
+                                              TextStyle(color: Colors.black54)),
+                                      Spacer(),
+                                      Text(
+                                        order?.product?[index].soldPrice
+                                                .toString() ??
+                                            '',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    thickness: .5,
+                                  ),
+                                ],
+                              );
                                     
-                                     Row(
-                                       mainAxisAlignment: MainAxisAlignment.center,
-                                       children: [
-                                         Text("Product",
-                                             style: TextStyle(color: Colors.black54)),
-                                         Spacer(),
-                                         Text(
-                                           order.product[index].products!.productName??'',
-                                           style: TextStyle(
-                                             fontSize: 20,
-                                           ),
-                                         ),
-                                       ],
-                                     ),
-                                        Divider(
-                               thickness: .5,
-                             ),
-                                       Row(
-                                   mainAxisAlignment: MainAxisAlignment.center,
-                                   children: [
-                                       
-                                     Text("quantity",
-                                         style: TextStyle(color: Colors.black54)),
-                                     Spacer(),
-                                     Text(
-                                       order.product[index].quantity.toString(),
-                                       style: TextStyle(
-                                         fontSize: 20,
-                                       ),
-                                     ),
-                                   ],
-                                 ),
-                                 Divider(
-                               thickness: .5,
-                             ),
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                               children: [
-                                 Text("Price",
-                                     style: TextStyle(color: Colors.black54)),
-                                 Spacer(),
-                                 Text(
-                                   order.product[index].soldPrice.toString(),
-                                   style: TextStyle(
-                                     fontSize: 20,
-                                   ),
-                                 ),
-                               ],
-                             ),
-                             Divider(
-                               thickness: .5,
-                             ),
-                          
-                                   ],
-                                 ),
-                                 
-                                 
-                               ),
-                             ),
-                           ],
-                         ),
-                       ),
-                     );
-
-              }
-              return Text('loading');
-         
-            },
-          )
-        ],
+                         })
+                         
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+             if(state.iserror ){
+              return Text(state.errormessage);
+            }
+           
+           
+          }
+         if(state is OrdersError){
+              return Text(state.errormessage);
+            }
+          return Text('Please wait or try again');
+        },
       ),
     );
   }

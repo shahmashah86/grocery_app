@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
 import 'package:hive_flutter/adapters.dart';
 part 'cart_entity.g.dart';
 
@@ -13,13 +14,13 @@ class CartEntity {
   @HiveField(3)
   final int quantity;
   @HiveField(4)
-  final String url;
+  String? url;
   CartEntity(
       {required this.id,
       required this.prodName,
       required this.price,
       this.quantity = 1,
-      required this.url});
+      this.url});
 
   CartEntity copyWith(
       {int? id, String? prodName, double? price, int? quantity, String? url}) {
@@ -30,4 +31,16 @@ class CartEntity {
         quantity: quantity ?? this.quantity,
         url: url ?? this.url);
   }
+
+  factory CartEntity.fromModel(CartModel model) {
+    return CartEntity(
+        id: model.id,
+        prodName: model.prodName,
+        price: model.price,
+        url: model.url,
+        quantity: model.quantity);
+  }
+
+  CartModel toModel() => CartModel(
+      id: id, prodName: prodName, price: price, url: url, quantity: quantity);
 }

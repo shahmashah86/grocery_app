@@ -1,5 +1,7 @@
 
 
+import 'package:flutter/material.dart';
+
 class ApiEndpoints {
 
   static const baseurl ="https://grocery-app-1h07.onrender.com";
@@ -26,5 +28,10 @@ class ApiEndpoints {
   static const userDasboard='/api/dashboard/userDashBoardDatas';
   static const listproductundercategory='/api/product/listAllProductsUnderACategory/';
   static const searchProduct='/api/product/searchProducts';
-
+  static const placeOrder='/api/order/placeAnOrder';
+  static const profileImage='/api/user/profileImage/';
+  static const bannerdelete='/api/dashboard/deleteABanner/';
+ static const deleteuser='/api/user/deleteAUser/';
+ static const foregetpassword='/api/user/resetPassword/';
+ static const updateUser='/api/user/updateAUser/';
 }

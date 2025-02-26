@@ -1,16 +1,16 @@
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:grocery_app/domain/admin/product_reg/model/product_reg_model.dart';
-import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
 import 'package:grocery_app/domain/common/enums/enums.dart';
-import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 
+import 'package:grocery_app/domain/products/model/product_reg_model.dart';
+import 'package:grocery_app/domain/products/model/products_model.dart';
+import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/screens/admin/product/product_description.dart';
 import 'package:grocery_app/presentation/screens/admin/product/productcreate.dart';
+
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -75,11 +75,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
           builder: (context, state) {
             if (state is ProductLoading) {
               log("loading", name: 'productlist screen');
-              return SpinKitThreeBounce(
-                color: Colors.amberAccent,
-              );
+              return Center(child: CircularProgressIndicator());
             }
             if (state is ProductLoaded) {
+              if(state.isLoading){
+                return Center(child: CircularProgressIndicator(),);
+              }
               log('listview from productlist screen');
 
               List<ProductRegModel>? products = state.productList;
@@ -241,7 +242,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   PopupMenuItem<String>(
                                     onTap: () {
                                       context.read<ProductBloc>().add(
-                                          productDeletion(
+                                          ProductDeletion(
                                               idTodelete:
                                                   products[index].products.id!,
                                               indexinList: index));

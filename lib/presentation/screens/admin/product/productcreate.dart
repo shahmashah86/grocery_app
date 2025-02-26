@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grocery_app/domain/admin/common/category/model/category_model.dart';
-import 'package:grocery_app/domain/admin/product_reg/model/product_reg_model.dart';
-import 'package:grocery_app/domain/admin/product_reg/model/products_model.dart';
+
+
+import 'package:grocery_app/domain/category/model/category_model.dart';
 import 'package:grocery_app/domain/common/enums/enums.dart';
+import 'package:grocery_app/domain/products/model/product_reg_model.dart';
+import 'package:grocery_app/domain/products/model/products_model.dart';
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -281,7 +283,7 @@ class _ProductcreateState extends State<Productcreate> {
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: MediaQuery.sizeOf(context).width * .57,
                                  
                                   child: SingleChildScrollView(
@@ -494,7 +496,7 @@ class _ProductcreateState extends State<Productcreate> {
                             log('fghjk');
                             ProductRegModel products = ProductRegModel(
                                 products: product, categories: seletedid);
-                            context.read<ProductBloc>().add(productUpdation(
+                            context.read<ProductBloc>().add(ProductUpdation(
                                 productsToUpdate: products,
                                 idToUpdate: widget.productIdToupdate!));
                             
