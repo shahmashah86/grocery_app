@@ -111,6 +111,7 @@ class AuthRepositoryImpl implements AuthRepository {
         bool admin = response.data['isAdmin'];
         addTokenTopref(token);
         addAdminToPref(admin);
+
         saveUserData(
             name: response.data['name'],
             email: response.data['email'],
@@ -330,27 +331,30 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future updateUser({required int userIdforupdate, AuthModel? authinfo}) async {
     try {
+      // log(authinfo!.toMap().toString());
       String? token = await readtokenFromPref();
       
       final Response response = await Apiservice.put(
           path: '${ApiEndpoints.updateUser}$userIdforupdate',
           data: authinfo?.toMap(),
+          
           headers: {"Authorization": "Bearer $token"});
           
       if (response.statusCode == 200) { 
-        log(response.data.toString());
+        log(response.data.toString(),name: 'response update user');
         await saveUserData(
             email: response.data['email'],
             id: response.data['id'],
             name: response.data['name'],
             phone: response.data['phoneNumber']);
-        return response.data;
+        final responsedata=AuthDto.fromJson(response.data).toModel();
+        return responsedata;
       }
        else {
         throw "Something went wrong in response";
       }
     } catch (e) {
-      log(e.toString());
+      log(e.toString(),name: 'error response');
       rethrow;
     }
   }

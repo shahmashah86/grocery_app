@@ -109,13 +109,15 @@ class OrderRepositoryImpl extends OrderRespository {
           path: ApiEndpoints.placeOrder,
           headers: {"Authorization": "Bearer $token"});
       if (response.statusCode == 200) {
-        return response.data;
+        // log(response.data.toString());
+        return response.data['message'];
+      
         // return
       } else {
         throw "Something went wrong in response";
       }
     } catch (e) {
-      log(e.toString());
+      log(e.toString(),name: 'exception');
       log("Something went wrong in request/code");
       rethrow;
     }

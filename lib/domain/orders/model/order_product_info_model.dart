@@ -11,18 +11,21 @@ class OrderProductInfoModel extends Equatable {
  final String? productName;
  final String? soldPrice;
  final ProductsModel? products;
+ final String? unit;
 
  const  OrderProductInfoModel({
   this.productId,
-    this.products,
+ 
     this.quantity,
     this.productName,
     this.soldPrice,
+       this.products,
+       this.unit
   });
   
   @override
 
-  List<Object?> get props => [productName,quantity,soldPrice,products,productId
+  List<Object?> get props => [productName,quantity,soldPrice,products,productId,unit
  ];
 
 

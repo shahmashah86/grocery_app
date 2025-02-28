@@ -7,20 +7,23 @@ class AuthDto {
   final String? token;
   final String? name;
   final int? id;
+  final String? userName;
   final String? email;
   final bool? isAdmin;
   final String? phoneNumber;
   final String? profileImage;
+
   
   const AuthDto({
-    required this.token,
+    this.token,
     required this.name,
     required this.id,
     required this.email,
     required this.isAdmin,
-   
+  this.userName,
     this.phoneNumber,
    this.profileImage,
+
   });
 
 
@@ -28,14 +31,29 @@ class AuthDto {
     return AuthDto(
       token: json['token']??'',
       name: json['name'],
+      userName:json['userName']??'',
       
       id: json['id'],
       email: json['email'],
       isAdmin: json['isAdmin'],
       phoneNumber: json['phoneNumber'],
-      profileImage: json['profileImage'],
+      profileImage: json['profileImage']??'',
+      
     );
   }
+//   factory AuthDto.fromJson(Map<String, dynamic> json) {
+//   return AuthDto(
+//      token: json['token']??'',
+//     name: json['name'] ?? "",
+//     email: json['email'] ?? "",
+//     userName:json['userName']??'',
+//     phoneNumber: json['phoneNumber']?.toString() ?? "",
+//     profileImage: json['profileImage'] ?? "",
+//     isAdmin: json['isAdmin'] ?? false,
+//     id: json['id'] ?? 0,
+//   );
+// }
+
 
   AuthModel toModel() {
     return AuthModel(
@@ -43,7 +61,7 @@ class AuthDto {
         id: id,
         email: email,
         isAdmin: isAdmin,
-       
+       username: userName,
         phoneNumber: phoneNumber,
         image: profileImage);
   }

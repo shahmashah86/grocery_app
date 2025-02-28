@@ -1,15 +1,17 @@
 import 'dart:developer';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
 import 'package:grocery_app/domain/place_order_model/place_order_model.dart';
-
+import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/order_success/order_successful.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -22,6 +24,17 @@ class _CartState extends State<Cart> {
     // TODO: implement initSta
     context.read<CartBloc>().add(CartitemsGet());
     super.initState();
+  }
+
+
+    Future<String?> loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final phone = prefs.getString('user_phone');
+    return phone;
+  
+   
+  
   }
 
   @override
@@ -163,7 +176,6 @@ class _CartState extends State<Cart> {
                                                               1;
                                                     } else {
                                                       return;
-                                                      
                                                     }
                                                     final cartModel = state
                                                         .cartItems![index]
@@ -172,12 +184,11 @@ class _CartState extends State<Cart> {
                                                                 quantityselected
                                                                     .value);
 
-                                                    
-
                                                     context
                                                         .read<CartBloc>()
                                                         .add(CartItemToupdate(
-                                                            itemtoUpdate: cartModel,
+                                                            itemtoUpdate:
+                                                                cartModel,
                                                             indextoUpdate:
                                                                 index));
                                                   },
@@ -320,37 +331,80 @@ class _CartState extends State<Cart> {
                             ],
                           ),
                           SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () {
-                              int totalItems = state.cartItems!.length;
-                              double totalAmount = double.parse(
-                                  state.subtotal!.toStringAsFixed(2));
-                              // final orderdetails=OrdersModel(dateTime: DateTime.now().toString(), totalItems: totalItems, totalAmount: state.total!.toStringAsFixed(2),);
-                              final productdetails = state.cartItems;
-                              final orderitems = PlaceOrderModel(
-                                  dateTime: DateTime.now().toIso8601String(),
-                                  totalItems: totalItems,
-                                  totalAmount: totalAmount,
-                                  productdetails: productdetails!);
-                              log(orderitems.toString());
-
-                              context
-                                  .read<OrdersBloc>()
-                                  .add(OrderPlaced(orders: orderitems));
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return Orderssuccessful();
-                              }));
-
-                                 context.read<CartBloc>().add(CartItemclear());
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.lime.shade400,
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              minimumSize: Size(double.infinity, 40),
+                          BlocListener<OrdersBloc, OrdersState>(
+                            listener: (context, state) {
+                             
+                           if(state is Orderssuccess && state.message=='Added to cart successfully'){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return Orderssuccessful();
+      }));
+      context.read<CartBloc>().add(CartItemclear());
+                           }
+                          if(state is Orderssuccess && state.errormessage.isNotEmpty){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'something is wrong please try again!',
                             ),
-                            child: Text('Proceed to Checkout',
-                                style: TextStyle(fontSize: 16)),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                            
+                          }
+                            if(state is OrdersError){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'something is wrong please try again!',
+                            ),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                            
+                          }
+                          //  return;
+                            },
+                            
+                            
+                            child: ElevatedButton(
+                              onPressed: () async{
+                             final mobno= await loadUserData();
+                                log(mobno.toString(),name: 'phone number not null checking in cart screen');
+                             if(mobno!=null||mobno!=''){
+                             return showDialog(context: context, builder:(context){
+
+                              return AlertDialog(title: Text("Contact Required"),icon:Icon(Icons.warning,color: Colors.amber,size: 40,),
+                                content: Text('Please enter a vaild phone number in profile to proceed with your order'),
+                                actions: [TextButton(onPressed: (){Navigator.pop(context);}, child: Text("OK"),style: ButtonStyle(backgroundColor:WidgetStatePropertyAll(Colors.black12)),)],);
+                                
+                             });
+                             }
+
+
+                                int totalItems = state.cartItems!.length;
+                                double totalAmount = double.parse(
+                                    state.subtotal!.toStringAsFixed(2));
+                                // final orderdetails=OrdersModel(dateTime: DateTime.now().toString(), totalItems: totalItems, totalAmount: state.total!.toStringAsFixed(2),);
+                                final productdetails = state.cartItems;
+                                final orderitems = PlaceOrderModel(
+                                    dateTime: DateTime.now().toIso8601String(),
+                                    totalItems: totalItems,
+                                    totalAmount: totalAmount,
+                                    productdetails: productdetails!);
+                                log(orderitems.toString());
+
+                                // context
+                                //     .read<OrdersBloc>()
+                                //     .add(OrderPlaced(orders: orderitems));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.lime.shade400,
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                minimumSize: Size(double.infinity, 40),
+                              ),
+                              child: Text('Proceed to Checkout',
+                                  style: TextStyle(fontSize: 16)),
+                            ),
                           ),
                         ],
                       ),

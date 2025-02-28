@@ -27,7 +27,7 @@ class AuthModel extends Equatable {
   @override
   String toString() {
 
-    return 'AuthModel(username:$username,name:$name,id:$id,email:$email,phoneNummber:$phoneNumber,profileImage:$image)';
+    return 'AuthModel(username:$username,name:$name,id:$id,email:$email,phoneNumber:$phoneNumber,profileImage:$image)';
   }
 
   @override
@@ -43,7 +43,7 @@ class AuthModel extends Equatable {
       'email': email,
       'isAdmin': isAdmin,
       'phoneNumber': phoneNumber,
-      'image': image,
+      'profileImage': image,
    
     };
   }

@@ -16,11 +16,14 @@ class OrderProductInfoDto  {
   final String? soldPrice;
   final String? productName;
   final ProductsDto? products;
+  final String? unit;
  const OrderProductInfoDto( {this.productId,
-    this.products,
+   
     this.quantity,
     this.soldPrice,
     this.productName,
+     this.products,
+     this.unit
   });
 
 
@@ -30,16 +33,19 @@ class OrderProductInfoDto  {
       quantity: map['quantity'],
       soldPrice: map['soldPrice'],
       productName: map['productName'],
-      products: map['product'] != null ? ProductsDto.fromJson(map['product'] as Map<String, dynamic>) : null 
+      products: map['product'] != null ? ProductsDto.fromJson(map['product'] as Map<String, dynamic>) : null ,
+      unit: map['unit']
     );
   }
   
     OrderProductInfoModel toModel() {
     return OrderProductInfoModel(
+      productId: productId,
       quantity: quantity,
       soldPrice: soldPrice,
       productName: productName,
-      products: products?.toModel()  
+      products: products?.toModel()  ,
+      unit: unit
       );
   }
   

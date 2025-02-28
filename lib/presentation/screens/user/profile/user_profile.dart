@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/domain/auth/auth_model/auth_model.dart';
 import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
+import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
-import 'package:grocery_app/presentation/screens/user/profile/edit_profile/edit_profile.dart';
+import 'package:grocery_app/presentation/screens/user/profile/user_orders/user_orders.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -102,12 +104,15 @@ class _UserProfileState extends State<UserProfile> {
           context: context,
           builder: (context) {
             return AlertDialog(
+  
               content: SizedBox(
-                height: 220,
+                height: 235,
                 width: 300,
                 child: Column(
-                  spacing: 20,
+                  
+                  spacing: 12,
                   children: [
+                    SizedBox(height: 15,),
                     TextFormField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -139,13 +144,12 @@ class _UserProfileState extends State<UserProfile> {
                       log(userdataToupdate.toString(),name: 'userdatatoupdate');
                       
                      context.read<AuthBloc>().add(Updateuser(userdataToupdate, userIdforupdate: id!));
-                    }, child: Text("submit"))
+                    }, child: Text("submit"),style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.amber)),)
                     : SizedBox.shrink(),
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.close))
+                    TextButton(onPressed: (){
+                       Navigator.pop(context);
+                    }, child: Text("Go back"),style: ButtonStyle(backgroundColor:WidgetStatePropertyAll(Colors.black12)),)
+              
               ],
             );
           });
@@ -242,22 +246,31 @@ class _UserProfileState extends State<UserProfile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: MediaQuery.sizeOf(context).width * 0.02,
                 children: [
-                  Container(
-                    height: 70,
-                    width: MediaQuery.sizeOf(context).width * 0.45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.amberAccent,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 5,
-                      children: [
-                        Icon(Icons.shopping_cart),
-                        Text(
-                          "My Orders",
-                        )
-                      ],
+                  InkWell(onTap: (){Navigator.push(context, (MaterialPageRoute(builder: (context){
+                    return UserOrders();
+                
+                    
+                  })));
+                  context.read<OrdersBloc>().add(OrdersbyUser(userId: id!));
+
+                  },
+                    child: Container(
+                      height: 70,
+                      width: MediaQuery.sizeOf(context).width * 0.45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.amberAccent,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 5,
+                        children: [
+                          Icon(Icons.shopping_cart),
+                          Text(
+                            "My Orders",
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   Container(
@@ -434,11 +447,11 @@ class _UserProfileState extends State<UserProfile> {
                                           style: ButtonStyle(
                                               backgroundColor:
                                                   WidgetStatePropertyAll(
-                                                      Colors.red)),
+                                                      Colors.amber)),
                                           child: Text(
                                             "Delete",
                                             style:
-                                                TextStyle(color: Colors.white),
+                                                TextStyle(color: Colors.indigo),
                                           )),
                                     ),
                                   ],

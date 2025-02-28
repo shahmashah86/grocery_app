@@ -78,6 +78,16 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
         log("Error fetching orders by user: ${e.toString()}");
       }
     }
+    else{
+      try{
+      emit(OrdersLoading());
+           final response = await orderRepository.getOrdersByUser(event.userId);
+           emit(Orderssuccess(usersorderList: response));
+      }
+      catch(e){
+        OrdersError(errormessage: e.toString());
+      }
+    }
   }
 
   _acknowledeOrder(Orderacknowledge event, Emitter<OrdersState> emit) async {
@@ -103,22 +113,99 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     }
   }
 
-  _placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
+_placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
+  final currentState = state;
+
+  if (currentState is Orderssuccess) {
     try {
-      emit(Orderssuccess(
+      emit(currentState.copyWith(
+        message: '',
         isLoading: true,
+        iserror: false,
+        allordersList: currentState.allordersList,
+        usersorderList: currentState.usersorderList,
+        orderScreenType: currentState.orderScreenType,
       ));
+
       final response = await orderRepository.placeOrder(event.orders);
-      emit(Orderssuccess(
-        message: response['message'],
+      log(response,name: 'response of ordersucces');
+      
+      emit(currentState.copyWith(
+        message: response,
+        ordersbyId: currentState.ordersbyId,
         isLoading: false,
+        usersorderList: currentState.usersorderList,
+        orderScreenType: currentState.orderScreenType,
+        allordersList: currentState.allordersList,
       ));
-      log(response['message']);
     } catch (e) {
-      emit(OrdersError(errormessage: e.toString()));
-      log(e.toString());
+      emit(currentState.copyWith(
+        iserror: true,
+        
+    message: '',
+        isLoading: false,
+        usersorderList: currentState.usersorderList,
+        allordersList: currentState.allordersList,
+        orderScreenType: currentState.orderScreenType,
+        errormessage: e.toString(), // Additional error info
+      ));
+    }
+  } else {
+    try {
+      emit(Orderssuccess(isLoading: true,));
+
+      final response = await orderRepository.placeOrder(event.orders);
+         log(response,name:'response message of order placed');
+
+      emit(Orderssuccess(isLoading: false, message: response));
+    } catch (e) {
+      emit(OrdersError(errormessage: e.toString())); // Make sure OrdersError is defined correctly
     }
   }
+}
+
+  // _placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
+  //    final currentstate = state;
+    
+  //      if (currentstate is Orderssuccess) {
+  //     try {
+  //       emit(currentstate.copyWith(
+  //         isLoading: true,
+  //         allordersList: currentstate.allordersList,
+  //         usersorderList: currentstate.usersorderList,
+  //         orderScreenType: currentstate.orderScreenType,
+  //       ));
+  //  final response = await orderRepository.placeOrder(event.orders);
+ 
+  //       emit(currentstate.copyWith(
+  //         message: response['message'],
+  //           ordersbyId: currentstate.ordersbyId,
+  //           isLoading: false,
+  //           usersorderList: currentstate.usersorderList,
+  //           orderScreenType: currentstate.orderScreenType,
+  //           allordersList: currentstate.allordersList));
+  //     } catch (e) {
+  //       emit(currentstate.copyWith(
+  //         iserror: true,
+  //         isLoading: false,
+  //         usersorderList: currentstate.usersorderList,
+  //         allordersList: currentstate.allordersList,
+  //         orderScreenType: currentstate.orderScreenType,
+  //       ));
+  //     }
+  //   }
+  //   else{
+  //     try{
+  //     emit(Orderssuccess(isLoading: true));
+  //        final response = await orderRepository.placeOrder(event.orders);
+  //     emit(Orderssuccess(isLoading: false,message: response['message']));
+  //     }
+  //     catch(e){
+  //       emit(OrdersError(errormessage: e.toString()));
+  //     }
+  //   }
+ 
+  // }
 
   _getOrder(OrderbyId event, Emitter<OrdersState> emit) async {
     final currentstate = state;
