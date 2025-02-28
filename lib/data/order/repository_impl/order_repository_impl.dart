@@ -149,4 +149,31 @@ class OrderRepositoryImpl extends OrderRespository {
       // throw "Something wrong woth the request/code";
     }
   }
+  
+  @override
+  Future<String> cancelOrder(int orderId) async {
+        try {
+      log('inside try');
+      String? token = await readtokenFromPref();
+      final Response response = await Apiservice.delete(
+          path: '${ApiEndpoints.cancelOrder}$orderId',
+          headers: {"Authorization": "Bearer $token"});
+
+      if (response.statusCode == 200) {
+        log('reponse of cancel',name: 'cancel order');
+
+        //  return response.data;
+        //  \response.data;
+   
+        return response.toString();
+      } else {
+        throw "Something went wrong in response";
+      }
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+      // throw "Something wrong woth the request/code";
+    }
+
+  }
 }

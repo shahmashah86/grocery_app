@@ -1,6 +1,5 @@
 
 
-import 'package:flutter/material.dart';
 
 class ApiEndpoints {
 
@@ -34,4 +33,5 @@ class ApiEndpoints {
  static const deleteuser='/api/user/deleteAUser/';
  static const foregetpassword='/api/user/resetPassword/';
  static const updateUser='/api/user/updateAUser/';
+ static const cancelOrder = '/api/order/deleteAnOrder/';
 }

@@ -370,7 +370,7 @@ class _CartState extends State<Cart> {
                               onPressed: () async{
                              final mobno= await loadUserData();
                                 log(mobno.toString(),name: 'phone number not null checking in cart screen');
-                             if(mobno!=null||mobno!=''){
+                             if(mobno==null||mobno==''){
                              return showDialog(context: context, builder:(context){
 
                               return AlertDialog(title: Text("Contact Required"),icon:Icon(Icons.warning,color: Colors.amber,size: 40,),
@@ -393,9 +393,9 @@ class _CartState extends State<Cart> {
                                     productdetails: productdetails!);
                                 log(orderitems.toString());
 
-                                // context
-                                //     .read<OrdersBloc>()
-                                //     .add(OrderPlaced(orders: orderitems));
+                                context
+                                    .read<OrdersBloc>()
+                                    .add(OrderPlaced(orders: orderitems));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.lime.shade400,

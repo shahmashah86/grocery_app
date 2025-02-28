@@ -16,13 +16,38 @@ class UserOrderCancel extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.yellow,
       ),
-      body: BlocBuilder<OrdersBloc, OrdersState>(
+      body: BlocConsumer<OrdersBloc, OrdersState>(
+         listener: (BuildContext context,  state) {
+              if(state is Orderssuccess&& state.ordersbyId.isEmpty){
+                showDialog(context: context, builder: (BuildContext context){
+                return AlertDialog(
+                  content: Text("Order got cancelled "),title: Row(
+                    children: [
+                      Text('Cancel '),
+                      Icon(Icons.remove_shopping_cart,size: 30,)
+                    ],
+                  ),
+                actions: [TextButton(onPressed: (){
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                
+
+
+                },style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.black12),), child: Text("Ok"))],
+                
+                );
+              });
+            
+            }
+          
+          },
+         
         builder: (context, state) {
           if(state is Orderssuccess){
             if(state.isLoading){
               return Center(child: CircleAvatar(child: CircularProgressIndicator(),));
             }
-          
+        
           if(state.ordersbyId.isNotEmpty){
             final orderlistofUser=state.ordersbyId.first;
             log(orderlistofUser.toString());
@@ -118,7 +143,9 @@ class UserOrderCancel extends StatelessWidget {
                                         ),
                                         actions: [
                                           TextButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
                                               style: ButtonStyle(
                                                   backgroundColor:
                                                       WidgetStatePropertyAll(
@@ -126,7 +153,11 @@ class UserOrderCancel extends StatelessWidget {
                                               child: Text("Go back")),
                                           TextButton(
                                             onPressed: () {
+                                            context.read<OrdersBloc>().add(Ordercancel(orderId: orderId));
                                               Navigator.pop(context);
+                                            
+                                      
+
                                             },
                                             style: ButtonStyle(
                                                 backgroundColor:
@@ -226,7 +257,9 @@ class UserOrderCancel extends StatelessWidget {
             ),
           );
           }
-        
+        if(state.iserror){
+          return Center(child: Text(state.errormessage),);
+        }
             
           }
           return Center(child: Text('Loading'),);

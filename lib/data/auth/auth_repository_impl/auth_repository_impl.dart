@@ -40,7 +40,8 @@ class AuthRepositoryImpl implements AuthRepository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('tokenValue', token);
   }
-   Future<String?> readtokenFromPref() async {
+
+  Future<String?> readtokenFromPref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String tokenFromAuth = prefs.getString('tokenValue') ?? "";
     return tokenFromAuth;
@@ -68,11 +69,13 @@ class AuthRepositoryImpl implements AuthRepository {
     await prefs.setString('user_email', email); // Email is always required
 
     if (prefs.getString('name') == null) {
-      String defaultName = email.split('@')[0];//if name not provided use it from email
+      String defaultName =
+          email.split('@')[0]; //if name not provided use it from email
       await prefs.setString('name', defaultName);
     }
 
     if (phone != null) {
+      // log(phone);
       await prefs.setString('user_phone', phone);
     }
 
@@ -132,7 +135,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-
   //create the apikey
   Future<void> createApikey() async {
     log("createApikey");
@@ -159,7 +161,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
- 
 //list all users by admin
   @override
   Future<List<AuthModel>> usersList() async {
@@ -242,7 +243,8 @@ class AuthRepositoryImpl implements AuthRepository {
       // throw "Something wrong woth the request/code";
     }
   }
- //upload profile image
+
+  //upload profile image
   @override
   Future uploadprofileImage({File? profileImage, int? id}) async {
     log(profileImage!.path, name: 'imagefile');
@@ -333,28 +335,28 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       // log(authinfo!.toMap().toString());
       String? token = await readtokenFromPref();
-      
+      log(authinfo.toString(),name:"User info To Update");
       final Response response = await Apiservice.put(
           path: '${ApiEndpoints.updateUser}$userIdforupdate',
           data: authinfo?.toMap(),
-          
           headers: {"Authorization": "Bearer $token"});
-          
-      if (response.statusCode == 200) { 
-        log(response.data.toString(),name: 'response update user');
+
+      if (response.statusCode == 200) {
+        log(response.data['user'].toString(), name: 'response update user');
         await saveUserData(
-            email: response.data['email'],
-            id: response.data['id'],
-            name: response.data['name'],
-            phone: response.data['phoneNumber']);
-        final responsedata=AuthDto.fromJson(response.data).toModel();
-        return responsedata;
-      }
-       else {
+            email: response.data['user']['email'],
+            id: response.data['user']['id'],
+            name: response.data['user']['name'],
+            phone: response.data['user']['phoneNumber']);
+        final responsedata = AuthDto.fromJson(response.data['user']).toModel();
+        final responseUpdated={'message':response.data['message'],'updatedinfo':responsedata};
+
+        return responseUpdated;
+      } else {
         throw "Something went wrong in response";
       }
     } catch (e) {
-      log(e.toString(),name: 'error response');
+      log(e.toString(), name: 'error response');
       rethrow;
     }
   }

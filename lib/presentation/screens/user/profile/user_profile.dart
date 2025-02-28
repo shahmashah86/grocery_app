@@ -92,27 +92,28 @@ class _UserProfileState extends State<UserProfile> {
     log(email ?? '');
     log(id.toString());
 
-     Future<String?> readuserName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String username = prefs.getString('user_name') ?? "";
+    Future<String?> readuserName() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String username = prefs.getString('user_name') ?? "";
 
-    return username;
-  }
+      return username;
+    }
 
     Future<void> showdialog(bool toEdit) async {
+      // await  loadUserData();
       await showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
-  
               content: SizedBox(
                 height: 235,
                 width: 300,
                 child: Column(
-                  
                   spacing: 12,
                   children: [
-                    SizedBox(height: 15,),
+                    SizedBox(
+                      height: 15,
+                    ),
                     TextFormField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -134,22 +135,41 @@ class _UserProfileState extends State<UserProfile> {
               ),
               actions: [
                 toEdit
-                    ? ElevatedButton(onPressed: () async{
-                    final username=await readuserName();
-                    log(username.toString());
-                    log(id.toString());
+                    ? ElevatedButton(
+                        onPressed: () async {
+                          final username = await readuserName();
+                          log(username.toString());
+                          log(id.toString());
 
-                      final userdataToupdate=AuthModel(name: nameController.text.trim(),username: username,id: id,phoneNumber: phoneNumbercontroller.text.trim(),
-                      email: emailController.text.trim(),);
-                      log(userdataToupdate.toString(),name: 'userdatatoupdate');
-                      
-                     context.read<AuthBloc>().add(Updateuser(userdataToupdate, userIdforupdate: id!));
-                    }, child: Text("submit"),style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.amber)),)
+                          final userdataToupdate = AuthModel(
+                            name: nameController.text.trim(),
+                            username: username,
+                            id: id,
+                            phoneNumber: phoneNumbercontroller.text.trim(),
+                            email: emailController.text.trim(),
+                          );
+                          log(userdataToupdate.toString(),
+                              name: 'userdatatoupdate');
+
+                          context.read<AuthBloc>().add(Updateuser(
+                              userdataToupdate,
+                              userIdforupdate: id!));
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                            backgroundColor:
+                                WidgetStatePropertyAll(Colors.amber)),
+                        child: Text("submit"),
+                      )
                     : SizedBox.shrink(),
-                    TextButton(onPressed: (){
-                       Navigator.pop(context);
-                    }, child: Text("Go back"),style: ButtonStyle(backgroundColor:WidgetStatePropertyAll(Colors.black12)),)
-              
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.black12)),
+                  child: Text("Go back"),
+                )
               ],
             );
           });
@@ -180,7 +200,19 @@ class _UserProfileState extends State<UserProfile> {
                     onTap: () {
                       getImage();
                     },
-                    child: BlocBuilder<AuthBloc, AuthState>(
+                    child: BlocConsumer<AuthBloc, AuthState>(
+                      listener: (context, state) {
+                        if (state is Authsuccess &&
+                            state.message == "User updated successfully") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Profile updated successfully!"),
+                 
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
                       builder: (context, state) {
                         if (state is Authupdated) {
                           return CircleAvatar(
@@ -246,14 +278,15 @@ class _UserProfileState extends State<UserProfile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: MediaQuery.sizeOf(context).width * 0.02,
                 children: [
-                  InkWell(onTap: (){Navigator.push(context, (MaterialPageRoute(builder: (context){
-                    return UserOrders();
-                
-                    
-                  })));
-                  context.read<OrdersBloc>().add(OrdersbyUser(userId: id!));
-
-                  },
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          (MaterialPageRoute(builder: (context) {
+                            return UserOrders();
+                          })));
+                      context.read<OrdersBloc>().add(OrdersbyUser(userId: id!));
+                    },
                     child: Container(
                       height: 70,
                       width: MediaQuery.sizeOf(context).width * 0.45,

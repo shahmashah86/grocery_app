@@ -24,13 +24,14 @@ class UserOrders extends StatelessWidget {
 
           if(state is Orderssuccess){
            if(state.isLoading==true ){
-            log('loadin');
+            // log('loading');
             return Center(child: CircleAvatar(child: CircularProgressIndicator(),),);
            }
            if(state.usersorderList.isEmpty){
             return Center(child: Text("no orders placed yet"),);
            }
            if(state.usersorderList.isNotEmpty){
+            log(state.usersorderList.toString(),name: 'usersorderlist');
                return ListView.builder(
                 
             itemBuilder: (context, index) {
@@ -102,6 +103,10 @@ class UserOrders extends StatelessWidget {
            }
            if(state.iserror){
           return  Center(child: Text(state.errormessage),);
+           }
+           if(state is OrdersError){
+               return  Center(child: Text(state.errormessage),);
+
            }
         }
         return Text('loading');

@@ -26,16 +26,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
   _signin(AuthSignin event, Emitter<AuthState> emit) async {
     try {
-              emit(AuthLoading());
+      emit(AuthLoading());
       var response = await authRepository.signinWithUserandPass(
           username: event.username, password: event.password);
 
       if (response.containsKey('token')) {
-
-
         bool isAdmin = response['isAdmin'];
         log(isAdmin.toString(), name: "admin");
-        emit(Authsuccess(authModel: AuthModel(isAdmin: isAdmin,),isLoading: false));
+        emit(Authsuccess(
+            authModel: AuthModel(
+              isAdmin: isAdmin,
+            ),
+            isLoading: false));
       } else {
         log("invalid");
         emit(AuthError(errormsg: 'Invalid credentials'));
@@ -48,7 +50,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   _signup(AuthSignUp event, Emitter<AuthState> emit) async {
     try {
-
       var response = await authRepository.signupWithUserandPass(
           email: event.email,
           username: event.username,
@@ -56,11 +57,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if (response.containsKey('token')) {
         emit(AuthLoading());
-        
 
         bool isAdmin = response['isAdmin'];
         log(isAdmin.toString(), name: "admin");
-        emit(Authsuccess(authModel: AuthModel(isAdmin: isAdmin),isLoading: true));
+        emit(Authsuccess(
+            authModel: AuthModel(isAdmin: isAdmin), isLoading: true));
       } else {
         log("invalid");
         emit(AuthError(errormsg: 'Invalid credentials'));
@@ -136,12 +137,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final currentstate = state;
 
       if (currentstate is Authupdated) {
-        emit(currentstate.copyWith(isLoading: true,message: ''));
-        
+        emit(currentstate.copyWith(isLoading: true, message: ''));
+
         var response =
             await authRepository.resetPassword(userName: event.userName);
         try {
-          
           log(response);
           emit(currentstate.copyWith(
               isLoading: false,
@@ -166,28 +166,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthError(errormsg: e.toString());
     }
   }
-  _updateuser(Updateuser event ,Emitter<AuthState> emit) async{
-    final currentstate=state;
-    if(currentstate is Authsuccess){
-      try{
-        emit(currentstate.copywith(isLoading: true));
-        var response=await authRepository.updateUser(userIdforupdate: event.userIdforupdate,authinfo: event.authModel);
-         emit(currentstate.copywith(authModel: response,isLoading: false));
-      }
-      catch(e){
-        currentstate.copywith(authModel: currentstate.authModel,errormessage: e.toString());
 
+  _updateuser(Updateuser event, Emitter<AuthState> emit) async {
+    final currentstate = state;
+    if (currentstate is Authsuccess) {
+      try {
+        emit(currentstate.copywith(isLoading: true,message: ''),);
+        var response = await authRepository.updateUser(
+            userIdforupdate: event.userIdforupdate, authinfo: event.authModel);
+        emit(currentstate.copywith(
+          authModel: response['updatedinfo'],
+          message: response['message'],
+          isLoading: false,
+        ));
+      } catch (e) {
+        currentstate.copywith(
+            authModel: currentstate.authModel, errormessage: e.toString());
       }
-
-    }
-    else{
-      try{
-       var response=await authRepository.updateUser(userIdforupdate: event.userIdforupdate,authinfo: event.authModel);
-      emit(Authsuccess(authModel:response,));
-      }catch(e){
+    } else {
+      try {
+        var response = await authRepository.updateUser(
+            userIdforupdate: event.userIdforupdate, authinfo: event.authModel);
+        emit(Authsuccess(
+          authModel: response['updatedinfo'],
+          message: response['message']
+        ));
+      } catch (e) {
         emit(AuthError(errormsg: e.toString()));
       }
     }
-
   }
 }

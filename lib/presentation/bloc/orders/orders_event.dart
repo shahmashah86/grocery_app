@@ -48,3 +48,10 @@ class OrderbyId extends OrdersEvent {
   @override
   List<Object> get props => [orderId];
 }
+class Ordercancel extends OrdersEvent{
+  final int orderId;
+
+ const Ordercancel({required this.orderId});
+ @override
+   List<Object> get props => [orderId];
+}

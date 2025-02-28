@@ -19,6 +19,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     on<Orderacknowledge>(_acknowledeOrder);
     on<OrderPlaced>(_placeanOrder);
     on<OrderbyId>(_getOrder);
+    on<Ordercancel>(_cancelOrders);
   }
   _getOrdersList(OrdersListGet event, Emitter<OrdersState> emit) async {
     final currentstate = state;
@@ -240,4 +241,44 @@ _placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
       }
     }
   }
+  _cancelOrders(Ordercancel event,Emitter<OrdersState> emit) async{
+        final currentstate = state;
+        if (currentstate is Orderssuccess) {
+      try {
+        emit(currentstate.copyWith(
+          
+          isLoading: true,
+           message: '',
+          allordersList: currentstate.allordersList,
+          usersorderList: currentstate.usersorderList,
+          orderScreenType: currentstate.orderScreenType,
+          ordersbyId: currentstate.ordersbyId
+  
+        ));
+        final response = await orderRepository.cancelOrder(event.orderId);
+        log(response.toString(), name: 'ordercancel');
+        emit(currentstate.copyWith(
+          message: response,
+            ordersbyId: [],
+            isLoading: false,
+            usersorderList:currentstate.usersorderList.where((e) => e.id != event.orderId).toList(),
+
+            orderScreenType: currentstate.orderScreenType,
+            allordersList: currentstate.allordersList));
+      } catch (e) {
+        emit(currentstate.copyWith(
+          errormessage: e.toString(),
+          iserror: true,
+          isLoading: false,
+          usersorderList: currentstate.usersorderList,
+          allordersList: currentstate.allordersList,
+          orderScreenType: currentstate.orderScreenType,
+          ordersbyId: currentstate.ordersbyId
+        ));
+      }
+    }
+
+  }
+
+
 }
