@@ -26,22 +26,22 @@ class _CartState extends State<Cart> {
     super.initState();
   }
 
-
-    Future<String?> loadUserData() async {
+  Future<String?> loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final phone = prefs.getString('user_phone');
     return phone;
-  
-   
-  
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("My cart"),
+          leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+          title: Text(
+            "Cart",
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
           backgroundColor: Colors.amber.shade200,
         ),
         body:
@@ -93,7 +93,7 @@ class _CartState extends State<Cart> {
                 ),
               );
             }
-            if (state is CartLoaded && state.cartItems!.isNotEmpty) {
+            if (state is CartLoaded && (state.cartItems?.isNotEmpty ?? false)) {
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -143,7 +143,7 @@ class _CartState extends State<Cart> {
                                       Text(
                                         state.cartItems![index].prodName,
                                         style: TextStyle(
-                                            fontSize: 23,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.w500),
                                       ),
                                       Text(
@@ -333,53 +333,73 @@ class _CartState extends State<Cart> {
                           SizedBox(height: 10),
                           BlocListener<OrdersBloc, OrdersState>(
                             listener: (context, state) {
-                             
-                           if(state is Orderssuccess && state.message=='Added to cart successfully'){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return Orderssuccessful();
-      }));
-      context.read<CartBloc>().add(CartItemclear());
-                           }
-                          if(state is Orderssuccess && state.errormessage.isNotEmpty){
-                              ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'something is wrong please try again!',
-                            ),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                            
-                          }
-                            if(state is OrdersError){
-                              ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'something is wrong please try again!',
-                            ),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                            
-                          }
-                          //  return;
+                              if (state is Orderssuccess &&
+                                  state.message ==
+                                      'Added to cart successfully') {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return Orderssuccessful();
+                                }));
+                                context.read<CartBloc>().add(CartItemclear());
+                              }
+
+                              if (state is Orderssuccess &&
+                                  state.errormessage.isNotEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'something is wrong please try again!',
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                              if (state is OrdersError) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'something is wrong please try again!',
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                              //  return;
                             },
-                            
-                            
                             child: ElevatedButton(
-                              onPressed: () async{
-                             final mobno= await loadUserData();
-                                log(mobno.toString(),name: 'phone number not null checking in cart screen');
-                             if(mobno==null||mobno==''){
-                             return showDialog(context: context, builder:(context){
-
-                              return AlertDialog(title: Text("Contact Required"),icon:Icon(Icons.warning,color: Colors.amber,size: 40,),
-                                content: Text('Please enter a vaild phone number in profile to proceed with your order'),
-                                actions: [TextButton(onPressed: (){Navigator.pop(context);}, child: Text("OK"),style: ButtonStyle(backgroundColor:WidgetStatePropertyAll(Colors.black12)),)],);
-                                
-                             });
-                             }
-
+                              onPressed: () async {
+                                final mobno = await loadUserData();
+                                log(mobno.toString(),
+                                    name:
+                                        'phone number not null checking in cart screen');
+                                if (mobno == null || mobno == '') {
+                                  return showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text("Contact Required"),
+                                          icon: Icon(
+                                            Icons.warning,
+                                            color: Colors.amber,
+                                            size: 40,
+                                          ),
+                                          content: Text(
+                                              'Please enter a vaild phone number in profile to proceed with your order'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text("OK"),
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      WidgetStatePropertyAll(
+                                                          Colors.black12)),
+                                            )
+                                          ],
+                                        );
+                                      });
+                                }
 
                                 int totalItems = state.cartItems!.length;
                                 double totalAmount = double.parse(
@@ -402,8 +422,21 @@ class _CartState extends State<Cart> {
                                 padding: EdgeInsets.symmetric(vertical: 12),
                                 minimumSize: Size(double.infinity, 40),
                               ),
-                              child: Text('Proceed to Checkout',
-                                  style: TextStyle(fontSize: 16)),
+                              child: BlocBuilder<OrdersBloc, OrdersState>(
+                                builder: (context, state) {
+                                  if(state is OrdersLoading){
+                                    return Center(child: SizedBox(height: 20,width: 20,
+                                      child: CircularProgressIndicator()),);
+                                  }
+                                  if(state is Orderssuccess && state.isLoading){
+                                     return Center(child: SizedBox(height: 20,width: 20,
+                                      child: CircularProgressIndicator()),);
+
+                                  }
+                                  return Text('Proceed to Checkout',
+                                      style: TextStyle(fontSize: 16));
+                                },
+                              ),
                             ),
                           ),
                         ],

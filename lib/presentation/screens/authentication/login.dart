@@ -9,6 +9,7 @@ import 'package:grocery_app/presentation/screens/admin/homscreen/admin_homescree
 
 import 'package:grocery_app/presentation/screens/authentication/registration.dart';
 import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
+import 'package:grocery_app/presentation/screens/user/profile/user_profile.dart';
 import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -352,7 +353,7 @@ class _LoginState extends State<Login> {
                                               context,
                                               MaterialPageRoute(builder:
                                                   (BuildContext context) {
-                                                return Registration();
+                                                return UserProfile();
                                               }),
                                             );
                                             ScaffoldMessenger.of(context)

@@ -176,4 +176,29 @@ class OrderRepositoryImpl extends OrderRespository {
     }
 
   }
+  
+  @override
+  Future<String> updateOrder(int orderId) async {
+            try {
+  
+      String? token = await readtokenFromPref();
+      final Response response = await Apiservice.put(
+          path: '${ApiEndpoints.updateOrder}$orderId',
+          headers: {"Authorization": "Bearer $token"});
+
+      if (response.statusCode == 200) {
+        log('reponse of cancel',name: 'update order');
+   
+        return response.toString();
+        
+      } else {
+        throw "Something went wrong in response";
+      }
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+      // throw "Something wrong woth the request/code";
+    }
+  
+  }
 }

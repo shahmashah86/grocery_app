@@ -7,6 +7,7 @@ import 'package:grocery_app/presentation/screens/user/cart/cart.dart';
 import 'package:grocery_app/presentation/screens/user/category/category.dart';
 import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
 import 'package:grocery_app/presentation/screens/user/profile/user_profile.dart';
+import 'package:grocery_app/presentation/screens/user/search/searchscreen.dart';
 
 
 class BottomNavigation extends StatefulWidget {
@@ -23,13 +24,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
   ValueNotifier<int> _currentindex=ValueNotifier(0);
   final List<Widget> _screens = [
     HomeScreen(),
-    ProductCategory(),
+   Searchscreen(searchfromDashboard: false,),
     Cart(),
     UserProfile()
   ];
   final List<IconData> _icon = [
     Icons.home,
-    Icons.category,
+    Icons.search,
     Icons.shopping_cart,
     Icons.person
   ];
@@ -59,10 +60,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
               height: 75,
               child: Card(clipBehavior: Clip.hardEdge,
                 child: BottomNavigationBar(iconSize: 26,
-                   selectedIconTheme: IconThemeData(color: Colors.white),
+                   selectedIconTheme: IconThemeData(color: Colors.grey.shade700),
                 selectedFontSize:12 ,
                 // unselectedFontSize: ,
-                unselectedIconTheme: IconThemeData(color: Colors.white),
+                unselectedIconTheme: IconThemeData(color: Colors.grey.shade700),
                 selectedLabelStyle: TextStyle(color: Colors.black),
                     // selectedItemColor: Colors.black54,
                     onTap: (value) =>_currentindex.value=value,
@@ -70,27 +71,27 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     type: BottomNavigationBarType.fixed,
                     backgroundColor:
                     // const Color.fromARGB(255, 255, 244, 212),
-                     Colors.amberAccent.shade200,
+                     Colors.amber.shade200,
                     items: [
                       BottomNavigationBarItem(
                           label: 'Home',
                           icon: Icon(
-                            Icons.home,
+                            Icons.home_outlined,
                           )),
                       BottomNavigationBarItem(
-                          label: 'Category',
+                          label: 'Search',
                           icon: Icon(
-                            Icons.category,
+                            Icons.search_outlined,
                           )),
                       BottomNavigationBarItem(
                           label: 'Cart',
                           icon: Icon(
-                            Icons.shopping_cart,
+                            Icons.shopping_cart_outlined,
                           )),
                       BottomNavigationBarItem(
                           label: 'Person',
                           icon: Icon(
-                            Icons.person,
+                            Icons.person_outline,
                           )),
                     ]),
               ),
@@ -101,7 +102,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               bottom:MediaQuery.sizeOf(context).width*.14 ,
               child: FloatingActionButton(
                   backgroundColor: Colors.amber.shade400,
-                  foregroundColor: Colors.white,
+                  foregroundColor: Colors.grey.shade700,
                   shape: CircleBorder(),
                   onPressed: () {},
                   child: Icon(_icon[_currentindex.value]))),

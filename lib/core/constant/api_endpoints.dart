@@ -34,4 +34,5 @@ class ApiEndpoints {
  static const foregetpassword='/api/user/resetPassword/';
  static const updateUser='/api/user/updateAUser/';
  static const cancelOrder = '/api/order/deleteAnOrder/';
+ static const updateOrder='/api/order/updateAnOrder/';
 }

@@ -11,4 +11,5 @@ Future acknowledgeOrder(int orderId);
 Future placeOrder(PlaceOrderModel details);
 Future<OrdersModel> getAnOrderbyId(int id);
 Future<String> cancelOrder(int orderId);
+Future<String> updateOrder(int orderId);
 }

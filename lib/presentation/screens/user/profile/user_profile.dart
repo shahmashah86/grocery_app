@@ -2,12 +2,16 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/domain/auth/auth_model/auth_model.dart';
 import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
+import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
 import 'package:grocery_app/presentation/screens/user/profile/user_orders/user_orders.dart';
+import 'package:grocery_app/presentation/screens/user/search/searchscreen.dart';
+import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -158,7 +162,7 @@ class _UserProfileState extends State<UserProfile> {
                         },
                         style: ButtonStyle(
                             backgroundColor:
-                                WidgetStatePropertyAll(Colors.amber)),
+                                WidgetStatePropertyAll(Colors.amber.shade200)),
                         child: Text("submit"),
                       )
                     : SizedBox.shrink(),
@@ -176,18 +180,27 @@ class _UserProfileState extends State<UserProfile> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+      appBar: AppBar
+      (
+    
+        leading: IconButton(onPressed: () {
+            //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: 
+            // (context){
+            //   return BottomNavigation();
+            // }), (route)=>false);
+        }, 
+        icon: Icon(Icons.arrow_back)),
         title: Text(
           "Profile",
           style: TextStyle(fontWeight: FontWeight.w500),
-        ),
+          
+        ),flexibleSpace: Container(decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.amber,Colors.amber.shade100],begin: Alignment.topCenter,end: Alignment.bottomCenter)),),
         backgroundColor: Colors.amber.shade200,
       ),
       body: ValueListenableBuilder(
         valueListenable: userdetails,
         builder: (context, value, child) => Column(
-          spacing: 14,
+          // spacing: 14,
           children: [
             SizedBox(height: 6),
             Row(
@@ -215,25 +228,40 @@ class _UserProfileState extends State<UserProfile> {
                       },
                       builder: (context, state) {
                         if (state is Authupdated) {
-                          return CircleAvatar(
-                            backgroundColor: Colors.grey.shade200,
-                            radius: 55,
-                            backgroundImage: state.imageUrl != ''
-                                ? NetworkImage(state.imageUrl)
-                                : null,
-                            child: state.imageUrl.isEmpty
-                                ? Icon(
-                                    Icons.camera_alt,
-                                    size: 50,
-                                    color: Colors.black54,
-                                  )
-                                : null,
+                          return Stack(
+                            children:[ CircleAvatar(
+                              backgroundColor: Colors.grey.shade200,
+                              radius: 55,
+                              backgroundImage: state.imageUrl != ''
+                                  ? NetworkImage(state.imageUrl)
+                                  : null,
+                              child: state.imageUrl.isEmpty
+                                  ? Icon(
+                                      Icons.camera_alt,
+                                      size: 50,
+                                      color: Colors.black54,
+                                    )
+                                  : null,
+                            ),
+                             Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: Colors.green.shade500,
+                                  child: Center(
+                                      child: Icon(
+                                    Icons.add,
+                                    color: Colors.black,
+                                    size: 20,
+                                  ))))
+                            ]
                           );
                         }
                         return Stack(children: [
                           CircleAvatar(
                             backgroundColor: Colors.grey.shade200,
-                            radius: 48,
+                            radius: 40,
                             backgroundImage: NetworkImage(
                                 userdetails.value[3] != '' ||
                                         userdetails.value[3] == null
@@ -252,13 +280,13 @@ class _UserProfileState extends State<UserProfile> {
                               right: 0,
                               bottom: 0,
                               child: CircleAvatar(
-                                  radius: 16,
-                                  backgroundColor: Colors.greenAccent.shade400,
+                                  radius: 12,
+                                  backgroundColor: Colors.green.shade500,
                                   child: Center(
                                       child: Icon(
                                     Icons.add,
                                     color: Colors.black,
-                                    size: 30,
+                                    size: 20,
                                   ))))
                         ]);
                       },
@@ -267,7 +295,7 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 Text(
                   userdetails.value[1],
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 22, ),
                 )
               ],
             ),
@@ -284,6 +312,7 @@ class _UserProfileState extends State<UserProfile> {
                           context,
                           (MaterialPageRoute(builder: (context) {
                             return UserOrders();
+                      
                           })));
                       context.read<OrdersBloc>().add(OrdersbyUser(userId: id!));
                     },
@@ -292,7 +321,7 @@ class _UserProfileState extends State<UserProfile> {
                       width: MediaQuery.sizeOf(context).width * 0.45,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.amberAccent,
+                        color: Colors.amber.shade200,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -300,6 +329,7 @@ class _UserProfileState extends State<UserProfile> {
                         children: [
                           Icon(Icons.shopping_cart),
                           Text(
+
                             "My Orders",
                           )
                         ],
@@ -311,7 +341,7 @@ class _UserProfileState extends State<UserProfile> {
                     width: MediaQuery.sizeOf(context).width * 0.45,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.amberAccent),
+                        color: Colors.amber.shade200),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: 5,
@@ -346,7 +376,7 @@ class _UserProfileState extends State<UserProfile> {
                           // _onTapped(false);
                         },
                         child: CircleAvatar(
-                          backgroundColor: Colors.amber.shade300,
+                          backgroundColor: Colors.amber.shade200,
                           foregroundColor: Colors.black54,
                           child: Icon(Icons.chevron_right),
                         ),
@@ -373,7 +403,7 @@ class _UserProfileState extends State<UserProfile> {
                         },
                         child: CircleAvatar(
                           foregroundColor: Colors.black54,
-                          backgroundColor: Colors.amber.shade300,
+                          backgroundColor: Colors.amber.shade200,
                           child: Icon(
                             Icons.chevron_right,
                           ),
@@ -406,7 +436,7 @@ class _UserProfileState extends State<UserProfile> {
                           }), (route) => false);
                         },
                         child: CircleAvatar(
-                          backgroundColor: Colors.amber.shade300,
+                          backgroundColor: Colors.amber.shade200,
                           foregroundColor: Colors.black54,
                           child: Icon(Icons.chevron_right),
                         ),
@@ -480,7 +510,7 @@ class _UserProfileState extends State<UserProfile> {
                                           style: ButtonStyle(
                                               backgroundColor:
                                                   WidgetStatePropertyAll(
-                                                      Colors.amber)),
+                                                      Colors.amber.shade200)),
                                           child: Text(
                                             "Delete",
                                             style:
@@ -493,7 +523,7 @@ class _UserProfileState extends State<UserProfile> {
                         },
                         child: CircleAvatar(
                           foregroundColor: Colors.black54,
-                          backgroundColor: Colors.amber.shade300,
+                          backgroundColor: Colors.amber.shade200,
                           child: Icon(Icons.chevron_right),
                         ),
                       )

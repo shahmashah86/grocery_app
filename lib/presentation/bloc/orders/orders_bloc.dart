@@ -20,6 +20,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     on<OrderPlaced>(_placeanOrder);
     on<OrderbyId>(_getOrder);
     on<Ordercancel>(_cancelOrders);
+    on<Orderproductsupdate>(_updateorder);
   }
   _getOrdersList(OrdersListGet event, Emitter<OrdersState> emit) async {
     final currentstate = state;
@@ -255,7 +256,7 @@ _placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
           ordersbyId: currentstate.ordersbyId
   
         ));
-        final response = await orderRepository.cancelOrder(event.orderId);
+        final response = await orderRepository.cancelOrder(event.orderId,);
         log(response.toString(), name: 'ordercancel');
         emit(currentstate.copyWith(
           message: response,
@@ -279,6 +280,46 @@ _placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
     }
 
   }
+   _updateorder(Orderproductsupdate event,Emitter<OrdersState> emit) async{
+        final currentstate = state;
+        if (currentstate is Orderssuccess) {
+      try {
+        emit(currentstate.copyWith(
+          
+          isLoading: true,
+           message: '',
+          allordersList: currentstate.allordersList,
+          usersorderList: currentstate.usersorderList,
+          orderScreenType: currentstate.orderScreenType,
+          ordersbyId: currentstate.ordersbyId
+  
+        ));
+        final response = await orderRepository.updateOrder(event.orderId,);
+        log(response.toString(), name: 'orderupdate');
+        emit(currentstate.copyWith(
+          message: response,
+            ordersbyId:currentstate.ordersbyId.where((e) => e.id != event.orderId).toList(), 
+            isLoading: false,
+            usersorderList:currentstate.usersorderList,
+
+            orderScreenType: currentstate.orderScreenType,
+            allordersList: currentstate.allordersList));
+      } catch (e) {
+        emit(currentstate.copyWith(
+          errormessage: e.toString(),
+          iserror: true,
+          isLoading: false,
+          usersorderList: currentstate.usersorderList,
+          allordersList: currentstate.allordersList,
+          orderScreenType: currentstate.orderScreenType,
+          ordersbyId: currentstate.ordersbyId
+        ));
+      }
+    }
+
+  }
+
+
 
 
 }

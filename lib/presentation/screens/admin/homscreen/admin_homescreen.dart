@@ -266,6 +266,9 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                   log('ordersloading...');
                     return CircularProgressIndicator();
                 }
+                if(state is Orderssuccess&& state.isLoading){
+                  return CircularProgressIndicator();
+                }
                       int totalsales = 0; 
                 if (state is Orderssuccess && state.allordersList.isNotEmpty) {
                   List<OrdersModel>? orders = state.allordersList;

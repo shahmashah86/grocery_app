@@ -109,7 +109,7 @@ class UserOrders extends StatelessWidget {
 
            }
         }
-        return Text('loading');
+        return Center(child: Text('loading'));
        
         },
       ),
