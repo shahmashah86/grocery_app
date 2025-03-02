@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/domain/orders/model/order_model.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 
@@ -214,20 +216,36 @@ class UserOrderCancel extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                   left: 9,
                                 ),
-                                child: Container(
-                                  height:
-                                      MediaQuery.sizeOf(context).height * .13,
-                                  width: MediaQuery.sizeOf(context).width * .22,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(orderlistofUser
-                                              .product?[index]
-                                              .products
-                                              ?.image ??
-                                          ''),
-                                    ),
+                                 child:Container(  clipBehavior: Clip.hardEdge,
+                                   decoration: BoxDecoration(
+                                   borderRadius: BorderRadius.circular(10),),
+                                  child: CachedNetworkImage(
+                                    height:
+                                        MediaQuery.sizeOf(context).height * .13,
+                                    width: MediaQuery.sizeOf(context).width * .22,
+                                    imageUrl: orderlistofUser
+                                                .product?[index]
+                                                .products
+                                                ?.image ??'',fit: BoxFit.cover,
+                                                errorWidget: (context, url, error) => Icon(
+                                        Icons.error,
+                                        size: 60,
+                                        color: Colors.black45,
+                                      ),
+                                      placeholder: (context, url) => SpinKitPulse(
+                                        color: Colors.white,
+                                      ),
+                                    // decoration: BoxDecoration(
+                                    //   borderRadius: BorderRadius.circular(10),
+                                    //   image: DecorationImage(
+                                    //     fit: BoxFit.cover,
+                                    //     image: NetworkImage(orderlistofUser
+                                    //             .product?[index]
+                                    //             .products
+                                    //             ?.image ??
+                                    //         ''),
+                                    //   ),
+                                    // ),
                                   ),
                                 ),
                               ),

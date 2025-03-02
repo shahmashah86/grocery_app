@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/domain/auth/auth_model/auth_model.dart';
 import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
@@ -180,21 +182,26 @@ class _UserProfileState extends State<UserProfile> {
     }
 
     return Scaffold(
-      appBar: AppBar
-      (
-    
-        leading: IconButton(onPressed: () {
-            //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: 
-            // (context){
-            //   return BottomNavigation();
-            // }), (route)=>false);
-        }, 
-        icon: Icon(Icons.arrow_back)),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:
+              // (context){
+              //   return BottomNavigation();
+              // }), (route)=>false);
+            },
+            icon: Icon(Icons.arrow_back)),
         title: Text(
           "Profile",
           style: TextStyle(fontWeight: FontWeight.w500),
-          
-        ),flexibleSpace: Container(decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.amber,Colors.amber.shade100],begin: Alignment.topCenter,end: Alignment.bottomCenter)),),
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.amber, Colors.amber.shade100],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter)),
+        ),
         backgroundColor: Colors.amber.shade200,
       ),
       body: ValueListenableBuilder(
@@ -220,7 +227,6 @@ class _UserProfileState extends State<UserProfile> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text("Profile updated successfully!"),
-                 
                               duration: Duration(seconds: 2),
                             ),
                           );
@@ -228,8 +234,8 @@ class _UserProfileState extends State<UserProfile> {
                       },
                       builder: (context, state) {
                         if (state is Authupdated) {
-                          return Stack(
-                            children:[ CircleAvatar(
+                          return Stack(children: [
+                            CircleAvatar(
                               backgroundColor: Colors.grey.shade200,
                               radius: 55,
                               backgroundImage: state.imageUrl != ''
@@ -243,38 +249,56 @@ class _UserProfileState extends State<UserProfile> {
                                     )
                                   : null,
                             ),
-                             Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: CircleAvatar(
-                                  radius: 12,
-                                  backgroundColor: Colors.green.shade500,
-                                  child: Center(
-                                      child: Icon(
-                                    Icons.add,
-                                    color: Colors.black,
-                                    size: 20,
-                                  ))))
-                            ]
-                          );
+                            Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: CircleAvatar(
+                                    radius: 12,
+                                    backgroundColor: Colors.green.shade500,
+                                    child: Center(
+                                        child: Icon(
+                                      Icons.add,
+                                      color: Colors.black,
+                                      size: 20,
+                                    ))))
+                          ]);
                         }
                         return Stack(children: [
                           CircleAvatar(
                             backgroundColor: Colors.grey.shade200,
                             radius: 40,
-                            backgroundImage: NetworkImage(
-                                userdetails.value[3] != '' ||
-                                        userdetails.value[3] == null
-                                    ? userdetails.value[3]
-                                    : ''),
-                            child: userdetails.value[3] == '' ||
-                                    userdetails.value[3] == null
-                                ? Icon(
-                                    Icons.camera_alt,
-                                    size: 45,
-                                    color: Colors.black54,
-                                  )
-                                : null,
+                    child:ClipOval(
+                      child: CachedNetworkImage(width:MediaQuery.sizeOf(context).width*.98,
+                      height:MediaQuery.sizeOf(context).height*.98,
+                        imageUrl: 
+                      userdetails.value[3] != '' ||
+                                          userdetails.value[3] == null
+                                      ? userdetails.value[3]:'',
+                                      errorWidget: (context, url, error) =>Icon(
+                                      Icons.camera_alt,
+                                      size: 45,
+                                      color: Colors.black54,
+                                    ) ,
+                                    placeholder: (context, url) => SpinKitCircle(color: Colors.white10,),
+                      
+                                      fit: BoxFit.cover,
+                                      ),
+                    ),
+                                    
+                          
+                          //   backgroundImage: NetworkImage(
+                          //       userdetails.value[3] != '' ||
+                          //               userdetails.value[3] == null
+                          //           ? userdetails.value[3]
+                          //           : ''),
+                          //   child: userdetails.value[3] == '' ||
+                          //           userdetails.value[3] == null
+                          //       ? Icon(
+                          //           Icons.camera_alt,
+                          //           size: 45,
+                          //           color: Colors.black54,
+                          //         )
+                          //       : null,
                           ),
                           Positioned(
                               right: 0,
@@ -295,7 +319,9 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 Text(
                   userdetails.value[1],
-                  style: TextStyle(fontSize: 22, ),
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
                 )
               ],
             ),
@@ -312,7 +338,6 @@ class _UserProfileState extends State<UserProfile> {
                           context,
                           (MaterialPageRoute(builder: (context) {
                             return UserOrders();
-                      
                           })));
                       context.read<OrdersBloc>().add(OrdersbyUser(userId: id!));
                     },
@@ -329,7 +354,6 @@ class _UserProfileState extends State<UserProfile> {
                         children: [
                           Icon(Icons.shopping_cart),
                           Text(
-
                             "My Orders",
                           )
                         ],

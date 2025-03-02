@@ -12,6 +12,7 @@ import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/cart/cart.dart';
 import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
+import 'package:grocery_app/presentation/screens/user/pdoduct_description/product_description.dart';
 
 class Searchscreen extends StatefulWidget {
   final bool searchfromDashboard;
@@ -359,6 +360,14 @@ class _SearchscreenState extends State<Searchscreen> {
                                 ],
                               ),
                             ),
+                            onTap:() {
+                              Navigator.push(context,MaterialPageRoute(builder: (context){
+                                return ProductDescription();
+                              }));
+                              
+
+                              context.read<ProductBloc>().add(Productget(productId: productList[index].products.id!));
+                            }
                           );
                         },
                         childCount: productList.length,
@@ -381,7 +390,13 @@ class _SearchscreenState extends State<Searchscreen> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          return InkWell(
+                          return InkWell(onTap: () {
+                            Navigator.push(context,MaterialPageRoute(builder: (context){
+                              return ProductDescription();
+                            }));
+
+                             context.read<ProductBloc>().add(Productget(productId: searchList![index].id!));
+                          },
                             child: Container(
                               clipBehavior: Clip.hardEdge,
                               decoration: BoxDecoration(

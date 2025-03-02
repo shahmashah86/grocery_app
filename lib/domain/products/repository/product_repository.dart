@@ -10,4 +10,5 @@ abstract class ProductRepository {
   Future uploadImage({int id,String productName,File? imageFile});
   Future  getInventoryList();
   Future getproductbysearch(String prodName);
+  Future getProduct(int productId);
 }

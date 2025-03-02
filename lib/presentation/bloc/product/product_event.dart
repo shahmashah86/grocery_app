@@ -66,3 +66,8 @@ const  Productsearch({required this.productName,});
   List<Object> get props => [productName];
 }
 
+final class Productget extends ProductEvent{
+  final int productId;
+
+ const Productget({required this.productId});
+}

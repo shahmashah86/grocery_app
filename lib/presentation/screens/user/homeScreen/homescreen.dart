@@ -7,6 +7,7 @@ import 'package:grocery_app/domain/category/model/category_model.dart';
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/bloc/user_dashboard/user_dashboard_bloc.dart';
+import 'package:grocery_app/presentation/screens/user/pdoduct_description/product_description.dart';
 import 'package:grocery_app/presentation/screens/user/search/searchscreen.dart';
 import 'package:grocery_app/presentation/screens/user/widgets/category_content.dart';
 import 'package:grocery_app/presentation/screens/user/widgets/clipper.dart';
@@ -245,62 +246,69 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount:
                           state.dashboardData?.trendingProducts.length ?? 0,
                       itemBuilder: (context, index, realIndex) {
-                        return Card(
-  color: Colors.lime.shade400,
-  elevation: 3,
-  clipBehavior: Clip.hardEdge,
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(10),  // Round only top-left corner
-      topRight: Radius.circular(10), // Round only top-right corner
-    ),
-  ),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 8.0,top: 8,right:8 ),
-        child: SizedBox(width: double.infinity,height:  180,
-          child: CachedNetworkImage(
-            imageUrl: state.dashboardData?.trendingProducts[index].image ?? "",
-            placeholder: (context, url) => SpinKitPulse(
-              color: Colors.white,
-            ),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(left: 8.0,right: 8,bottom: 4,top: 4),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            
-          children: [
-            Expanded(
-              child: Text(maxLines: 1,overflow: TextOverflow.ellipsis,
-                state.dashboardData!.trendingProducts[index].productName ?? "",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.indigo,
-                ),
-              ),
-            ),
-            // SizedBox(height: 2), // Add spacing
-            Text(
-              "₹${state.dashboardData?.trendingProducts[index].price.toString()}",
-              style: TextStyle(
-                fontSize: 16,
-                // fontWeight: FontWeight.w500,
-                color: Colors.indigo,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ],
-  ),
-);
+                        return InkWell(onTap: (){ Navigator.push(context,MaterialPageRoute(builder: (context){
+                          return ProductDescription();
+                          
+                        }));
+                        context.read<ProductBloc>().add(Productget(productId: state.dashboardData!.trendingProducts[index].id!));
+                        },
+                          child: Card(
+                            color: Colors.lime.shade400,
+                            elevation: 3,
+                            clipBehavior: Clip.hardEdge,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),  // Round only top-left corner
+                                topRight: Radius.circular(10), // Round only top-right corner
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0,top: 8,right:8 ),
+                                  child: SizedBox(width: double.infinity,height:  180,
+                                    child: CachedNetworkImage(
+                                      imageUrl: state.dashboardData?.trendingProducts[index].image ?? "",
+                                      placeholder: (context, url) => SpinKitPulse(
+                                        color: Colors.white,
+                                      ),
+                                      errorWidget: (context, url, error) => Icon(Icons.error),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0,right: 8,bottom: 4,top: 4),
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      
+                                    children: [
+                                      Expanded(
+                                        child: Text(maxLines: 1,overflow: TextOverflow.ellipsis,
+                                          state.dashboardData!.trendingProducts[index].productName ?? "",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.indigo,
+                                          ),
+                                        ),
+                                      ),
+                                      // SizedBox(height: 2), // Add spacing
+                                      Text(
+                                        "₹${state.dashboardData?.trendingProducts[index].price.toString()}",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          // fontWeight: FontWeight.w500,
+                                          color: Colors.indigo,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
 
                         // return Card(color: Colors.lime.shade400,
                         //   elevation: 3,clipBehavior: Clip.hardEdge,

@@ -21,6 +21,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<ProductimageUpload>(_uploadImage);
     on<ProductstockGet>(_getInventory);
     on<Productsearch>(_getproductbysearch);
+    on<Productget>(_getproduct);
   }
 
   _productList(ProductList event, Emitter<ProductState> emit) async {
@@ -271,6 +272,73 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(
           ProductLoaded(
               searchList: response, isLoading: false, frombottomnav: false),
+        );
+      } catch (e) {
+        emit(ProductError(msg: e.toString()));
+      }
+    }
+  }
+
+
+  
+  _getproduct(Productget event, Emitter<ProductState> emit) async {
+    final currentstate = state;
+
+    if (currentstate is ProductLoaded) {
+      try {
+  
+        emit(currentstate.copyWith(
+            message: '',
+            isLoading: true,
+            isError: false,
+          
+            productList: currentstate.productList,
+            stockList: currentstate.stockList,
+            searchList: currentstate.searchList,
+            errormsg: '',
+            frombottomnav: currentstate.frombottomnav));
+        final response =
+            await productRegRepository.getProduct(event.productId);
+        log(response.toString(), name: 'response og product get event');
+
+        emit(currentstate.copyWith(
+          message: '',
+          isLoading: false,
+          isError: false,
+          
+          productList: currentstate.productList,
+          stockList: currentstate.stockList,
+          searchList: currentstate.searchList,
+          errormsg: '',
+          frombottomnav: false,
+          product: [response]
+        ));
+        
+      } catch (e) {
+        log(e.toString(), name: 'error from bloc');
+        emit(currentstate.copyWith(
+          message: '',
+          isLoading: false,
+          isError: true,
+         
+          productList: currentstate.productList,
+          stockList: currentstate.stockList,
+          searchList: currentstate.searchList,
+          errormsg: e.toString(),
+          frombottomnav: currentstate.frombottomnav,
+        
+        ));
+      }
+    } else {
+      try {
+        emit(ProductLoading());
+        final response =
+            await productRegRepository.getProduct(event.productId);
+        // log('product loading', name: 'from bloc');
+        emit(
+          ProductLoaded(
+              
+              product: [response], isLoading: false,),
         );
       } catch (e) {
         emit(ProductError(msg: e.toString()));

@@ -61,10 +61,7 @@ class CategoryContent extends StatelessWidget {
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return ProductDescription(
-                        description:categorywiseProducts?[index].productDescription??'',
-                        imgpath:categorywiseProducts?[index].image??"",
-                        producName: categorywiseProducts?[index].productName??"",
-                        price: categorywiseProducts?[index].price.toString()??""
+                     
 
                       );
                     }

@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'dart:ui' as ui;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
 import 'package:grocery_app/domain/place_order_model/place_order_model.dart';
@@ -10,7 +12,9 @@ import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
+import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/order_success/order_successful.dart';
+import 'package:grocery_app/presentation/screens/user/pdoduct_description/product_description.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Cart extends StatefulWidget {
@@ -116,17 +120,41 @@ class _CartState extends State<Cart> {
                                   padding: const EdgeInsets.only(
                                     left: 9,
                                   ),
-                                  child: Container(
-                                    height:
-                                        MediaQuery.sizeOf(context).height * .15,
-                                    width:
-                                        MediaQuery.sizeOf(context).width * .3,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            state.cartItems?[index].url ?? ''),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                                        return ProductDescription();
+                                      }));
+                                      context.read<ProductBloc>().add(Productget(productId: state.cartItems![index].id));
+                                    },
+                                    
+                                    child: Container(clipBehavior: Clip.hardEdge,
+                                         decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),),
+                                      child: CachedNetworkImage(
+                                        height:
+                                            MediaQuery.sizeOf(context).height * .15,
+                                        width:
+                                            MediaQuery.sizeOf(context).width * .3,
+                                            imageUrl: state.cartItems?[index].url ?? '' ,
+                                               fit: BoxFit.cover,
+                                                errorWidget: (context, url, error) => Icon(
+                                        Icons.error,
+                                        size: 60,
+                                        color: Colors.black45,
+                                      ),
+                                      placeholder: (context, url) => SpinKitPulse(
+                                        color: Colors.white,
+                                      ),
+                                        // decoration: BoxDecoration(
+                                        //   borderRadius: BorderRadius.circular(10),
+                                      
+                                        //   image: DecorationImage(
+                                        //     fit: BoxFit.cover,
+                                        //     image: NetworkImage(
+                                        //         state.cartItems?[index].url ?? ''),
+                                        //   ),
+                                        // ),
                                       ),
                                     ),
                                   ),

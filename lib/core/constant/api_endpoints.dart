@@ -35,4 +35,5 @@ class ApiEndpoints {
  static const updateUser='/api/user/updateAUser/';
  static const cancelOrder = '/api/order/deleteAnOrder/';
  static const updateOrder='/api/order/updateAnOrder/';
+ static const getAproduct='/api/product/getAProduct/';
 }

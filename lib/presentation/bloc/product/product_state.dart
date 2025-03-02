@@ -19,9 +19,11 @@ final class ProductLoaded extends ProductState {
   final List<ProductRegModel>? productList;
   final List<ProductsModel>? stockList;
   final List<ProductsModel>? searchList;
+  final List<ProductsModel> product;
 
   final bool frombottomnav;
   final String? errormsg;
+  
 
   const ProductLoaded(
       {this.isLoading = false,
@@ -32,6 +34,7 @@ final class ProductLoaded extends ProductState {
       this.stockList,
       this.searchList = const [],
       this.frombottomnav = false,
+      this.product=const [],
       this.errormsg = ''});
 
   @override
@@ -44,7 +47,9 @@ final class ProductLoaded extends ProductState {
         stockList,
         searchList,
         frombottomnav,
+        product,
         errormsg
+
       ];
 
   ProductLoaded copyWith({
@@ -55,6 +60,7 @@ final class ProductLoaded extends ProductState {
     List<ProductRegModel>? productList,
     List<ProductsModel>? stockList,
     List<ProductsModel>? searchList,
+    List<ProductsModel>? product,
     bool? frombottomnav,
     String? errormsg,
   }) {
@@ -67,7 +73,10 @@ final class ProductLoaded extends ProductState {
         searchList: searchList ?? this.searchList,
         productId: productId ?? this.productId,
         frombottomnav: frombottomnav ?? this.frombottomnav,
-        errormsg: errormsg ?? this.errormsg);
+        errormsg: errormsg ?? this.errormsg,
+        product: product??this.product
+        
+        );
   }
 }
 
