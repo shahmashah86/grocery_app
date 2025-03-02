@@ -3,7 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
 import 'package:grocery_app/domain/products/model/products_model.dart';
+import 'package:grocery_app/main.dart';
+import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 
 class ProductDescription extends StatelessWidget {
@@ -62,7 +65,8 @@ class ProductDescription extends StatelessWidget {
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30)),
-                      color: const Color.fromARGB(255, 255, 239, 192),
+                      // color: const Color.fromARGB(255, 255, 239, 192),
+                      color: Colors.white
                     ),
                     child: Padding(
                       padding:
@@ -90,19 +94,19 @@ class ProductDescription extends StatelessWidget {
                             textAlign: TextAlign.justify,
                             style: TextStyle(fontSize: 14),
                           ),
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).height*.2,
-                          ),
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Quantity',
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                  )),
-                              Spacer(),
-                              Quantity()
-                            ],
-                          ),
+                          // SizedBox(
+                          //   height: MediaQuery.sizeOf(context).height*.2,
+                          // ),
+                          // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                              // Text('Quantity',
+                              //     style: TextStyle(
+                              //       fontSize: 22,
+                              //     )),
+                              // Spacer(),
+                              // Quantity()
+                          //   ],
+                          // ),
                           SizedBox(
                             height: MediaQuery.sizeOf(context).height*.01,
                           ),
@@ -117,6 +121,59 @@ class ProductDescription extends StatelessWidget {
                                     backgroundColor:
                                         WidgetStatePropertyAll(Colors.amber)),
                                 onPressed: () {
+                                     CartModel cartItems = CartModel(
+                                            id: product.id!,
+                                            prodName: product
+                                                    .productName! ,
+                                              
+                                            price:product.price!,
+                                              
+                                            url: product.image
+                                          );
+
+                                          bool itemExists = cartBox.values.any(
+                                              (item) =>
+                                                  item.id == cartItems.id);
+
+                                          if (!itemExists) {
+                                            context.read<CartBloc>().add(
+                                                CartItemAdd(
+                                                    cartItems: cartItems));
+                                           
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                content: Text(
+                                                    "Product added to cart!"),
+                                                duration: Duration(seconds: 1),
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                              ),
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                content: Text(
+                                                  "Product already in cart!",
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                                duration: Duration(seconds: 1),
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                              ),
+                                            );
+                                          }
+             
 
                                 },
                                 child: Center(
