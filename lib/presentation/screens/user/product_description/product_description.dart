@@ -10,9 +10,9 @@ import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 
 class ProductDescription extends StatelessWidget {
-  ProductDescription({
-    Key? key,
-  }) : super(key: key);
+  const ProductDescription({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +53,14 @@ class ProductDescription extends StatelessWidget {
                 ),
               ),
             ),
+            Positioned(top: 14,left: 12,
+              child: IconButton(onPressed: (){
+                Navigator.pop(context);
+              }, icon: CircleAvatar(child: Center(child: Icon(Icons.chevron_left,color: Colors.black,))))),
             Column(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.46,
+                  height: MediaQuery.of(context).size.height * 0.47,
                 ),
                 Expanded(
                   child: Container(
@@ -83,9 +87,16 @@ class ProductDescription extends StatelessWidget {
                                     fontSize: 25, fontWeight: FontWeight.w500),
                               ),
                               Spacer(),
-                              Text(
-                               product.price.toString() ,
-                                style: TextStyle(fontSize: 22),
+                              Row(
+                                children: [
+                                  Text(
+                                   product.price.toString() ,
+                                    style: TextStyle(fontSize: 19),
+                                  ),Text(
+                                  '/${product.unit.toString()}' ,
+                                    style: TextStyle(fontSize: 19),
+                                  ),
+                                ],
                               )
                             ],
                           ),
@@ -94,18 +105,7 @@ class ProductDescription extends StatelessWidget {
                             textAlign: TextAlign.justify,
                             style: TextStyle(fontSize: 14),
                           ),
-                          // SizedBox(
-                          //   height: MediaQuery.sizeOf(context).height*.2,
-                          // ),
-                          // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                              // Text('Quantity',
-                              //     style: TextStyle(
-                              //       fontSize: 22,
-                              //     )),
-                              // Spacer(),
-                              // Quantity()
-                          //   ],
+                        
                           // ),
                           SizedBox(
                             height: MediaQuery.sizeOf(context).height*.01,

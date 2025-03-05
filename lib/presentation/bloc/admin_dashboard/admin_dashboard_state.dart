@@ -12,26 +12,46 @@ final class AdminDashboardInitial extends AdminDashboardState {}
 final class AdminDashboardLoading extends AdminDashboardState {}
 
 final class AdminDashboardsuccess extends AdminDashboardState {
+  final bool isLoading;
+  final bool isError;
   final AdmindasboardModel dashboardData;
+  final List<AdmindasboardModel>? dashboardForbanners;
   final String message;
-
+  final String errormsg;
 
   const AdminDashboardsuccess(
-     this.dashboardData, {this.message=''}
-     
-     );
+    this.dashboardData, {
+    this.isLoading = false,
+    this.isError = false,
+    this.dashboardForbanners,
+    this.message = '',
+    this.errormsg = '',
+  });
 
   @override
-  List<Object?> get props => [dashboardData,message];
+  List<Object?> get props => [
+        isLoading,
+        isError,
+        dashboardData,
+        dashboardForbanners,
+        message,
+        errormsg
+      ];
 
-  AdminDashboardsuccess copyWith({
-    AdmindasboardModel? dashboardData,
-    String? message,
-  }) {
+  AdminDashboardsuccess copyWith(
+      {bool? isLoading,
+      bool? isError,
+      AdmindasboardModel? dashboardData,
+      List<AdmindasboardModel>? dashboardForbanners,
+      String? message,
+      String? errormsg}) {
     return AdminDashboardsuccess(
-      dashboardData ?? this.dashboardData,
-      message: message ?? this.message,
-    );
+        isLoading: isLoading ?? this.isLoading,
+        isError: isError ?? this.isError,
+        dashboardData ?? this.dashboardData,
+        dashboardForbanners: dashboardForbanners ?? this.dashboardForbanners,
+        message: message ?? this.message,
+        errormsg: errormsg ?? this.errormsg);
   }
 }
 

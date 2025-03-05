@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:grocery_app/presentation/bloc/admin_dashboard/admin_dashboard_bloc.dart';
+import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 import 'package:grocery_app/presentation/screens/admin/banner/list_banners_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -37,12 +38,14 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.amber.shade200,
-          actions: [IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context){
-              return ListBannersScreen();
-            }));
-
-          }, icon: Icon(Icons.list)),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ListBannersScreen();
+                  }));
+                },
+                icon: Icon(Icons.list)),
             IconButton(
               onPressed: () async {
                 await getImage();
@@ -59,79 +62,100 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
             valueListenable: selectedImages,
             builder: (context, value, child) => selectedImages.value.isEmpty
                 ? Center(child: Text("No image selected"))
-                : BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
-                          builder: (context, state) {
-                            if(state is AdminDashboardLoading){
-                              return CircularProgressIndicator(
-
-                              );
-                            }
-                              if(state is AdminDashboardError){
-                                              return Center(child: Text("Error in uplaoding please try again"));
-                                            }
-                                        
-                    return Column(
-                                    children: [
-                                      Expanded(
-                                      
-                                           child: 
-                                           
-                                           ListView.builder(
-                                                itemBuilder: (context, index) {
-                                                  return Stack(children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Container(
-                                                        height: 200,
-                                                        width: double.infinity,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.circular(10),
-                                                            color: Colors.amber.shade50,
-                                                            image: DecorationImage(
-                                                                image: FileImage(
-                                                                  selectedImages.value[index],
-                                                                ),
-                                                                fit: BoxFit.cover)),
-                                                      ),
-                                                    ),
-                                                    Positioned(
-                                                      right: 10,
-                                                      bottom: 10,
-                                                      child: IconButton(
-                                                        onPressed: () {
-                                                          selectedImages.value =
-                                                              List.from(selectedImages.value)
-                                                                ..removeAt(index);
-                                                        },
-                                                        icon: Icon(
-                                                          Icons.delete,
-                                                          size: 50,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ]);
-                                                },
-                                                itemCount: selectedImages.value.length)
-                                         
+                : Column(
+                    children: [
+                      Expanded(
+                          child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                return Stack(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              .25,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.amber.shade50,
+                                          image: DecorationImage(
+                                              image: FileImage(
+                                                selectedImages.value[index],
+                                              ),
+                                              fit: BoxFit.cover)),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 10,
+                                    bottom: 10,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        selectedImages.value =
+                                            List.from(selectedImages.value)
+                                              ..removeAt(index);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 50,
+                                        color: Colors.white,
                                       ),
-                                      TextButton(
-                                          onPressed: () {
-                                            log(selectedImages.value.toString());
-                                   
-                                            context.read<AdminDashboardBloc>().add(
-                                                AdminbannerCreation(
-                                                    imageFile: selectedImages.value));
+                                    ),
+                                  )
+                                ]);
+                              },
+                              itemCount: selectedImages.value.length)),
+                      BlocConsumer<AdminDashboardBloc, AdminDashboardState>(
+                        builder: (context, state) {
+                          if(state is AdminDashboardsuccess){
+                            if(state.isLoading==true){
+                              return CircularProgressIndicator();
+                            }
+                           
+                            
+               
+                          return TextButton(
+                              onPressed: () {
+                                log(selectedImages.value.toString());
 
-                                                           
-                                          },
-                                          child: Text("upload"))
-                                    ],
-                                  );
-                  },
-                ))
-                  
-                  );
+                                context.read<AdminDashboardBloc>().add(
+                                    AdminbannerCreation(
+                                        imageFile: selectedImages.value));
+                              },
+                              child: Text("upload"));
+                          }
+                          return Text("Loading please wait or try again");
+                        }, listener: (context, state) { 
+                          if(state is AdminDashboardsuccess){
+                                       if(state.message=='succesfully uploaded'){
+                                ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text(state.message 
+                               ,style: TextStyle(color: Colors.black),),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                       selectedImages.value = [];
+                            }
+                            if(state.isError){
+                              log('error ',name: 'banner nor created');
+                                 ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(state.errormsg 
+                               ,style: TextStyle(color: Colors.white),),
+                            duration: Duration(seconds: 2),
+                                )
+                                 );
+
+                            }
+                            }
+
+
+                         },
+                      )
+                    ],
+                  )));
   }
 }

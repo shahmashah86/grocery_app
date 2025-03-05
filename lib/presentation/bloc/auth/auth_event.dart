@@ -64,12 +64,12 @@ class Resetpassword extends AuthEvent {
   @override
   List<Object> get props => [userName];
 }
-class Updateuser extends AuthEvent{
 
+class Updateuser extends AuthEvent {
   final int userIdforupdate;
   final AuthModel authModel;
 
- const Updateuser(this.authModel, {required this.userIdforupdate});
- 
-
+  const Updateuser(this.authModel, {required this.userIdforupdate});
+    @override
+  List<Object> get props => [userIdforupdate,authModel];
 }

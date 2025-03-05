@@ -4,3 +4,9 @@ enum OrderScreenType {
   userWiseOrders,
   allOrders
 }
+
+enum ProdCreateEditScreen {
+  add,
+  edit,
+  list
+}

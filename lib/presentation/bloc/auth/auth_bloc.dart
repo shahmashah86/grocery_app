@@ -24,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<Resetpassword>(_resetpassword);
     on<Updateuser>(_updateuser);
   }
+  //user signin
   _signin(AuthSignin event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -48,6 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+//user signup
   _signup(AuthSignUp event, Emitter<AuthState> emit) async {
     try {
       var response = await authRepository.signupWithUserandPass(
@@ -72,11 +74,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+//users list
   _listusers(ListUsers event, Emitter<AuthState> emit) async {
     final currentstate = state;
     try {
       if (currentstate is UsersListstate) {
-        // emit(currentstate.copyWith(isLoading: true));
         final response = await authRepository.usersList();
         log('inside try of lisusers');
         emit(UsersListstate(users: response, isLoading: false));
@@ -93,6 +95,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+//profile image upload
   _profileimageUpload(UploadProfile event, Emitter<AuthState> emit) async {
     try {
       var response = await authRepository.uploadprofileImage(
@@ -105,24 +108,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  //delete user
+
   _deleteuser(Deleteuser event, Emitter<AuthState> emit) async {
     log('inside bloc');
 
     try {
       final currentstate = state;
 
-      var response = await authRepository.deleteUser(userid: event.userId);
       if (currentstate is Authupdated) {
         try {
+          var response = await authRepository.deleteUser(userid: event.userId);
           log(response);
           emit(currentstate.copyWith(
-              message: response, imageUrl: currentstate.imageUrl));
+              message: response,
+              imageUrl: currentstate.imageUrl,
+              errormessage: ''));
         } catch (e) {
           log(e.toString());
-          currentstate.copyWith(errormessage: e.toString());
+          currentstate.copyWith(
+              message: '',
+              imageUrl: currentstate.imageUrl,
+              errormessage: e.toString());
         }
       } else {
-        emit(Authupdated(message: response));
+        var response = await authRepository.deleteUser(userid: event.userId);
+        emit(Authupdated(
+          message: response,
+        ));
       }
     } catch (e) {
       log(e.toString());
@@ -130,6 +143,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+//reset password
   _resetpassword(Resetpassword event, Emitter<AuthState> emit) async {
     log('inside bloc');
 
@@ -150,7 +164,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         } catch (e) {
           // log(e.toString());
           emit(currentstate.copyWith(
-              errormessage: e.toString(), isLoading: false));
+              isLoading: false,
+              message: '',
+              errormessage: e.toString(),
+              imageUrl: currentstate.imageUrl));
         }
       } else {
         log('inside bloc else');
@@ -159,7 +176,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await authRepository.resetPassword(userName: event.userName);
         // log(event.userName);
         //        log(response);
-        emit(Authupdated(message: response, isLoading: false));
+        emit(Authupdated(
+          isLoading: false,
+          message: response,
+        ));
       }
     } catch (e) {
       log(e.toString());
@@ -167,30 +187,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+//update user
   _updateuser(Updateuser event, Emitter<AuthState> emit) async {
     final currentstate = state;
     if (currentstate is Authsuccess) {
       try {
-        emit(currentstate.copywith(isLoading: true,message: ''),);
+        emit(
+          currentstate.copywith(isLoading: true, message: ''),
+        );
         var response = await authRepository.updateUser(
             userIdforupdate: event.userIdforupdate, authinfo: event.authModel);
         emit(currentstate.copywith(
           authModel: response['updatedinfo'],
-          message: response['message'],
           isLoading: false,
+          errormessage: '',
+          message: response['message'],
         ));
       } catch (e) {
         currentstate.copywith(
-            authModel: currentstate.authModel, errormessage: e.toString());
+            authModel: currentstate.authModel,
+            isLoading: false,
+            errormessage: e.toString());
       }
     } else {
       try {
         var response = await authRepository.updateUser(
             userIdforupdate: event.userIdforupdate, authinfo: event.authModel);
         emit(Authsuccess(
-          authModel: response['updatedinfo'],
-          message: response['message']
-        ));
+            isLoading: false,
+            authModel: response['updatedinfo'],
+            errormessage: '',
+            message: response['message']));
       } catch (e) {
         emit(AuthError(errormsg: e.toString()));
       }

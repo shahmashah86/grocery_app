@@ -3,10 +3,6 @@ import 'package:grocery_app/domain/banner/banner_model.dart';
 import 'package:grocery_app/domain/orders/model/order_model.dart';
 import 'package:grocery_app/domain/products/model/products_model.dart';
 
-
-
-
-
 class AdmindasboardModel extends Equatable {
   List<BannerModel>? banners;
   String? usersCount;

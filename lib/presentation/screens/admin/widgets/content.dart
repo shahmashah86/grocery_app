@@ -8,6 +8,7 @@ import 'package:grocery_app/domain/orders/model/order_model.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 
 import 'package:grocery_app/presentation/screens/admin/orders/get_order_byid_screen.dart';
+import 'package:intl/intl.dart';
 
 class Content extends StatefulWidget {
   const Content(
@@ -36,10 +37,13 @@ class _ContentState extends State<Content> {
   Widget build(BuildContext context) {
    
 
+
     //  List<int> acknowldegedId=[];
     return ListView.builder(
       itemCount: widget.order.length,
       itemBuilder: (context, index) {
+             DateTime parsedDate = DateTime.parse(widget.order[index].dateTime);
+                String formattedDate = DateFormat("dd-MM-yy").format(parsedDate);
         // log(acknowldegedId.toString());
         return Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 10),
@@ -56,7 +60,7 @@ class _ContentState extends State<Content> {
             child: Card(
               child: Container(
                 padding: EdgeInsets.only(left: 8, right: 9),
-                height: MediaQuery.sizeOf(context).height * 0.3,
+                // height: MediaQuery.sizeOf(context).height * 0.345,
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 251, 247, 233),
                   borderRadius: BorderRadius.circular(10),
@@ -132,16 +136,16 @@ class _ContentState extends State<Content> {
                         Text("Date", style: TextStyle(color: Colors.black54)),
                         Spacer(),
                         Text(
-                          widget.order[index].dateTime,
+                          formattedDate,
                           style: TextStyle(
                             fontSize: 20,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
                    
                       //    if(state is Orderssuccess && state.message!=null){
                       //     log('sucess');

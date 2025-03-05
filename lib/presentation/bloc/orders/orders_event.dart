@@ -21,10 +21,10 @@ class OrdersbyUser extends OrdersEvent {
 
 class Orderacknowledge extends OrdersEvent {
   final int orderId;
-//  final List<int> acknowldegedOrders;
+
   const Orderacknowledge({
     required this.orderId,
-    // required this.acknowldegedOrders,
+  
   });
 
   @override
@@ -48,17 +48,19 @@ class OrderbyId extends OrdersEvent {
   @override
   List<Object> get props => [orderId];
 }
-class Ordercancel extends OrdersEvent{
+
+class Ordercancel extends OrdersEvent {
   final int orderId;
 
- const Ordercancel({required this.orderId});
- @override
-   List<Object> get props => [orderId];
+  const Ordercancel({required this.orderId});
+  @override
+  List<Object> get props => [orderId];
 }
 
-class Orderproductsupdate extends OrdersEvent{
+class Orderproductsupdate extends OrdersEvent {
   final int orderId;
   final OrdersModel updatedorder;
 
-
- const Orderproductsupdate({required this.updatedorder, required this.orderId});}
+  const Orderproductsupdate(
+      {required this.updatedorder, required this.orderId});
+}

@@ -20,8 +20,6 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<CategorylistbyId>(_productByCategory);
   }
   _getCategory(CategoryGet event, Emitter<CategoryState> emit) async {
-   
-
     try {
       emit(CategoryLoading());
       final response = await categoryRepository.getAllCategories();
@@ -40,16 +38,24 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
     if (currentState is CategoryLoaded) {
       try {
-        emit(currentState.copyWith(isLoading: true));
-        await Future.delayed(Duration(seconds: 4));
+        emit(currentState.copyWith(
+            categoryList: currentState.categoryList,
+            isLoading: true,
+            message: '',
+            errorMsg: '',
+            produnderCategory: currentState.produnderCategory));
+
         final response = await categoryRepository.createCategory(
           name: event.categeoryName,
         );
-        emit(currentState.copyWith(message: response, isLoading: false));
+        emit(currentState.copyWith(
+            message: response,
+            isLoading: false,
+            produnderCategory: currentState.produnderCategory));
         log(response.toString());
       } catch (e) {
         log('error');
-        emit(currentState.copyWith(errorMsg: e.toString()));
+        emit(currentState.copyWith(isLoading: false, errorMsg: e.toString()));
       }
     }
   }
@@ -58,14 +64,26 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     final currentState = state;
     if (currentState is CategoryLoaded) {
       try {
-        emit(currentState.copyWith(isLoading: true));
+        emit(currentState.copyWith(
+            message: '',
+            isLoading: true,
+            errorMsg: '',
+            produnderCategory: currentState.produnderCategory));
         final response = await categoryRepository.updateCategory(
             id: event.id, catgeoryToUpdate: event.categoryName);
-        emit(currentState.copyWith(message: response, isLoading: false));
+        emit(currentState.copyWith(
+            categoryList: currentState.categoryList,
+            message: response,
+            isLoading: false,
+            errorMsg: '',
+            produnderCategory: currentState.produnderCategory));
         log(response.toString());
       } catch (e) {
         log('error');
-        currentState.copyWith(errorMsg: e.toString());
+        currentState.copyWith(
+            categoryList: currentState.categoryList,
+            errorMsg: e.toString(),
+            produnderCategory: currentState.produnderCategory);
       }
     }
   }
@@ -74,13 +92,25 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     final currentstate = state;
     if (currentstate is CategoryLoaded) {
       try {
-        emit(currentstate.copyWith(isLoading: true));
+        emit(currentstate.copyWith(
+            categoryList: currentstate.categoryList,
+            message: '',
+            isLoading: true,
+            errorMsg: '',
+            produnderCategory: currentstate.produnderCategory));
         final response = await categoryRepository.deleteCategory(id: event.id);
         log(response.toString());
-        emit(currentstate.copyWith(message: response, isLoading: false));
+        emit(currentstate.copyWith(
+            message: response,
+            isLoading: false,
+            errorMsg: '',
+            produnderCategory: currentstate.produnderCategory));
       } catch (e) {
         log('error');
-        currentstate.copyWith(errorMsg: e.toString());
+        currentstate.copyWith(
+            categoryList: currentstate.categoryList,
+            errorMsg: e.toString(),
+            produnderCategory: currentstate.produnderCategory);
       }
     }
   }
@@ -90,14 +120,22 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     final currentState = state;
     if (currentState is CategoryLoaded) {
       try {
-        emit(currentState.copyWith(isLoading: true));
+        emit(currentState.copyWith(
+            categoryList: currentState.categoryList,
+            isLoading: true,
+            message: '',
+            errorMsg: '',
+            produnderCategory: currentState.produnderCategory));
         final response = await categoryRepository.listallCategories(event.id);
         emit(currentState.copyWith(
             produnderCategory: response, isLoading: false));
         log(response.toString());
       } catch (e) {
         log('error');
-        currentState.copyWith(errorMsg: e.toString());
+        currentState.copyWith(
+            categoryList: currentState.categoryList,
+            errorMsg: e.toString(),
+            produnderCategory: currentState.produnderCategory);
       }
     }
   }

@@ -24,7 +24,7 @@ class CartItemDelete extends CartEvent {
   const CartItemDelete({
     required this.indextoDelete,
   });
-  
+
   @override
   List<Object> get props => [indextoDelete];
 }
@@ -34,11 +34,9 @@ class CartItemToupdate extends CartEvent {
   final int indextoUpdate;
   const CartItemToupdate(
       {required this.itemtoUpdate, required this.indextoUpdate});
-      
-  @override
-  List<Object> get props => [indextoUpdate,itemtoUpdate];
-}
-class CartItemclear extends CartEvent{
 
-  
+  @override
+  List<Object> get props => [indextoUpdate, itemtoUpdate];
 }
+
+class CartItemclear extends CartEvent {}

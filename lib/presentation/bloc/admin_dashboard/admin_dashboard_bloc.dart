@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/domain/admindashboard/model/admindasboard_model.dart';
@@ -19,14 +18,13 @@ class AdminDashboardBloc
     on<UserDashboardGet>(__getuserDashboard);
   }
 
+//get admin dasboard
   _getDashboard(
       AdminDasboarddataGet event, Emitter<AdminDashboardState> emit) async {
     try {
       emit(AdminDashboardLoading());
       final response = await adminRepository.getAdminDashboardData();
-
       // log(response.toString());
-
       emit(AdminDashboardsuccess(response));
     } catch (e) {
       emit(AdminDashboardError(errormessage: e.toString()));
@@ -34,50 +32,101 @@ class AdminDashboardBloc
     }
   }
 
+//create banner
   _createbanner(
       AdminbannerCreation event, Emitter<AdminDashboardState> emit) async {
-    try {
-      final currentState = state;
+    final currentState = state;
 
-      if (currentState is AdminDashboardsuccess) {
+    if (currentState is AdminDashboardsuccess) {
+      try {
+        emit(currentState.copyWith(
+            isLoading: true,
+            isError: false,
+            dashboardData: currentState.dashboardData,
+            message: '',
+            errormsg: ''));
         final response = await adminRepository.bannercreation(event.imageFile);
         log(response.toString());
-        emit(currentState.copyWith(message: response.toString()));
+        emit(currentState.copyWith(
+            isLoading: false,
+            isError: false,
+            dashboardData: currentState.dashboardData,
+            message: response.toString(),
+            errormsg: ''));
+      } catch (e) {
+        emit(currentState.copyWith(
+            isLoading: false,
+            isError: true,
+            dashboardData: currentState.dashboardData,
+            message: currentState.message,
+            dashboardForbanners: currentState.dashboardForbanners,
+            errormsg: e.toString()));
+        log(e.toString());
       }
-    } catch (e) {
-      emit(AdminDashboardError(errormessage: e.toString()));
-      log(e.toString());
     }
   }
 
+//get user dashboard for getting banners
   __getuserDashboard(
       UserDashboardGet event, Emitter<AdminDashboardState> emit) async {
-    try {
-      emit(AdminDashboardLoading());
-      final response = await adminRepository.getUserDasboard();
-
-      log(response.toString());
-
-      emit(AdminDashboardsuccess(response));
-    } catch (e) {
-      emit(AdminDashboardError(errormessage: e.toString()));
-      log(e.toString(), name: 'something wrong');
+    final currentstate = state;
+    if (currentstate is AdminDashboardsuccess) {
+      try {
+        emit(currentstate.copyWith(
+            isLoading: true,
+            isError: false,
+            dashboardData: currentstate.dashboardData,
+            dashboardForbanners: currentstate.dashboardForbanners,
+            message: '',
+            errormsg: ''));
+        final response = await adminRepository.getUserDasboard();
+        emit(currentstate.copyWith(
+            isLoading: false,
+            isError: false,
+            dashboardData: currentstate.dashboardData,
+            dashboardForbanners: [response],
+            message: '',
+            errormsg: ''));
+      } catch (e) {
+        emit(currentstate.copyWith(
+            isLoading: false,
+            isError: true,
+            dashboardData: currentstate.dashboardData,
+            dashboardForbanners: currentstate.dashboardForbanners,
+            message: '',
+            errormsg: e.toString()));
+      }
     }
   }
 
+//delete banner
   Future<void> _deletebanner(
       AdminbannerDeletion event, Emitter<AdminDashboardState> emit) async {
     final currentState = state;
-    try {
-      if (currentState is AdminDashboardsuccess) {
+
+    if (currentState is AdminDashboardsuccess) {
+      try {
         final response =
             await adminRepository.bannerDelete(event.indextoDelete);
-        log(response.toString());
-
+        log(response.toString(), name: 'from bloc');
+        emit(currentState.copyWith(
+            isLoading: true,
+            isError: false,
+            dashboardData: currentState.dashboardData,
+            dashboardForbanners: List.from(
+                currentState.dashboardForbanners as List<AdmindasboardModel?>)
+              ..forEach((e) => e.banners
+                  ?.removeWhere((test) => test.id == event.indextoDelete)),
+            message: response));
+      } catch (e) {
+        emit(currentState.copyWith(
+            isLoading: false,
+            isError: false,
+            dashboardData: currentState.dashboardData,
+            dashboardForbanners: currentState.dashboardForbanners,
+            message: '',
+            errormsg: e.toString()));
       }
-    } catch (e) {
-      emit(AdminDashboardError(errormessage: e.toString()));
-      log(e.toString());
     }
   }
 }

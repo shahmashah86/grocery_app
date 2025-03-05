@@ -3,10 +3,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/domain/category/model/category_model.dart';
 import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
-import 'package:grocery_app/presentation/screens/admin/category/addCategory.dart';
+import 'package:grocery_app/presentation/screens/admin/category/add_Category.dart';
 
 class Getallcategory extends StatefulWidget {
   const Getallcategory({super.key});
@@ -139,7 +138,7 @@ context.read<CategoryBloc>().add(CategoryDelete(id:id ));
               }),
             
                  
-              SpinKitThreeBounce(size: 20,color:  Color.fromARGB(255, 220, 215, 215),)
+              CircularProgressIndicator()
               
 
 
@@ -157,7 +156,7 @@ context.read<CategoryBloc>().add(CategoryDelete(id:id ));
           if(state is CategoryLoaded){
             log('categoryLoaded');
             List<CategoryModel>? categories=state.categoryList??[];
-              return GridView.builder(
+              return GridView.builder(padding: EdgeInsets.all(10),
               itemCount: categories.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisExtent: MediaQuery.sizeOf(context).height * 0.099,
@@ -166,7 +165,7 @@ context.read<CategoryBloc>().add(CategoryDelete(id:id ));
                   mainAxisSpacing: 2),
               itemBuilder: (context, index) {
                 return Card(
-                  color: Colors.amberAccent,
+                  color: Colors.amber.shade300,
                   child: Padding(
                     padding: const EdgeInsets.all(15),
                     child: Row(
@@ -229,7 +228,7 @@ context.read<CategoryBloc>().add(CategoryDelete(id:id ));
           return Center(child: Text(state.msg),);
 
         }
-          return SpinKitThreeBounce(color: Colors.amberAccent,);
+          return Center(child: Text("Loading"));
              
         },
       ),

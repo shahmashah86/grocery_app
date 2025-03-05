@@ -1,4 +1,4 @@
-import 'dart:developer';
+ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,7 +77,7 @@ class StockoutScreen extends StatelessWidget {
               if(state.isLoading){
                 return Center(child: CircularProgressIndicator());
               }
-                stocks = state.stockList; // Keep original data into stocks
+                stocks = state.stockList??[]; // Keep original data into stocks
   stock.value =stocks; // Initialize stock with fresh unsorted data
             // stocks= state.stockList;
             //   stock.value = stocks??[];

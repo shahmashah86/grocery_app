@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:fl_chart/fl_chart.dart';
+// import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,16 +15,19 @@ import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 
 import 'package:grocery_app/presentation/screens/admin/banner/create_banner_screen.dart';
-import 'package:grocery_app/presentation/screens/admin/category/getAllCategory.dart';
+import 'package:grocery_app/presentation/screens/admin/category/get_AllCategory.dart';
 
 import 'package:grocery_app/presentation/screens/admin/orders/all_orders_screen.dart';
 import 'package:grocery_app/presentation/screens/admin/product/product_list_screen.dart';
 import 'package:grocery_app/presentation/screens/admin/product/productcreate.dart';
 import 'package:grocery_app/presentation/screens/admin/product/trending_products.dart';
+import 'package:grocery_app/presentation/screens/admin/stock/stockout_screen.dart';
 
-import 'package:grocery_app/presentation/screens/admin/stockout_screen.dart';
-import 'package:grocery_app/presentation/screens/admin/users_list.dart';
+import 'package:grocery_app/presentation/screens/admin/user_list/users_list.dart';
+
+
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHomescreen extends StatefulWidget {
@@ -51,11 +54,8 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
         backgroundColor: Colors.amber.shade50,
         child: ListView(
           children: [
-            DrawerHeader(
-              padding: EdgeInsets.all(0),
-              child: Container(
-                color: Colors.amber.shade200,
-              ),
+            Container(height: MediaQuery.sizeOf(context).height*.14,padding: EdgeInsets.all(30),
+              color: Colors.amber.shade200,child: Text("Menu",style: TextStyle(fontSize: 22,),),
             ),
             InkWell(
                 child: ListTile(
@@ -159,11 +159,11 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
       body: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
         child: Column(
-          spacing: 14,
+          spacing: 12,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 30,
+              spacing: 18,
               children: [
                 Column(
                   children: [
@@ -272,7 +272,7 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                       int totalsales = 0; 
                 if (state is Orderssuccess && state.allordersList.isNotEmpty) {
                   List<OrdersModel>? orders = state.allordersList;
-                  for (var i = 0; i < orders!.length; i++) {
+                  for (var i = 0; i < orders.length; i++) {
                     if (orders[i].acknowledged == true) {
                       totalsales += int.parse(orders[i].totalAmount.toString());
                     }
@@ -285,12 +285,12 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.amber.shade50),
                     height: MediaQuery.sizeOf(context).height * .19,
-                    width: MediaQuery.sizeOf(context).width * .98,
+                    width: double.infinity,
                     child: Row(
                       spacing: 15,
                       children: [
                         SizedBox(
-                          width: MediaQuery.sizeOf(context).width * .46,
+                          width: MediaQuery.sizeOf(context).width * .42,
                           child: Card(
                             child: Container(
                               decoration: BoxDecoration(
@@ -334,36 +334,14 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                 if (state is AdminDashboardsuccess) {
                   return Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: InkWell(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "trending now",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              Icon(Icons.arrow_forward)
-                            ],
-                          ),
-                          onTap: () => Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            final List<ProductsModel> trendingProducts =
-                                state.dashboardData!.trendingProducts;
-                            log(trendingProducts.toString());
-
-                            return TrendingProducts(products: trendingProducts);
-                          })),
-                        ),
-                      ),
+                    
                       Container(
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.amber.shade50),
                         height: MediaQuery.sizeOf(context).height * .276,
-                        width: MediaQuery.sizeOf(context).width * .98,
+                        width:double.infinity,
                         child: Column(
                           children: [
                             Row(
@@ -372,7 +350,7 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                                 Card(
                                   child: Container(
                                     width:
-                                        MediaQuery.sizeOf(context).width * .44,
+                                        MediaQuery.sizeOf(context).width * .43,
                                     height:
                                         MediaQuery.sizeOf(context).height * .14,
                                     decoration: BoxDecoration(
@@ -384,16 +362,16 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                                       children: [
                                         Image.asset(
                                           "assets/adminicon/group.png",
-                                          height: 31,
+                                          height:    MediaQuery.sizeOf(context).height * .03,
                                           width: 33,
                                         ),
                                         Text(
                                           "Users",
-                                          style: TextStyle(fontSize: 20),
+                                          style: TextStyle(fontSize: 19),
                                         ),
                                         Text(
-                                          state.dashboardData?.usersCount ?? '',
-                                          style: TextStyle(fontSize: 40),
+                                          state.dashboardData.usersCount ?? '',
+                                          style: TextStyle(fontSize: 29),
                                         )
                                       ],
                                     ),
@@ -402,7 +380,7 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                                 Card(
                                   child: Container(
                                     width:
-                                        MediaQuery.sizeOf(context).width * .44,
+                                        MediaQuery.sizeOf(context).width * .43,
                                     height:
                                         MediaQuery.sizeOf(context).height * .14,
                                     decoration: BoxDecoration(
@@ -415,16 +393,16 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                                         Image.asset(
                                           "assets/adminicon/groceries.png",
                                           width: 33,
-                                          height: 32,
+                                          height:   MediaQuery.sizeOf(context).height * .03 ,
                                         ),
                                         Text(
                                           "Products",
-                                          style: TextStyle(fontSize: 20),
+                                          style: TextStyle(fontSize: 19),
                                         ),
                                         Text(
-                                          state.dashboardData!.productCount ??
+                                          state.dashboardData.productCount ??
                                               "",
-                                          style: TextStyle(fontSize: 40),
+                                          style: TextStyle(fontSize: 29),
                                         )
                                       ],
                                     ),
@@ -433,7 +411,7 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                               ],
                             ),
                             SizedBox(
-                                height: 90,
+                               height:   MediaQuery.sizeOf(context).height * .1,
                                 width: double.infinity,
                                 child: Card(
                                   child: Container(
@@ -447,23 +425,23 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                                         Image.asset(
                                           "assets/adminicon/stockout.png",
                                           color: Colors.red,
-                                          height: 39,
+                                          height: 30,
                                         ),
                                         SizedBox(
                                           width: 10,
                                         ),
                                         Text(
                                           "Stockout: ",
-                                          style: TextStyle(fontSize: 21),
+                                          style: TextStyle(fontSize: 19),
                                         ),
                                         SizedBox(
                                           width: 10,
                                         ),
                                         Text(
-                                          state.dashboardData!
+                                          state.dashboardData
                                                   .stockOutProductCount ??
                                               "",
-                                          style: TextStyle(fontSize: 41),
+                                          style: TextStyle(fontSize: 30),
                                         )
                                       ],
                                     ),
@@ -472,6 +450,92 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                           ],
                         ),
                       ),
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "Trending now",
+                                    style: TextStyle(fontSize: 19),
+                                  ),
+                                  Icon(Icons.chevron_right)
+                                ],
+                              ),
+                              onTap: () => Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                final List<ProductsModel> trendingProducts =
+                                    state.dashboardData.trendingProducts;
+                                log(trendingProducts.toString());
+                            
+                                return TrendingProducts(products: trendingProducts);
+                              })),
+                            ),
+                              InkWell(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "User Orders",
+                                      style: TextStyle(fontSize: 19),
+                                    ),
+                                    Icon(Icons.chevron_right)
+                                  ],
+                                ),
+                                onTap: () => Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                               
+                            
+                              
+                                  return AllOrders();
+                                })),
+                              ),
+
+                            
+                          ],
+                        ),
+                      SizedBox(height: 8,),
+                     SizedBox(height: 225,
+                       child: ListView.builder(
+                         itemCount: state.dashboardData.allorders.length,
+                         itemBuilder: (context, index) {
+                           final orders = state.dashboardData.allorders??[];
+                          DateTime parsedDate = DateTime.parse(orders[index].dateTime);
+                String formattedDate = DateFormat("dd-MM-yy").format(parsedDate);
+                       
+                       
+                           return Padding(
+                             padding: const EdgeInsets.only(bottom: 8,top: 8),
+                             child: Container(padding: EdgeInsets.all(15),
+                               height: MediaQuery.sizeOf(context).height * 0.1,
+                               width: double.infinity,
+                               decoration: BoxDecoration(color: Colors.amber.shade50),
+                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                               spacing: 4,
+                               mainAxisAlignment: MainAxisAlignment.start,
+                                 children: [
+                                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                     children: [ 
+                                      Text("User id: ${orders[index].userId.toString()} "),
+                                       Text(formattedDate),
+                                     ],
+                                   ), 
+                                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                     children: [ 
+                                      Text("Total: ${orders[index].totalAmount.toString()} "),
+                                       Text(orders[index].acknowledged==true?'Acknowledged':'Acknowledge',style: 
+                                       TextStyle(color: orders[index].acknowledged==true?Colors.green:Colors.red),),
+                                     ],
+                                   )
+                                 ],
+                               ),
+                             ),
+                           );
+                         },
+                       ),
+                     )
+
                     ],
                   );
                 }
@@ -484,60 +548,63 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                 return (Text('please wait or load again'));
               },
             ),
-            BlocBuilder<OrdersBloc, OrdersState>(
-              
-              builder: (context, state) {
-                if(state is OrdersBloc){
-                return Expanded(
-                  child: LineChart(
-                    LineChartData(
-                        borderData: FlBorderData(show: false),
-                        gridData: FlGridData(show: false),
-                        minX: 0,
-                        minY: 0,
-                        maxX: 7,
-                        maxY: 7,
-                        titlesData: FlTitlesData(
-                            topTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)),
-                            leftTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                    showTitles: false, reservedSize: 12)),
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: true),
-                            ),
-                            rightTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false))),
-                        lineBarsData: [
-                          LineChartBarData(
-                              spots: [
-                                FlSpot(.4, 1.7),
-                                FlSpot(0.5, 2),
-                                FlSpot(1, 3),
-                                FlSpot(2, 4),
-                                FlSpot(3, 2),
-                                FlSpot(4, 4.5),
-                                FlSpot(5, 5),
-                                FlSpot(6, 5.6),
-                                FlSpot(6.5, 4)
-                              ],
-                              isCurved: true,
-                              color: Colors.blueAccent,
-                              barWidth: 3,
-                              belowBarData: BarAreaData(
-                                  show: true,
-                                  color: Colors.blue.withOpacity(0.3)))
-                        ],
-                        backgroundColor: Colors.amber.shade50),
-                  ),
-                );
-                }
-                return(CircularProgressIndicator());
-              },
-            )
+          
           ],
         ),
       ),
     );
   }
 }
+
+
+  // BlocBuilder<OrdersBloc, OrdersState>(
+              
+            //   builder: (context, state) {
+            //     if(state is OrdersBloc){
+            //     return Expanded(
+            //       child: LineChart(
+            //         LineChartData(
+            //             borderData: FlBorderData(show: false),
+            //             gridData: FlGridData(show: false),
+            //             minX: 0,
+            //             minY: 0,
+            //             maxX: 7,
+            //             maxY: 7,
+            //             titlesData: FlTitlesData(
+            //                 topTitles: AxisTitles(
+            //                     sideTitles: SideTitles(showTitles: false)),
+            //                 leftTitles: AxisTitles(
+            //                     sideTitles: SideTitles(
+            //                         showTitles: false, reservedSize: 12)),
+            //                 bottomTitles: AxisTitles(
+            //                   sideTitles: SideTitles(showTitles: true),
+            //                 ),
+            //                 rightTitles: AxisTitles(
+            //                     sideTitles: SideTitles(showTitles: false))),
+            //             lineBarsData: [
+            //               LineChartBarData(
+            //                   spots: [
+            //                     FlSpot(.4, 1.7),
+            //                     FlSpot(0.5, 2),
+            //                     FlSpot(1, 3),
+            //                     FlSpot(2, 4),
+            //                     FlSpot(3, 2),
+            //                     FlSpot(4, 4.5),
+            //                     FlSpot(5, 5),
+            //                     FlSpot(6, 5.6),
+            //                     FlSpot(6.5, 4)
+            //                   ],
+            //                   isCurved: true,
+            //                   color: Colors.blueAccent,
+            //                   barWidth: 3,
+            //                   belowBarData: BarAreaData(
+            //                       show: true,
+            //                       color: Colors.blue.withOpacity(0.3)))
+            //             ],
+            //             backgroundColor: Colors.amber.shade50),
+            //       ),
+            //     );
+            //     }
+            //     return(CircularProgressIndicator());
+            //   },
+            // )

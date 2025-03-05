@@ -43,7 +43,8 @@ class ProductRepositoryImpl extends ProductRepository {
       }
     } catch (e) {
       log(e.toString());
-      throw "Something wrong woth the request/code";
+      rethrow;
+      // throw "Something wrong woth the request/code";
     }
   }
 
@@ -75,7 +76,7 @@ class ProductRepositoryImpl extends ProductRepository {
   }
 
   @override
-  Future productUpdation(ProductRegModel productsToUpdate, int id) async {
+  Future productUpdation(ProductRegModel productsToUpdate, int id,File? imageFile) async {
     try {
       String? token = await readtokenFromPref();
       String path = '${ApiEndpoints.porductUpdate}$id';
@@ -86,13 +87,19 @@ class ProductRepositoryImpl extends ProductRepository {
       log(response.toString(), name: 'response of product registration');
       if (response.statusCode == 200) {
         log("inside response");
+         if (imageFile != null) {
+          await uploadImage(
+              id: id,
+              imageFile: imageFile,
+              productName: productsToUpdate.products.productName);
+        }
         return response.data["message"];
       } else {
         throw "Something went wrong in response";
       }
     } catch (e) {
-      log(e.toString());
-      throw "Something wrong woth the request/code";
+      log(e.toString(),name: 'response of request prod impl');
+      rethrow;
     }
   }
 
@@ -114,7 +121,7 @@ class ProductRepositoryImpl extends ProductRepository {
       }
     } catch (e) {
       log(e.toString());
-      throw "Something wrong woth the request/code";
+     rethrow;
     }
   }
 
@@ -149,7 +156,7 @@ class ProductRepositoryImpl extends ProductRepository {
       }
     } catch (e) {
       log(e.toString());
-      throw "Something wrong woth the request/code";
+     rethrow;
     }
   }
 
@@ -210,7 +217,7 @@ class ProductRepositoryImpl extends ProductRepository {
       
           path: '${ApiEndpoints.getAproduct}$productId',
           headers: {"Authorization": "Bearer $token"});
-      log(response.toString(), name: 'productsearch');
+      log(response.toString(), name: 'productget');
       if (response.statusCode == 200) {
         log("inside response of get product");
         // List<dynamic products = response.data as List<dynamic>;

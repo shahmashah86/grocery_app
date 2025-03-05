@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
 
-import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Registration extends StatefulWidget {
   const Registration({super.key});
@@ -43,7 +41,7 @@ class _RegistrationState extends State<Registration> {
         ),
         Center(
           child: SizedBox(
-            height: 450,
+            height: MediaQuery.sizeOf(context).height*.4,
             width: 300,
             child: Form(
               child: Column(
@@ -119,7 +117,7 @@ class _RegistrationState extends State<Registration> {
 
 BlocConsumer<AuthBloc, AuthState>(
   listener: (context, state) {
-    // TODO: implement listener
+   
      if (state is Authsuccess) {
                         Navigator.pushReplacement(
                           context,

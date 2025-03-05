@@ -9,13 +9,7 @@ import 'package:grocery_app/presentation/screens/user/cart/cart.dart';
 
 class CartdbRepository {
   Future<void> addCart(CartEntity cartItems) async {
-  // int id, String productName,int quantity,int price
-    // final cart = CartModel(
-    //  id: id,
-    //  prodName: productName,
-    //  price: price,
-    //  quantity: quantity
-    // );
+  
     log("inside add");
     await cartBox.add(cartItems);
   }

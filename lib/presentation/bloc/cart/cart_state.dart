@@ -37,7 +37,7 @@ final class CartLoaded extends CartState {
   }
 
   @override
-  List<Object?> get props => [isLoading,cartItems,total,tax,subtotal];
+  List<Object?> get props => [isLoading, cartItems, total, tax, subtotal];
 }
 
 final class CartLoading extends CartState {}

@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/presentation/screens/admin/homscreen/admin_homescreen.dart';
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
-import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
-import 'package:grocery_app/presentation/screens/user/onboarding/onboarding1.dart';
+import 'package:grocery_app/presentation/screens/onboarding/onboarding1.dart';
+
 import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     log(adminFromAuth.toString(), name: "admin from onbaord");
     // ignore: use_build_context_synchronously
-    // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){   return   tokenFromAuth==""&&? Login():HomeScreen();}), (route)=>false);
+  
     return adminFromAuth;
   }
 
@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 : Login();
       }
       return Onboarding1();
-      // (tokenFromAuth!=""&&isAdmin==true)? Login():HomeScreen();
+
     }), (route) => false);
     return tokenFromAuth;
   }
@@ -66,10 +66,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.amber.shade200,
       body: Center(
-        // child: CircleAvatar(backgroundImage: AssetImage("assets/adminicon/FreshMart.png"),radius: 60,),
+      
 
         child: Container(
-          height: 200,
+          height: MediaQuery.sizeOf(context).height*2,
           width: 200,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),

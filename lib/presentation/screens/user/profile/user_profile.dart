@@ -3,17 +3,15 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/domain/auth/auth_model/auth_model.dart';
 import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
-import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
+
 import 'package:grocery_app/presentation/screens/user/profile/user_orders/user_orders.dart';
-import 'package:grocery_app/presentation/screens/user/search/searchscreen.dart';
-import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,7 +50,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     // TODO: implement initState
-    loadUserData();
+    loadUserData(); //getting the user detauils that is stored shared prefs while loggined or register
 
     super.initState();
   }
@@ -85,12 +83,6 @@ class _UserProfileState extends State<UserProfile> {
     emailController.text = email ?? '';
     nameController.text = name!;
   }
-  // Future<String?> loadImage() async{
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //   imageUrl = prefs.getString('user_image_url') ?? "";
-  //   return imageUrl;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +97,8 @@ class _UserProfileState extends State<UserProfile> {
       return username;
     }
 
+//dialog for shoeing the info and edit info
     Future<void> showdialog(bool toEdit) async {
-      // await  loadUserData();
       await showDialog(
           context: context,
           builder: (context) {
@@ -160,6 +152,7 @@ class _UserProfileState extends State<UserProfile> {
                           context.read<AuthBloc>().add(Updateuser(
                               userdataToupdate,
                               userIdforupdate: id!));
+
                           Navigator.pop(context);
                         },
                         style: ButtonStyle(
@@ -183,14 +176,6 @@ class _UserProfileState extends State<UserProfile> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:
-              // (context){
-              //   return BottomNavigation();
-              // }), (route)=>false);
-            },
-            icon: Icon(Icons.arrow_back)),
         title: Text(
           "Profile",
           style: TextStyle(fontWeight: FontWeight.w500),
@@ -207,7 +192,6 @@ class _UserProfileState extends State<UserProfile> {
       body: ValueListenableBuilder(
         valueListenable: userdetails,
         builder: (context, value, child) => Column(
-          // spacing: 14,
           children: [
             SizedBox(height: 6),
             Row(
@@ -267,38 +251,25 @@ class _UserProfileState extends State<UserProfile> {
                           CircleAvatar(
                             backgroundColor: Colors.grey.shade200,
                             radius: 40,
-                    child:ClipOval(
-                      child: CachedNetworkImage(width:MediaQuery.sizeOf(context).width*.98,
-                      height:MediaQuery.sizeOf(context).height*.98,
-                        imageUrl: 
-                      userdetails.value[3] != '' ||
-                                          userdetails.value[3] == null
-                                      ? userdetails.value[3]:'',
-                                      errorWidget: (context, url, error) =>Icon(
-                                      Icons.camera_alt,
-                                      size: 45,
-                                      color: Colors.black54,
-                                    ) ,
-                                    placeholder: (context, url) => SpinKitCircle(color: Colors.white10,),
-                      
-                                      fit: BoxFit.cover,
-                                      ),
-                    ),
-                                    
-                          
-                          //   backgroundImage: NetworkImage(
-                          //       userdetails.value[3] != '' ||
-                          //               userdetails.value[3] == null
-                          //           ? userdetails.value[3]
-                          //           : ''),
-                          //   child: userdetails.value[3] == '' ||
-                          //           userdetails.value[3] == null
-                          //       ? Icon(
-                          //           Icons.camera_alt,
-                          //           size: 45,
-                          //           color: Colors.black54,
-                          //         )
-                          //       : null,
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                width: MediaQuery.sizeOf(context).width * .98,
+                                height: MediaQuery.sizeOf(context).height * .98,
+                                imageUrl: userdetails.value[3] != '' ||
+                                        userdetails.value[3] == null
+                                    ? userdetails.value[3]
+                                    : '',
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.camera_alt,
+                                  size: 45,
+                                  color: Colors.black54,
+                                ),
+                                placeholder: (context, url) => SpinKitCircle(
+                                  color: Colors.white10,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           Positioned(
                               right: 0,
@@ -381,7 +352,6 @@ class _UserProfileState extends State<UserProfile> {
             SizedBox(
               height: MediaQuery.sizeOf(context).height * 0.035,
             ),
-
             Column(
               spacing: 20,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,7 +370,7 @@ class _UserProfileState extends State<UserProfile> {
                           // _onTapped(false);
                         },
                         child: CircleAvatar(
-                          backgroundColor: Colors.amber.shade200,
+                          backgroundColor: Colors.amber.shade100,
                           foregroundColor: Colors.black54,
                           child: Icon(Icons.chevron_right),
                         ),
@@ -422,12 +392,11 @@ class _UserProfileState extends State<UserProfile> {
                       Spacer(),
                       InkWell(
                         onTap: () {
-                          // _onTapped(true);
                           showdialog(true);
                         },
                         child: CircleAvatar(
                           foregroundColor: Colors.black54,
-                          backgroundColor: Colors.amber.shade200,
+                          backgroundColor: Colors.amber.shade100,
                           child: Icon(
                             Icons.chevron_right,
                           ),
@@ -460,7 +429,7 @@ class _UserProfileState extends State<UserProfile> {
                           }), (route) => false);
                         },
                         child: CircleAvatar(
-                          backgroundColor: Colors.amber.shade200,
+                          backgroundColor: Colors.amber.shade100,
                           foregroundColor: Colors.black54,
                           child: Icon(Icons.chevron_right),
                         ),
@@ -547,7 +516,7 @@ class _UserProfileState extends State<UserProfile> {
                         },
                         child: CircleAvatar(
                           foregroundColor: Colors.black54,
-                          backgroundColor: Colors.amber.shade200,
+                          backgroundColor: Colors.amber.shade100,
                           child: Icon(Icons.chevron_right),
                         ),
                       )
@@ -560,10 +529,6 @@ class _UserProfileState extends State<UserProfile> {
                 ),
               ],
             )
-            // Container(decoration: BoxDecoration(border: Border.all(color:Colors.amber.shade200,width: 2 )),
-            // height: 50,width: MediaQuery.sizeOf(context).width * 0.94),
-            // Container(decoration: BoxDecoration(border: Border.all(color:Colors.amber.shade200,width: 2 )),
-            // height: 50,width: MediaQuery.sizeOf(context).width * 0.94)
           ],
         ),
       ),

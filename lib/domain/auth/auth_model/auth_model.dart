@@ -12,17 +12,15 @@ class AuthModel extends Equatable {
   final String? username;
   final String? password;
 
-  const AuthModel({
-    this.username,
-   
-    this.name,
-    this.id,
-    this.email,
-    this.isAdmin,
-    this.phoneNumber,
-    this.image,
-     this.password
-  });
+  const AuthModel(
+      {this.username,
+      this.name,
+      this.id,
+      this.email,
+      this.isAdmin,
+      this.phoneNumber,
+      this.image,
+      this.password});
 
   @override
   String toString() {
@@ -31,7 +29,7 @@ class AuthModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [username, name, id, email, isAdmin, phoneNumber, image,password];
+      [username, name, id, email, isAdmin, phoneNumber, image, password];
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -41,7 +39,7 @@ class AuthModel extends Equatable {
       'email': email,
       'isAdmin': isAdmin,
       'phoneNumber': phoneNumber,
-      // 'profileImage': image,
+  
     };
   }
 }

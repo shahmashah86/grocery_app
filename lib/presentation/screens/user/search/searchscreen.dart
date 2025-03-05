@@ -1,18 +1,12 @@
 import 'dart:developer';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
 import 'package:grocery_app/domain/products/model/product_reg_model.dart';
 import 'package:grocery_app/domain/products/model/products_model.dart';
-import 'package:grocery_app/main.dart';
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/cart/cart.dart';
-import 'package:grocery_app/presentation/screens/user/homeScreen/homescreen.dart';
-import 'package:grocery_app/presentation/screens/user/pdoduct_description/product_description.dart';
+import 'package:grocery_app/presentation/screens/user/widgets/product_grid.dart';
 
 class Searchscreen extends StatefulWidget {
   final bool searchfromDashboard;
@@ -23,15 +17,16 @@ class Searchscreen extends StatefulWidget {
 }
 
 class _SearchscreenState extends State<Searchscreen> {
-  ValueNotifier<int> cartitemsCount = ValueNotifier(0);
   late final TextEditingController searchController;
 
   @override
   void initState() {
+    //cart items getting initailly for finding the count of cart items
     context.read<CartBloc>().add(CartitemsGet());
     searchController = TextEditingController();
     super.initState();
 
+//checking whether entering this page via bottomnav search icon from homescreen or by searchbar searching
     if (widget.searchfromDashboard == false) {
       context.read<ProductBloc>().add(ProductList());
     }
@@ -49,30 +44,23 @@ class _SearchscreenState extends State<Searchscreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(        leading: IconButton(onPressed: () {
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: 
-            (context){
-              return HomeScreen();
-            }), (route)=>false);
-            
-          }, icon: Icon(Icons.arrow_back)),
-          title: Text("Search",style: TextStyle(fontWeight: FontWeight.w500),),
+          SliverAppBar(
             expandedHeight: 170,
             floating: false,
             backgroundColor: Colors.amber.shade200,
             actions: [
+              //cart icon on the appbar
               Padding(
                 padding: const EdgeInsets.only(right: 10),
-                child: ValueListenableBuilder(
-                  valueListenable: cartitemsCount,
-                  builder: (context, value, child) =>
-                      BlocBuilder<CartBloc, CartState>(
-                    builder: (context, state) {
-                      return InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Cart()),
-                        ),
+                child: BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    return InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Cart()),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
@@ -85,60 +73,62 @@ class _SearchscreenState extends State<Searchscreen> {
                               top: -6,
                               child: CircleAvatar(
                                 radius: 12,
-                                backgroundColor: Colors.amber,
+                                backgroundColor: Colors.amber.shade50,
                                 child: BlocBuilder<CartBloc, CartState>(
-                                  builder: (context, state) {
-                                      if(state is CartLoaded){
+                                    builder: (context, state) {
+                                  if (state is CartLoaded) {
                                     return Text(
                                         state.cartItems?.length.toString() ??
                                             '0');
                                   }
-                                   return Text(
-                                         
-                                            '0');
-                                  }
-                                ),
+                                  return Text('0');
+                                }),
                               ),
                             ),
                           ],
                         ),
-                      );
-
-                      
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
             pinned: true,
-            flexibleSpace: LayoutBuilder(
-              builder: (context, constraints) {
-                double percent = (constraints.maxHeight - kToolbarHeight) /
-                    (150 - kToolbarHeight);
-                percent = percent.clamp(0.0, 1.0);
-                return FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.only(bottom: 10),
-                  title: percent > 0.3
-                      ? Opacity(
-                          opacity: percent,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              "Fresh Picks, Fast Delivery! 🍎🛒",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.indigo,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Colors.amber.shade500, Colors.amber.shade100],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter)),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  double percent = (constraints.maxHeight - kToolbarHeight) /
+                      (150 - kToolbarHeight);
+                  percent = percent.clamp(0.0, 1.0);
+                  return FlexibleSpaceBar(
+                    titlePadding: EdgeInsets.only(bottom: 10),
+                    title: percent > 0.4
+                        ? Opacity(
+                            opacity: percent,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                "Fresh Picks, Fast Delivery! 🍎🛒",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.indigo,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      : null,
-                );
-              },
+                          )
+                        : null,
+                  );
+                },
+              ),
             ),
           ),
-          // ✅ Pass the TextEditingController from _SearchscreenState
+          //chekcing that entering this screen is from homescreen searchbar if no only make the search bar pinned
           if (!widget.searchfromDashboard)
             SliverPersistentHeader(
               pinned: true,
@@ -179,346 +169,90 @@ class _SearchscreenState extends State<Searchscreen> {
                 }
 
                 if (state.isError == true) {
-                  log('errror  from screen', name: 'error from searchscreen');
-                  return SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: MediaQuery.sizeOf(context).height * .5,
-                      child: Center(child: Text(state.errormsg.toString())),
-                    ),
-                  );
-                }
+                  log('inside error', name: 'search screeen');
+                  if (state.errormsg ==
+                      'Exception: Please provide a product name to search') {
+                    log(state.frombottomnav.toString());
+                    List<ProductsModel>? productList =
+                        (state.productList as List<ProductRegModel>)
+                            .map((item) => item.products)
+                            .toList();
 
-                if (state.searchList?.isEmpty??true) {
-                  return SliverToBoxAdapter(
-                    child: Padding(padding: EdgeInsets.symmetric(
-                         vertical:     MediaQuery.sizeOf(context).height * .12,
-                         
-                  
-                    ),
-                      child:Column(
-                        children: [
-                          Text(
-                            "Oops!!..no result for your search",
-                            style:
-                                TextStyle(fontSize: 23, color: Colors.black38),
-                          ),
-                          Image.asset('assets/user/notFound.png',
-                              height: MediaQuery.sizeOf(context).height * .3,
-                              width: MediaQuery.sizeOf(context).width * .85),
-                        ],
+                    List<ProductsModel> allProducts = productList
+                        .where((product) => product.isAvailable == true)
+                        .toList();
+                    ProductGrid(
+                      productdetail: allProducts,
+                      bySearch: false,
+                    );
+                    log(allProducts.toString(),
+                        name: 'allproducts from searchscreen');
+                  } else {
+                    log('errror  from screen', name: 'error from searchscreen');
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: MediaQuery.sizeOf(context).height * .5,
+                        child: Center(child: Text(state.errormsg.toString())),
                       ),
-                      
-                    ),
-                  );
+                    );
+                  }
                 }
 
                 if ((state.productList?.isEmpty ?? true) &&
                     state.frombottomnav) {
                   return SliverToBoxAdapter(child: Text('data'));
                 }
+
+                if ((state.searchList?.isEmpty ?? true) &&
+                    (state.frombottomnav == false)) {
+                  if (state.isError) {
+                    log('screen search list empty', name: 'from search screen');
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.sizeOf(context).height * .12,
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Oops!!..no result for your search",
+                              style: TextStyle(
+                                  fontSize: 23, color: Colors.black38),
+                            ),
+                            Image.asset('assets/user/notFound.png',
+                                height: MediaQuery.sizeOf(context).height * .3,
+                                width: MediaQuery.sizeOf(context).width * .85),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                }
+
                 if ((state.productList?.isNotEmpty ?? false) &&
                     state.frombottomnav) {
-                  List<ProductRegModel> productList = state.productList ?? [];
-                  return SliverPadding(
-                    padding: EdgeInsets.all(8),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 0.6,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return InkWell(
-                            child: Container(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                color: Colors.amber.shade100,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  CachedNetworkImage(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.56,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.27,
-                                    imageUrl:
-                                        productList[index].products.image ?? '',
-                                    fit: BoxFit.cover,
-                                    errorWidget: (context, url, error) => Icon(
-                                      Icons.error,
-                                      size: 60,
-                                      color: Colors.black45,
-                                    ),
-                                    placeholder: (context, url) => SpinKitPulse(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, bottom: 4, top: 4),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                productList[index]
-                                                        .products
-                                                        .productName ??
-                                                    '',
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: Colors.black),
-                                              ),
-                                              Text(
-                                                productList[index]
-                                                        .products
-                                                        .productDescription ??
-                                                    '',
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              Text(
-                                                  "Price: ${productList[index].products.price ?? ''}"),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          CartModel cartItems = CartModel(
-                                            id: productList[index]
-                                                    .products
-                                                    .id ??
-                                                0,
-                                            prodName: productList[index]
-                                                    .products
-                                                    .productName ??
-                                                '',
-                                            price: productList[index]
-                                                    .products
-                                                    .price ??
-                                                0,
-                                            url: productList[index]
-                                                    .products
-                                                    .image ??
-                                                '',
-                                          );
+                  List<ProductsModel> productList =
+                      (state.productList as List<ProductRegModel>)
+                          .map((item) => item.products)
+                          .toList();
 
-                                          bool itemExists = cartBox.values.any(
-                                              (item) =>
-                                                  item.id == cartItems.id);
+                  List<ProductsModel> allProducts = productList
+                      .where((product) => product.isAvailable == true)
+                      .toList();
 
-                                          if (!itemExists) {
-                                            context.read<CartBloc>().add(
-                                                CartItemAdd(
-                                                    cartItems: cartItems));
-                                            cartitemsCount.value =
-                                                cartitemsCount.value + 1;
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                content: Text(
-                                                    "Product added to cart!"),
-                                                duration: Duration(seconds: 1),
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                              ),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                content: Text(
-                                                  "Product already in cart!",
-                                                  style: TextStyle(
-                                                      color: Colors.red),
-                                                ),
-                                                duration: Duration(seconds: 1),
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        icon: Icon(Icons.shopping_cart),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            onTap:() {
-                              Navigator.push(context,MaterialPageRoute(builder: (context){
-                                return ProductDescription();
-                              }));
-                              
-
-                              context.read<ProductBloc>().add(Productget(productId: productList[index].products.id!));
-                            }
-                          );
-                        },
-                        childCount: productList.length,
-                      ),
-                    ),
+                  return ProductGrid(
+                    productdetail: allProducts,
+                    bySearch: !state.frombottomnav,
                   );
                 }
 
-                if (state.searchList!.isNotEmpty &&
-                    state.frombottomnav == false) {
+                if ((state.searchList?.isNotEmpty ?? false) &&
+                    (state.frombottomnav == false)) {
+                  log('ddddddd');
                   List<ProductsModel>? searchList = state.searchList;
-                  return SliverPadding(
-                    padding: EdgeInsets.all(8),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 0.6,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return InkWell(onTap: () {
-                            Navigator.push(context,MaterialPageRoute(builder: (context){
-                              return ProductDescription();
-                            }));
-
-                             context.read<ProductBloc>().add(Productget(productId: searchList![index].id!));
-                          },
-                            child: Container(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                color: Colors.amber.shade100,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  CachedNetworkImage(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.56,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.27,
-                                    imageUrl: searchList?[index].image ?? '',
-                                    fit: BoxFit.cover,
-                                    errorWidget: (context, url, error) => Icon(
-                                      Icons.error,
-                                      size: 60,
-                                      color: Colors.black45,
-                                    ),
-                                    placeholder: (context, url) => SpinKitPulse(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, bottom: 4, top: 4),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                searchList?[index]
-                                                        .productName ??
-                                                    '',
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: Colors.black),
-                                              ),
-                                              Text(
-                                                searchList?[index]
-                                                        .productDescription ??
-                                                    '',
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              Text(
-                                                  "Price: ${searchList?[index].price ?? ''}"),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          CartModel cartItems = CartModel(
-                                            id: searchList?[index].id ?? 0,
-                                            prodName: searchList?[index]
-                                                    .productName ??
-                                                '',
-                                            price:
-                                                searchList?[index].price ?? 0,
-                                            url: searchList?[index].image ?? '',
-                                          );
-
-                                          bool itemExists = cartBox.values.any(
-                                              (item) =>
-                                                  item.id == cartItems.id);
-
-                                          if (!itemExists) {
-                                            context.read<CartBloc>().add(
-                                                CartItemAdd(
-                                                    cartItems: cartItems));
-                                            cartitemsCount.value =
-                                                cartitemsCount.value + 1;
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                content: Text(
-                                                    "Product added to cart!"),
-                                                duration: Duration(seconds: 1),
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                              ),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                content: Text(
-                                                  "Product already in cart!",
-                                                  style: TextStyle(
-                                                      color: Colors.red),
-                                                ),
-                                                duration: Duration(seconds: 1),
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        icon: Icon(Icons.shopping_cart),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        childCount: searchList?.length ?? 0,
-                      ),
-                    ),
+                  return ProductGrid(
+                    productdetail: searchList,
+                    bySearch: !state.frombottomnav,
                   );
                 }
               }
@@ -581,24 +315,10 @@ class SearchBarDelegate extends SliverPersistentHeaderDelegate {
               borderSide: BorderSide(color: Colors.white, width: 2),
             ),
           ),
-          onSubmitted: (value) {
-            if (searchController.text.trim().isNotEmpty) {
-              context.read<ProductBloc>().add(
-                  Productsearch(productName: searchController.text.trim()));
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  content: Text(
-                    "enter any products to search",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  duration: Duration(seconds: 1),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            }
+          onChanged: (value) {
+            context
+                .read<ProductBloc>()
+                .add(Productsearch(productName: searchController.text.trim()));
           },
         ),
       ),

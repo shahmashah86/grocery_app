@@ -69,24 +69,20 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
         ));
 
         log(response.toString(), name: 'userslist');
-   
       } catch (e) {
         emit(currentstate.copyWith(
-          
           orderScreenType: OrderScreenType.userWiseOrders,
           isLoading: false,
           allordersList: currentstate.allordersList,
         ));
         log("Error fetching orders by user: ${e.toString()}");
       }
-    }
-    else{
-      try{
-      emit(OrdersLoading());
-           final response = await orderRepository.getOrdersByUser(event.userId);
-           emit(Orderssuccess(usersorderList: response));
-      }
-      catch(e){
+    } else {
+      try {
+        emit(OrdersLoading());
+        final response = await orderRepository.getOrdersByUser(event.userId);
+        emit(Orderssuccess(usersorderList: response));
+      } catch (e) {
         OrdersError(errormessage: e.toString());
       }
     }
@@ -97,7 +93,6 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
 
     final response = await orderRepository.acknowledgeOrder(event.orderId);
 
-    log("lllll");
     if (currentstate is Orderssuccess) {
       try {
         emit(currentstate.copyWith(
@@ -115,106 +110,67 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     }
   }
 
-_placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
-  final currentState = state;
+  _placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
+    final currentState = state;
 
-  if (currentState is Orderssuccess) {
-    try {
-      emit(currentState.copyWith(
-        message: '',
-        isLoading: true,
-        iserror: false,
-        allordersList: currentState.allordersList,
-        usersorderList: currentState.usersorderList,
-        orderScreenType: currentState.orderScreenType,
-      ));
+    if (currentState is Orderssuccess) {
+      try {
+        emit(currentState.copyWith(
+          message: '',
+          isLoading: true,
+          iserror: false,
+          allordersList: currentState.allordersList,
+          usersorderList: currentState.usersorderList,
+          orderScreenType: currentState.orderScreenType,
+        ));
 
-      final response = await orderRepository.placeOrder(event.orders);
-      log(response,name: 'response of ordersucces');
-      
-      emit(currentState.copyWith(
-        message: response,
-        ordersbyId: currentState.ordersbyId,
-        isLoading: false,
-        usersorderList: currentState.usersorderList,
-        orderScreenType: currentState.orderScreenType,
-        allordersList: currentState.allordersList,
-      ));
-    } catch (e) {
-      emit(currentState.copyWith(
-        iserror: true,
-        
-    message: '',
-        isLoading: false,
-        usersorderList: currentState.usersorderList,
-        allordersList: currentState.allordersList,
-        orderScreenType: currentState.orderScreenType,
-        errormessage: e.toString(), // Additional error info
-      ));
-    }
-  } else {
-    try {
-      emit(Orderssuccess(isLoading: true,));
+        final response = await orderRepository.placeOrder(event.orders);
+        log(response, name: 'response of ordersucces');
 
-      final response = await orderRepository.placeOrder(event.orders);
-         log(response,name:'response message of order placed');
+        emit(currentState.copyWith(
+          message: response,
+          ordersbyId: currentState.ordersbyId,
+          isLoading: false,
+          usersorderList: currentState.usersorderList,
+          orderScreenType: currentState.orderScreenType,
+          allordersList: currentState.allordersList,
+        ));
+      } catch (e) {
+        emit(currentState.copyWith(
+          iserror: true,
 
-      emit(Orderssuccess(isLoading: false, message: response));
-    } catch (e) {
-      emit(OrdersError(errormessage: e.toString())); // Make sure OrdersError is defined correctly
+          message: '',
+          isLoading: false,
+          usersorderList: currentState.usersorderList,
+          allordersList: currentState.allordersList,
+          orderScreenType: currentState.orderScreenType,
+          errormessage: e.toString(), // Additional error info
+        ));
+      }
+    } else {
+      try {
+        emit(Orderssuccess(
+          isLoading: true,
+        ));
+
+        final response = await orderRepository.placeOrder(event.orders);
+        log(response, name: 'response message of order placed');
+
+        emit(Orderssuccess(isLoading: false, message: response));
+      } catch (e) {
+        emit(OrdersError(
+            errormessage:
+                e.toString())); // Make sure OrdersError is defined correctly
+      }
     }
   }
-}
 
-  // _placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
-  //    final currentstate = state;
-    
-  //      if (currentstate is Orderssuccess) {
-  //     try {
-  //       emit(currentstate.copyWith(
-  //         isLoading: true,
-  //         allordersList: currentstate.allordersList,
-  //         usersorderList: currentstate.usersorderList,
-  //         orderScreenType: currentstate.orderScreenType,
-  //       ));
-  //  final response = await orderRepository.placeOrder(event.orders);
- 
-  //       emit(currentstate.copyWith(
-  //         message: response['message'],
-  //           ordersbyId: currentstate.ordersbyId,
-  //           isLoading: false,
-  //           usersorderList: currentstate.usersorderList,
-  //           orderScreenType: currentstate.orderScreenType,
-  //           allordersList: currentstate.allordersList));
-  //     } catch (e) {
-  //       emit(currentstate.copyWith(
-  //         iserror: true,
-  //         isLoading: false,
-  //         usersorderList: currentstate.usersorderList,
-  //         allordersList: currentstate.allordersList,
-  //         orderScreenType: currentstate.orderScreenType,
-  //       ));
-  //     }
-  //   }
-  //   else{
-  //     try{
-  //     emit(Orderssuccess(isLoading: true));
-  //        final response = await orderRepository.placeOrder(event.orders);
-  //     emit(Orderssuccess(isLoading: false,message: response['message']));
-  //     }
-  //     catch(e){
-  //       emit(OrdersError(errormessage: e.toString()));
-  //     }
-  //   }
- 
-  // }
-
+//get order by orderId...
   _getOrder(OrderbyId event, Emitter<OrdersState> emit) async {
     final currentstate = state;
 
-
     log(currentstate.toString(), name: 'currentstate of get order');
-  
+
     if (currentstate is Orderssuccess) {
       try {
         emit(currentstate.copyWith(
@@ -242,84 +198,78 @@ _placeanOrder(OrderPlaced event, Emitter<OrdersState> emit) async {
       }
     }
   }
-  _cancelOrders(Ordercancel event,Emitter<OrdersState> emit) async{
-        final currentstate = state;
-        if (currentstate is Orderssuccess) {
+
+  _cancelOrders(Ordercancel event, Emitter<OrdersState> emit) async {
+    final currentstate = state;
+    if (currentstate is Orderssuccess) {
       try {
         emit(currentstate.copyWith(
-          
-          isLoading: true,
-           message: '',
-          allordersList: currentstate.allordersList,
-          usersorderList: currentstate.usersorderList,
-          orderScreenType: currentstate.orderScreenType,
-          ordersbyId: currentstate.ordersbyId
-  
-        ));
-        final response = await orderRepository.cancelOrder(event.orderId,);
+            isLoading: true,
+            message: '',
+            allordersList: currentstate.allordersList,
+            usersorderList: currentstate.usersorderList,
+            orderScreenType: currentstate.orderScreenType,
+            ordersbyId: currentstate.ordersbyId));
+        final response = await orderRepository.cancelOrder(
+          event.orderId,
+        );
         log(response.toString(), name: 'ordercancel');
         emit(currentstate.copyWith(
-          message: response,
+            message: response,
             ordersbyId: [],
             isLoading: false,
-            usersorderList:currentstate.usersorderList.where((e) => e.id != event.orderId).toList(),
-
+            usersorderList: currentstate.usersorderList
+                .where((e) => e.id != event.orderId)
+                .toList(),
             orderScreenType: currentstate.orderScreenType,
             allordersList: currentstate.allordersList));
       } catch (e) {
         emit(currentstate.copyWith(
-          errormessage: e.toString(),
-          iserror: true,
-          isLoading: false,
-          usersorderList: currentstate.usersorderList,
-          allordersList: currentstate.allordersList,
-          orderScreenType: currentstate.orderScreenType,
-          ordersbyId: currentstate.ordersbyId
-        ));
+            errormessage: e.toString(),
+            iserror: true,
+            isLoading: false,
+            usersorderList: currentstate.usersorderList,
+            allordersList: currentstate.allordersList,
+            orderScreenType: currentstate.orderScreenType,
+            ordersbyId: currentstate.ordersbyId));
       }
     }
-
   }
-   _updateorder(Orderproductsupdate event,Emitter<OrdersState> emit) async{
-        final currentstate = state;
-        if (currentstate is Orderssuccess) {
+
+  _updateorder(Orderproductsupdate event, Emitter<OrdersState> emit) async {
+    final currentstate = state;
+    if (currentstate is Orderssuccess) {
       try {
         emit(currentstate.copyWith(
-          
-          isLoading: true,
-           message: '',
-          allordersList: currentstate.allordersList,
-          usersorderList: currentstate.usersorderList,
-          orderScreenType: currentstate.orderScreenType,
-          ordersbyId: currentstate.ordersbyId
-  
-        ));
-        final response = await orderRepository.updateOrder(event.orderId,);
+            isLoading: true,
+            message: '',
+            allordersList: currentstate.allordersList,
+            usersorderList: currentstate.usersorderList,
+            orderScreenType: currentstate.orderScreenType,
+            ordersbyId: currentstate.ordersbyId));
+        final response = await orderRepository.updateOrder(
+          event.orderId,
+        );
         log(response.toString(), name: 'orderupdate');
         emit(currentstate.copyWith(
-          message: response,
-            ordersbyId:currentstate.ordersbyId.where((e) => e.id != event.orderId).toList(), 
+            message: response,
+            ordersbyId: currentstate.ordersbyId
+                .where((e) => e.id != event.orderId)
+                .toList(),
             isLoading: false,
-            usersorderList:currentstate.usersorderList,
-
+            usersorderList: currentstate.usersorderList,
             orderScreenType: currentstate.orderScreenType,
             allordersList: currentstate.allordersList));
       } catch (e) {
         emit(currentstate.copyWith(
-          errormessage: e.toString(),
-          iserror: true,
-          isLoading: false,
-          usersorderList: currentstate.usersorderList,
-          allordersList: currentstate.allordersList,
-          orderScreenType: currentstate.orderScreenType,
-          ordersbyId: currentstate.ordersbyId
-        ));
+            errormessage: e.toString(),
+            iserror: true,
+            isLoading: false,
+            usersorderList: currentstate.usersorderList,
+            allordersList: currentstate.allordersList,
+            orderScreenType: currentstate.orderScreenType,
+            ordersbyId: currentstate.ordersbyId));
       }
     }
-
   }
-
-
-
-
 }

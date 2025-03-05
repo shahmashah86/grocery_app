@@ -2,14 +2,13 @@
 
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
 import 'package:grocery_app/domain/cart/cart_respository/cart_respository.dart';
-import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
+
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -67,6 +66,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
+//delete cart items
   _deletecartItem(CartItemDelete event, Emitter<CartState> emit) async {
     final currentstate = state;
     await cartRespository.deletecartItem(event.indextoDelete);
@@ -78,14 +78,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     double deliveryCharge = 50;
     double total = subtotal + tax + deliveryCharge;
     if (currentstate is CartLoaded) {
-      //        await cartRespository.deletecartItem(event.indextoDelete);
-      //  final cartafterDelete=List<CartModel>.from(cartRespository.getAllcartItems() as List<CartModel>);
+
       emit(currentstate.copyWith(isLoading: true));
       log(cartafterDelete.toString(), name: 'cartafterDeleted');
       emit(currentstate.copyWith(cartItems: cartafterDelete, isLoading: false,subtotal: subtotal, total: total, tax: tax));
     } 
   }
 
+//update cart items
   _updatecarteItem(CartItemToupdate event, Emitter<CartState> emit) async {
     final currentstate = state;
     await cartRespository.editcartItem(event.indextoUpdate, event.itemtoUpdate);
@@ -103,6 +103,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(currentstate.copyWith(cartItems: cartafterUpdate, isLoading: false,subtotal: subtotal, total: total, tax: tax));
     } 
   }
+  //clear cart items
   _clearcartItem(CartItemclear event, Emitter<CartState> emit) async{
         final currentstate = state;
     await cartRespository.clearCart();

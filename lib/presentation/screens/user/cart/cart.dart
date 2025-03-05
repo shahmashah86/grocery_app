@@ -1,23 +1,20 @@
 import 'dart:developer';
-import 'dart:ui' as ui;
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
 import 'package:grocery_app/domain/place_order_model/place_order_model.dart';
-import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
-
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/order_success/order_successful.dart';
-import 'package:grocery_app/presentation/screens/user/pdoduct_description/product_description.dart';
+import 'package:grocery_app/presentation/screens/user/product_description/product_description.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Cart extends StatefulWidget {
+  const Cart({super.key});
+
   @override
   State<Cart> createState() => _CartState();
 }
@@ -25,7 +22,6 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   @override
   void initState() {
-    // TODO: implement initSta
     context.read<CartBloc>().add(CartitemsGet());
     super.initState();
   }
@@ -41,18 +37,13 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
           title: Text(
             "Cart",
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
           backgroundColor: Colors.amber.shade200,
         ),
-        body:
-            // final List<CartEntity> cartlist = cartitemBox.values.toList();
-
-            // log(cartlist.toString());
-            BlocBuilder<CartBloc, CartState>(
+        body: BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
             if (state is CartLoading) {
               return CircleAvatar(
@@ -122,180 +113,168 @@ class _CartState extends State<Cart> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
                                         return ProductDescription();
                                       }));
-                                      context.read<ProductBloc>().add(Productget(productId: state.cartItems![index].id));
+                                      context.read<ProductBloc>().add(
+                                          Productget(
+                                              productId:
+                                                  state.cartItems![index].id));
                                     },
-                                    
-                                    child: Container(clipBehavior: Clip.hardEdge,
-                                         decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),),
+                                    child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                       child: CachedNetworkImage(
                                         height:
-                                            MediaQuery.sizeOf(context).height * .15,
+                                            MediaQuery.sizeOf(context).height *
+                                                .15,
                                         width:
-                                            MediaQuery.sizeOf(context).width * .3,
-                                            imageUrl: state.cartItems?[index].url ?? '' ,
-                                               fit: BoxFit.cover,
-                                                errorWidget: (context, url, error) => Icon(
-                                        Icons.error,
-                                        size: 60,
-                                        color: Colors.black45,
-                                      ),
-                                      placeholder: (context, url) => SpinKitPulse(
-                                        color: Colors.white,
-                                      ),
-                                        // decoration: BoxDecoration(
-                                        //   borderRadius: BorderRadius.circular(10),
-                                      
-                                        //   image: DecorationImage(
-                                        //     fit: BoxFit.cover,
-                                        //     image: NetworkImage(
-                                        //         state.cartItems?[index].url ?? ''),
-                                        //   ),
-                                        // ),
+                                            MediaQuery.sizeOf(context).width *
+                                                .3,
+                                        imageUrl:
+                                            state.cartItems?[index].url ?? '',
+                                        fit: BoxFit.cover,
+                                        errorWidget: (context, url, error) =>
+                                            Icon(
+                                          Icons.error,
+                                          size: 60,
+                                          color: Colors.black45,
+                                        ),
+                                        placeholder: (context, url) =>
+                                            SpinKitPulse(
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 30,
-                                  ),
-                                  child: Column(
-                                    spacing: 5,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        state.cartItems![index].prodName,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      Text(
-                                        state.cartItems![index].price
-                                            .toString(),
-                                        style: TextStyle(fontSize: 17),
-                                      ),
-                                      Row(
-                                        spacing: 2,
-                                        children: [
-                                          Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.amber.shade300),
-                                              width: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.035,
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.035,
-                                              child: IconButton(
-                                                  padding: EdgeInsets.all(3),
-                                                  onPressed: () {
-                                                    if (quantityselected.value >
-                                                        1) {
-                                                      quantityselected.value =
-                                                          quantityselected
-                                                                  .value -
-                                                              1;
-                                                    } else {
-                                                      return;
-                                                    }
-                                                    final cartModel = state
-                                                        .cartItems![index]
-                                                        .copyWith(
-                                                            quantity:
-                                                                quantityselected
-                                                                    .value);
-
-                                                    context
-                                                        .read<CartBloc>()
-                                                        .add(CartItemToupdate(
-                                                            itemtoUpdate:
-                                                                cartModel,
-                                                            indextoUpdate:
-                                                                index));
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.remove,
-                                                    size: 20,
-                                                  ))),
-                                          Container(
-                                              decoration: BoxDecoration(
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing: 5,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.cartItems![index].prodName,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      state.cartItems![index].price.toString(),
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                    Row(
+                                      spacing: 2,
+                                      children: [
+                                        Container(
+                                            decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                              ),
-                                              width: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.04,
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.04,
-                                              child: ValueListenableBuilder(
-                                                valueListenable:
-                                                    quantityselected,
-                                                builder:
-                                                    (context, value, child) =>
-                                                        Center(
-                                                            child: Text(
-                                                  quantityselected.value
-                                                      .toString(),
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                )),
-                                              )),
-                                          Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.amber.shade300),
-                                              width: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.035,
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.035,
-                                              child: IconButton(
-                                                  padding: EdgeInsets.all(3),
-                                                  onPressed: () {
+                                                color: Colors.amber.shade300),
+                                            width: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.035,
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.035,
+                                            child: IconButton(
+                                                padding: EdgeInsets.all(3),
+                                                onPressed: () {
+                                                  if (quantityselected.value >
+                                                      1) {
                                                     quantityselected.value =
-                                                        quantityselected.value +
+                                                        quantityselected.value -
                                                             1;
-                                                    CartModel cart = CartModel(
-                                                        id: state
-                                                            .cartItems![index]
-                                                            .id,
-                                                        prodName: state
-                                                            .cartItems![index]
-                                                            .prodName,
-                                                        price: state
-                                                            .cartItems![index]
-                                                            .price,
-                                                        url: state
-                                                            .cartItems![index]
-                                                            .url,
-                                                        quantity:
-                                                            quantityselected
-                                                                .value);
-                                                    context
-                                                        .read<CartBloc>()
-                                                        .add(CartItemToupdate(
-                                                            itemtoUpdate: cart,
-                                                            indextoUpdate:
-                                                                index));
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.add,
-                                                    size: 20,
-                                                  )))
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                                  } else {
+                                                    return;
+                                                  }
+                                                  final cartModel = state
+                                                      .cartItems![index]
+                                                      .copyWith(
+                                                          quantity:
+                                                              quantityselected
+                                                                  .value);
+
+                                                  context.read<CartBloc>().add(
+                                                      CartItemToupdate(
+                                                          itemtoUpdate:
+                                                              cartModel,
+                                                          indextoUpdate:
+                                                              index));
+                                                },
+                                                icon: Icon(
+                                                  Icons.remove,
+                                                  size: 20,
+                                                ))),
+                                        Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            width: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.04,
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.04,
+                                            child: ValueListenableBuilder(
+                                              valueListenable: quantityselected,
+                                              builder:
+                                                  (context, value, child) =>
+                                                      Center(
+                                                          child: Text(
+                                                quantityselected.value
+                                                    .toString(),
+                                                style: TextStyle(fontSize: 15),
+                                              )),
+                                            )),
+                                        Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.amber.shade300),
+                                            width: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.035,
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.035,
+                                            child: IconButton(
+                                                padding: EdgeInsets.all(3),
+                                                onPressed: () {
+                                                  quantityselected.value =
+                                                      quantityselected.value +
+                                                          1;
+                                                  CartModel cart = CartModel(
+                                                      id: state
+                                                          .cartItems![index].id,
+                                                      prodName: state
+                                                          .cartItems![index]
+                                                          .prodName,
+                                                      price: state
+                                                          .cartItems![index]
+                                                          .price,
+                                                      url: state
+                                                          .cartItems![index]
+                                                          .url,
+                                                      quantity: quantityselected
+                                                          .value);
+                                                  context.read<CartBloc>().add(
+                                                      CartItemToupdate(
+                                                          itemtoUpdate: cart,
+                                                          indextoUpdate:
+                                                              index));
+                                                },
+                                                icon: Icon(
+                                                  Icons.add,
+                                                  size: 20,
+                                                )))
+                                      ],
+                                    ),
+                                  ],
                                 ),
                                 Spacer(),
                                 IconButton(
@@ -452,14 +431,22 @@ class _CartState extends State<Cart> {
                               ),
                               child: BlocBuilder<OrdersBloc, OrdersState>(
                                 builder: (context, state) {
-                                  if(state is OrdersLoading){
-                                    return Center(child: SizedBox(height: 20,width: 20,
-                                      child: CircularProgressIndicator()),);
+                                  if (state is OrdersLoading) {
+                                    return Center(
+                                      child: SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator()),
+                                    );
                                   }
-                                  if(state is Orderssuccess && state.isLoading){
-                                     return Center(child: SizedBox(height: 20,width: 20,
-                                      child: CircularProgressIndicator()),);
-
+                                  if (state is Orderssuccess &&
+                                      state.isLoading) {
+                                    return Center(
+                                      child: SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator()),
+                                    );
                                   }
                                   return Text('Proceed to Checkout',
                                       style: TextStyle(fontSize: 16));

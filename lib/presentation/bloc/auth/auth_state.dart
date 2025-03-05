@@ -19,20 +19,23 @@ final class Authsuccess extends AuthState {
   const Authsuccess(
       {this.isLoading = false,
       required this.authModel,
-      this.errormessage = '',this.message=''});
+      this.errormessage = '',
+      this.message = ''});
 
   Authsuccess copywith(
-      {AuthModel? authModel, bool? isLoading, String? errormessage,String? message}) {
+      {AuthModel? authModel,
+      bool? isLoading,
+      String? errormessage,
+      String? message}) {
     return Authsuccess(
         authModel: authModel ?? this.authModel,
         errormessage: errormessage ?? this.errormessage,
         isLoading: isLoading ?? this.isLoading,
-        message: message??this.message);
+        message: message ?? this.message);
   }
 
-
   @override
-  List<Object> get props => [isLoading, authModel, errormessage,message];
+  List<Object> get props => [ authModel,isLoading, errormessage, message];
 }
 
 class AuthError extends AuthState {

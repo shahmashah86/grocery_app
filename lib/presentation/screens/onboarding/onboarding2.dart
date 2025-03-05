@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/presentation/screens/user/onboarding/onboarding3.dart';
+import 'package:grocery_app/presentation/screens/onboarding/onboarding3.dart';
+
 
 
 
@@ -29,9 +30,6 @@ class Onboarding2 extends StatelessWidget {
                 ),
               ),
 
-              //  Expanded(
-              //   child: ClipPath(clipper:CustomClipperClass2() ,
-              //     child: Container(height: MediaQuery.of(context).size.height*0.3,width: double.infinity,color: Colors.pink.shade100,))),
             ],
           ),
         ),
@@ -70,7 +68,7 @@ class CustomClipperClass2 extends CustomClipper<Path> {
     path.lineTo(0, size.height);
     // path.lineTo(200, size.height);
     path.cubicTo(220, 2 * size.height / 2, 120, 220, size.width, size.height);
-// path.cubicTo(size.width/2, size.height-120, 2.5*size.width/4, size.height+60, size.width, size.height-75);
+    // path.cubicTo(size.width/2, size.height-120, 2.5*size.width/4, size.height+60, size.width, size.height-75);
     // path.arcToPoint(Offset.fromDirection(size.height*0.9,),radius:Radius.circular(3),rotation: 30);
     path.lineTo(size.width, 0);
 

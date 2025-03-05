@@ -6,6 +6,7 @@ import 'package:grocery_app/domain/common/enums/enums.dart';
 import 'package:grocery_app/domain/orders/model/order_model.dart';
 
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
+import 'package:intl/intl.dart';
 
 class GetOrderByidScreen extends StatefulWidget {
   final int orderId;
@@ -37,123 +38,122 @@ class _GetOrderByidScreenState extends State<GetOrderByidScreen> {
             }
             if (state.isLoading==false&& state.ordersbyId.isNotEmpty) {
               final OrdersModel order = state.ordersbyId.first;
+                   DateTime parsedDate = DateTime.parse(order.dateTime);
+                String formattedDate = DateFormat("dd-MMM-yyyy").format(parsedDate);
               log(order.toString(), name: 'inside getorderby id');
               return SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                order.dateTime,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              )
-                            ],
-                          ),
-                       
-                          Divider(thickness: .5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Total Items",
-                                  style: TextStyle(color: Colors.black54)),
-                              Spacer(),
-                              Text(
-                                order.totalItems.toString() ,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(thickness: .5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Total Amount",
-                                  style: TextStyle(color: Colors.black54)),
-                              Spacer(),
-                              Text(
-                                order?.totalAmount.toString() ?? '',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                                   
-                          Divider(thickness: .7),
-                         ...List.generate( order!.product!.length, (index){
-                          return  Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Product",
-                                          style:
-                                              TextStyle(color: Colors.black54)),
-                                      Spacer(),
-                                      Text(
-                                        order?.product?[index].products!
-                                                .productName ??
-                                            '',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                 
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("quantity",
-                                          style:
-                                              TextStyle(color: Colors.black54)),
-                                      Spacer(),
-                                      Text(
-                                        order?.product?[index].quantity
-                                                .toString() ??
-                                            '',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                 
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Price",
-                                          style:
-                                              TextStyle(color: Colors.black54)),
-                                      Spacer(),
-                                      Text(
-                                        order?.product?[index].soldPrice
-                                                .toString() ??
-                                            '',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
-                                    thickness: .5,
-                                  ),
-                                ],
-                              );
-                                    
-                         })
-                         
+                          Text(
+                            formattedDate,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          )
                         ],
                       ),
+                   
+                      Divider(thickness: .5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Total Items",
+                              style: TextStyle(color: Colors.black54)),
+                          Spacer(),
+                          Text(
+                            order.totalItems.toString() ,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(thickness: .5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Total Amount",
+                              style: TextStyle(color: Colors.black54)),
+                          Spacer(),
+                          Text(
+                            order?.totalAmount.toString() ?? '',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                             Divider(thickness: .7),      
+                      Divider(thickness: .7),
+                      Text('Items:',style: TextStyle(fontSize: 19),),
+                     ...List.generate( order!.product!.length, (index){
+                      return  Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Product",
+                                      style:
+                                          TextStyle(color: Colors.black54)),
+                                  Spacer(),
+                                  Text(
+                                    order?.product?[index].products!
+                                            .productName ??
+                                        '',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                             
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("quantity",
+                                      style:
+                                          TextStyle(color: Colors.black54)),
+                                  Spacer(),
+                                  Text(
+                                    order?.product?[index].quantity
+                                            .toString() ??
+                                        '',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                             
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Price",
+                                      style:
+                                          TextStyle(color: Colors.black54)),
+                                  Spacer(),
+                                  Text(
+                                    order?.product?[index].soldPrice
+                                            .toString() ??
+                                        '',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                thickness: .5,
+                              ),
+                            ],
+                          );
+                                
+                     })
+                     
                     ],
                   ),
                 ),

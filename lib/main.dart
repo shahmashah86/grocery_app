@@ -32,7 +32,6 @@ cartBox=  await Hive.openBox<CartEntity>("cartBox");
       BlocProvider.value(value: di.getIt<OrdersBloc>()),
       BlocProvider.value(value: di.getIt<CategoryBloc>()),
       BlocProvider.value(value: di.getIt<ProductBloc>()),
-        //  BlocProvider.value(value: di.getIt<GetOrderbyIdBloc>()),
          BlocProvider.value(value: di.getIt<UserDashboardBloc>()),
                 BlocProvider.value(value: di.getIt<CartBloc>()),
   ], child: const MyApp()));

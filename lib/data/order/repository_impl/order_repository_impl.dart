@@ -21,6 +21,7 @@ class OrderRepositoryImpl extends OrderRespository {
     return tokenFromAuth;
   }
 
+//all orders
   @override
   Future<List<OrdersModel>> getOrdersList() async {
     try {
@@ -32,9 +33,6 @@ class OrderRepositoryImpl extends OrderRespository {
       if (response.statusCode == 200) {
         log("inside response");
         List<dynamic> jsonresponse = response.data;
-        // List<OrderDtos> orderList=(response.data as List<Map<String,dynamic>>).map((element)=>OrderDtos.fromMap(element)).toList();
-
-        // List<OrderDtos> orderList=OrderDtos.fromMap(response.data);
 
         return jsonresponse
             .map((toElement) => OrderDtos.fromMap(toElement).toModel())
@@ -48,6 +46,8 @@ class OrderRepositoryImpl extends OrderRespository {
     }
   }
 
+
+//get order by user
   @override
   Future<List<OrdersModel>> getOrdersByUser(int userId) async {
     try {
@@ -73,6 +73,7 @@ class OrderRepositoryImpl extends OrderRespository {
     }
   }
 
+//acknowledge order
   @override
   Future acknowledgeOrder(int orderId) async {
     try {
@@ -97,6 +98,7 @@ class OrderRepositoryImpl extends OrderRespository {
     }
   }
 
+//place order
   @override
   Future placeOrder(PlaceOrderModel details) async {
     try {
@@ -111,9 +113,7 @@ class OrderRepositoryImpl extends OrderRespository {
       if (response.statusCode == 200) {
         // log(response.data.toString());
         return response.data['message'];
-      
-        // return
-      } else {
+          } else {
         throw "Something went wrong in response";
       }
     } catch (e) {
@@ -123,6 +123,8 @@ class OrderRepositoryImpl extends OrderRespository {
     }
   }
 
+
+//get order by order id
   @override
   Future<OrdersModel> getAnOrderbyId(int id) async {
     try {
@@ -133,10 +135,7 @@ class OrderRepositoryImpl extends OrderRespository {
           headers: {"Authorization": "Bearer $token"});
 
       if (response.statusCode == 200) {
-        log('kkk');
-
-        //  return response.data;
-        //  \response.data;
+    
         final orderdata = OrderDtos.fromMap(response.data).toModel();
         log(orderdata.toString());
         return orderdata;
@@ -150,6 +149,7 @@ class OrderRepositoryImpl extends OrderRespository {
     }
   }
   
+  //cancel a order
   @override
   Future<String> cancelOrder(int orderId) async {
         try {
@@ -177,6 +177,8 @@ class OrderRepositoryImpl extends OrderRespository {
 
   }
   
+
+
   @override
   Future<String> updateOrder(int orderId) async {
             try {
@@ -197,7 +199,7 @@ class OrderRepositoryImpl extends OrderRespository {
     } catch (e) {
       log(e.toString());
       rethrow;
-      // throw "Something wrong woth the request/code";
+
     }
   
   }

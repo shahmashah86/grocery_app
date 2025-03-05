@@ -4,8 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:grocery_app/domain/orders/model/order_model.dart';
+
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
+import 'package:intl/intl.dart';
 
 class UserOrderCancel extends StatelessWidget {
   const UserOrderCancel({super.key, required this.orderId});
@@ -20,6 +21,7 @@ class UserOrderCancel extends StatelessWidget {
       body: BlocConsumer<OrdersBloc, OrdersState>(
         listener: (BuildContext context, state) {
           if (state is Orderssuccess && state.ordersbyId.isEmpty) {
+            //dialog saying order cancelled
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -61,6 +63,9 @@ class UserOrderCancel extends StatelessWidget {
 
             if (state.ordersbyId.isNotEmpty) {
               final orderlistofUser = state.ordersbyId.first;
+              DateTime parsedDate = DateTime.parse(orderlistofUser.dateTime);
+              String formattedDate =
+                  DateFormat("dd MMM yyyy").format(parsedDate);
               log(orderlistofUser.toString());
 
               return SingleChildScrollView(
@@ -104,7 +109,7 @@ class UserOrderCancel extends StatelessWidget {
                                           color: Colors.black54,
                                         )),
                                     Text(
-                                      orderlistofUser.dateTime,
+                                      formattedDate,
                                       style: TextStyle(fontSize: 15),
                                     ),
                                   ],
@@ -123,7 +128,7 @@ class UserOrderCancel extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 15,
+                                  height: 10,
                                 ),
                                 Text('Changed your mind! want to cancel?',
                                     style: TextStyle(
@@ -216,124 +221,108 @@ class UserOrderCancel extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                   left: 9,
                                 ),
-                                 child:Container(  clipBehavior: Clip.hardEdge,
-                                   decoration: BoxDecoration(
-                                   borderRadius: BorderRadius.circular(10),),
+                                child: Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                   child: CachedNetworkImage(
                                     height:
                                         MediaQuery.sizeOf(context).height * .13,
-                                    width: MediaQuery.sizeOf(context).width * .22,
+                                    width:
+                                        MediaQuery.sizeOf(context).width * .22,
                                     imageUrl: orderlistofUser
-                                                .product?[index]
-                                                .products
-                                                ?.image ??'',fit: BoxFit.cover,
-                                                errorWidget: (context, url, error) => Icon(
-                                        Icons.error,
-                                        size: 60,
-                                        color: Colors.black45,
-                                      ),
-                                      placeholder: (context, url) => SpinKitPulse(
-                                        color: Colors.white,
-                                      ),
-                                    // decoration: BoxDecoration(
-                                    //   borderRadius: BorderRadius.circular(10),
-                                    //   image: DecorationImage(
-                                    //     fit: BoxFit.cover,
-                                    //     image: NetworkImage(orderlistofUser
-                                    //             .product?[index]
-                                    //             .products
-                                    //             ?.image ??
-                                    //         ''),
-                                    //   ),
-                                    // ),
+                                            .product?[index].products?.image ??
+                                        '',
+                                    fit: BoxFit.cover,
+                                    errorWidget: (context, url, error) => Icon(
+                                      Icons.error,
+                                      size: 60,
+                                      color: Colors.black45,
+                                    ),
+                                    placeholder: (context, url) => SpinKitPulse(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 30,
-                                ),
-                                child: Column(
-                                  spacing: 5,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(overflow: TextOverflow.ellipsis,
-                                      orderlistofUser
-                                          .product![index].productName!,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    orderlistofUser
+                                        .product![index].productName!,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Text(
+                                        '₹${orderlistofUser.product![index].soldPrice.toString()}',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                    Row(
-                                      spacing: 10,
-                                      children: [
-                                        Text(
-                                          '₹${orderlistofUser.product![index].soldPrice.toString()}',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          '●',
-                                          style: TextStyle(
-                                              color: Colors.amber,
-                                              fontSize: 20),
-                                        ),
-                                        Text(
-                                            '${orderlistofUser.product![index].quantity.toString()}${orderlistofUser.product![index].products!.unit}'),
-                                        IconButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return AlertDialog(
-                                                      content: Text(
-                                                          "Do you really want to cancel this product"),
-                                                      icon: Icon(
-                                                        Icons.dangerous,
-                                                        size: 40,
-                                                        color:
-                                                            Colors.deepOrange,
-                                                      ),
-                                                      title: Text(
-                                                          "Cancel product"),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          style: ButtonStyle(
+                                      Text(
+                                        '●',
+                                        style: TextStyle(
+                                            color: Colors.amber, fontSize: 20),
+                                      ),
+                                      Text(
+                                          '${orderlistofUser.product![index].quantity.toString()}${orderlistofUser.product![index].products!.unit}'),
+                                      IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    content: Text(
+                                                        "Do you really want to cancel this product?"),
+                                                    icon: Icon(
+                                                      Icons.dangerous,
+                                                      size: 55,
+                                                      color: Colors.deepOrange,
+                                                    ),
+                                                    title:
+                                                        Text("Cancel product"),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        style: ButtonStyle(
                                                             backgroundColor:
-                                                                  WidgetStatePropertyAll(
-                                                                      Colors
-                                                                          .black12)),
-                                                          child: Text('No'),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () {
-
-                                                            // final updatedOrder=OrdersModel(dateTime: DateTime.now().toIso8601String(),totalItems: );
-                                                            // context.read<OrdersBloc>().add(Orderproductsupdate(orderId: orderId));
-                                                          },
-                                                          style: ButtonStyle(
-                                                              backgroundColor:
-                                                                  WidgetStatePropertyAll(
-                                                                      Colors
-                                                                          .amber)),
-                                                          child: Text('Yes'),
-                                                        )
-                                                      ],
-                                                    );
-                                                  });
-                                            },
-                                            icon: Icon(Icons.delete_sharp))
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                                                WidgetStatePropertyAll(
+                                                                    Colors
+                                                                        .black12)),
+                                                        child: Text('No'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                        
+                                                        },
+                                                        style: ButtonStyle(
+                                                            backgroundColor:
+                                                                WidgetStatePropertyAll(
+                                                                    Colors.amber
+                                                                        .shade200)),
+                                                        child: Text('Yes'),
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          icon: Icon(Icons.delete_sharp))
+                                    ],
+                                  ),
+                                ],
                               ),
                             ]),
                           ),

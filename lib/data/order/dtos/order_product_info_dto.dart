@@ -1,13 +1,6 @@
 
-
-
 import 'package:grocery_app/data/products/dtos/products_dto.dart';
 import 'package:grocery_app/domain/orders/model/order_product_info_model.dart';
-
-
-
-
-
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class OrderProductInfoDto  {

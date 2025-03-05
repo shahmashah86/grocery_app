@@ -4,7 +4,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:grocery_app/presentation/screens/user/onboarding/onboarding2.dart';
+import 'package:grocery_app/presentation/screens/onboarding/onboarding2.dart';
+
 
 class Onboarding1 extends StatelessWidget {
   const Onboarding1({super.key});

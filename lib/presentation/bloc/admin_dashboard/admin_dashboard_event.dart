@@ -8,24 +8,24 @@ sealed class AdminDashboardEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AdminDasboarddataGet  extends AdminDashboardEvent{
+class AdminDasboarddataGet extends AdminDashboardEvent {}
 
+class UserDashboardGet extends AdminDashboardEvent {}
 
-}
-class UserDashboardGet extends AdminDashboardEvent{
-
-}
 class AdminbannerCreation extends AdminDashboardEvent {
-
- final List<File> imageFile;
+  final List<File> imageFile;
   const AdminbannerCreation({
     required this.imageFile,
   });
+  @override
+  List<Object> get props => [imageFile];
 }
-class AdminbannerDeletion extends AdminDashboardEvent {
 
- final int indextoDelete;
+class AdminbannerDeletion extends AdminDashboardEvent {
+  final int indextoDelete;
   const AdminbannerDeletion({
     required this.indextoDelete,
   });
+  @override
+  List<Object> get props => [indextoDelete];
 }

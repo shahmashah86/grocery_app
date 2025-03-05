@@ -23,6 +23,7 @@ final class ProductLoaded extends ProductState {
 
   final bool frombottomnav;
   final String? errormsg;
+  final ProdCreateEditScreen mode;
   
 
   const ProductLoaded(
@@ -35,7 +36,9 @@ final class ProductLoaded extends ProductState {
       this.searchList = const [],
       this.frombottomnav = false,
       this.product=const [],
-      this.errormsg = ''});
+      this.errormsg = '',
+      this.mode=ProdCreateEditScreen.list,
+      });
 
   @override
   List<Object?> get props => [
@@ -48,7 +51,8 @@ final class ProductLoaded extends ProductState {
         searchList,
         frombottomnav,
         product,
-        errormsg
+        errormsg,
+        mode
 
       ];
 
@@ -63,6 +67,7 @@ final class ProductLoaded extends ProductState {
     List<ProductsModel>? product,
     bool? frombottomnav,
     String? errormsg,
+    ProdCreateEditScreen? mode
   }) {
     return ProductLoaded(
         isLoading: isLoading ?? this.isLoading,
@@ -74,7 +79,8 @@ final class ProductLoaded extends ProductState {
         productId: productId ?? this.productId,
         frombottomnav: frombottomnav ?? this.frombottomnav,
         errormsg: errormsg ?? this.errormsg,
-        product: product??this.product
+        product: product??this.product,
+        mode: mode??this.mode
         
         );
   }
