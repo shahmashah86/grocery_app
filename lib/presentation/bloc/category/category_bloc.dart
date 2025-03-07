@@ -55,7 +55,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         log(response.toString());
       } catch (e) {
         log('error');
-        emit(currentState.copyWith(isLoading: false, errorMsg: e.toString()));
+        emit(currentState.copyWith(isLoading: false,isError: true, errorMsg: e.toString()));
       }
     }
   }
@@ -81,6 +81,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       } catch (e) {
         log('error');
         currentState.copyWith(
+          isLoading: false,
+          isError: true,
+          message: '',
             categoryList: currentState.categoryList,
             errorMsg: e.toString(),
             produnderCategory: currentState.produnderCategory);
@@ -96,6 +99,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
             categoryList: currentstate.categoryList,
             message: '',
             isLoading: true,
+            isError: true,
             errorMsg: '',
             produnderCategory: currentstate.produnderCategory));
         final response = await categoryRepository.deleteCategory(id: event.id);
@@ -108,6 +112,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       } catch (e) {
         log('error');
         currentstate.copyWith(
+          isLoading: false,
+          message: '',
             categoryList: currentstate.categoryList,
             errorMsg: e.toString(),
             produnderCategory: currentstate.produnderCategory);
@@ -133,6 +139,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       } catch (e) {
         log('error');
         currentState.copyWith(
+          isLoading: false,
+          isError: true,
+          message: '',
             categoryList: currentState.categoryList,
             errorMsg: e.toString(),
             produnderCategory: currentState.produnderCategory);

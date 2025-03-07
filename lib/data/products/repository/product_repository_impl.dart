@@ -197,7 +197,7 @@ class ProductRepositoryImpl extends ProductRepository {
         log("inside response of search product");
         List<dynamic> listOfproducts = response.data as List<dynamic>;
         return listOfproducts
-            .map((e) => ProductsDto.fromJson(e).toModel())
+            .map((e) => ProductDto.fromMap(e).toModel())
             .toList();
       } else {
         throw "Something went wrong in response";

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grocery_app/domain/common/enums/enums.dart';
+
 import 'package:grocery_app/domain/orders/model/order_model.dart';
 
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
@@ -22,28 +22,25 @@ class Content extends StatefulWidget {
 }
 
 class _ContentState extends State<Content> {
-
-
-    late ValueNotifier<List<bool>> isAcknowledged;
+  late ValueNotifier<List<bool>> isAcknowledged;
 
   @override
   void initState() {
+    
     super.initState();
-    widget.fromallordersScreen==true?
-    isAcknowledged = ValueNotifier(widget.order.map((o) => o.acknowledged!).toList()):null;
+    widget.fromallordersScreen == true
+        ? isAcknowledged =
+            ValueNotifier(widget.order.map((o) => o.acknowledged!).toList())
+        : null;
   }
 
   @override
   Widget build(BuildContext context) {
-   
-
-
-    //  List<int> acknowldegedId=[];
     return ListView.builder(
       itemCount: widget.order.length,
       itemBuilder: (context, index) {
-             DateTime parsedDate = DateTime.parse(widget.order[index].dateTime);
-                String formattedDate = DateFormat("dd-MM-yy").format(parsedDate);
+        DateTime parsedDate = DateTime.parse(widget.order[index].dateTime);
+        String formattedDate = DateFormat("dd-MM-yy").format(parsedDate);
         // log(acknowldegedId.toString());
         return Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 10),
@@ -59,7 +56,8 @@ class _ContentState extends State<Content> {
             },
             child: Card(
               child: Container(
-                padding: EdgeInsets.only(left: 8, right: 9),
+                padding:
+                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
                 // height: MediaQuery.sizeOf(context).height * 0.345,
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 251, 247, 233),
@@ -67,180 +65,87 @@ class _ContentState extends State<Content> {
                 ),
                 width: double.infinity,
                 child: Column(
+                  spacing: 5,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          widget.fromallordersScreen
-                              ? widget.order[index].id.toString()
-                              : widget.order[index].userId.toString(),
+                        Container(
+                          width: MediaQuery.sizeOf(context).width * .3,
+                          height: MediaQuery.sizeOf(context).height * .04,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.grey)),
+                          child: Center(
+                            child: Text(
+                              widget.fromallordersScreen
+                                  ? 'Order Id:${widget.order[index].id.toString()}'
+                                  : 'User Id:${widget.order[index].userId.toString()}',
+                              style: TextStyle(
+                                  fontSize: 19, color: Colors.indigo.shade500),
+                            ),
+                          ),
+                        ),
+                        Text('📅  $formattedDate',
                           style: TextStyle(
-                              fontSize: 21, fontWeight: FontWeight.bold),
+                            fontSize: 17,
+                          ),
                         )
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.fromallordersScreen ? "User Id" : "Order Id",
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                        Spacer(),
-                        Text(
-                          widget.fromallordersScreen
-                              ? widget.order[index].userId.toString()
-                              : widget.order[index].id.toString(),
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
                     Divider(thickness: .5),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Total Items",
-                            style: TextStyle(color: Colors.black54)),
-                        Spacer(),
                         Text(
-                          widget.order[index].totalItems.toString(),
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
+                            "Item count: ${widget.order[index].totalItems.toString()}",
+                            style: TextStyle(color: Colors.black54)),
+                        Text(
+                          "₹${widget.order[index].totalAmount.toString()}",
+                          style: TextStyle(color: Colors.black, fontSize: 16),
+                        )
                       ],
                     ),
-                    Divider(thickness: .5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Total Amount",
-                            style: TextStyle(color: Colors.black54)),
-                        Spacer(),
-                        Text(
-                          widget.order[index].totalAmount.toString(),
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(
+                   
+                    widget.fromallordersScreen == true
+                        ? 
+                        Column(
+                          children: [ Divider(
                       thickness: .5,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Date", style: TextStyle(color: Colors.black54)),
-                        Spacer(),
-                        Text(
-                          formattedDate,
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
-                   
-                      //    if(state is Orderssuccess && state.message!=null){
-                      //     log('sucess');
-                      //   return Row(
-                      //     children: [
-                      //       Spacer(),
-                      //       TextButton(
-                      //           style: ButtonStyle(),
-                      //           onPressed: () {
-                      //             context.read<OrdersBloc>().add(
-                      //                 Orderacknowledge(
-                      //                     orderId: order![index].id));
-                      //           },
-                      //           child: Text("Acknowldeged"))
-                      //     ],
-                      //   );
-                      // }
-                      widget.fromallordersScreen == true?
-                        
-                        //  BlocBuilder<OrdersBloc, OrdersState>(
-                        //   builder: (context, state) {
-                        //     if(state is Orderssuccess && state.orderScreenType==OrderScreenType.allOrders ){
-                        //       if(state.message!=''){
-                        //          return ValueListenableBuilder(
-                        //       valueListenable: isAcknowledged,
-                        //       builder: (context, value, child) => Row(
-                        //         children: [
-                        //           Spacer(),
-                        //           TextButton(
-                        //               style: ButtonStyle(),
-                        //               onPressed: () {
-                        //                 if (!value[index]) {
-                        //                   List<bool> updatedList =
-                        //                       List.from(value);
-                        //                   updatedList[index] = true;
-                        //                   isAcknowledged.value = updatedList;
-                        //                   context.read<OrdersBloc>().add(
-                        //                       Orderacknowledge(
-                        //                           orderId: order[index].id!));
-                        //                 }
-                        //               },
-                        //               child: Text(
-                        //                 value[index]
-                        //                     ? "Acknowledged"
-                        //                     : 'Acknowledge',
-                        //                 style: TextStyle(
-                        //                     color: value[index] == true
-                        //                         ? Colors.green
-                        //                         : Colors.red),
-                        //               ))
-                        //         ],
-                        //       ),
-                        //     );
-
-                        //       }
-
-                        //     }
-
                             ValueListenableBuilder(
-                              valueListenable: isAcknowledged,
-                              builder: (context, value, child) => Row(
-                                children: [
-                                  Spacer(),
-                                  TextButton(
-                                      style: ButtonStyle(),
-                                      onPressed: () {
-                                        if (!value[index]) {
-                                          List<bool> updatedList =
-                                              List.from(value);
-                                          updatedList[index] = true;
-                                          isAcknowledged.value = updatedList;
-                                          context.read<OrdersBloc>().add(
-                                              Orderacknowledge(
-                                                  orderId: widget.order[index].id!));
-                                        }
-                                      },
-                                      child: Text(
-                                        value[index]
-                                            ? "Acknowledged"
-                                            : 'Acknowledge',
-                                        style: TextStyle(
-                                            color: value[index] == true
-                                                ? Colors.green
-                                                : Colors.red),
-                                      ))
-                                ],
+                                valueListenable: isAcknowledged,
+                                builder: (context, value, child) => Row(
+                                  children: [
+                                    Spacer(),
+                                    TextButton(
+                                        style: ButtonStyle(),
+                                        onPressed: () {
+                                          if (!value[index]) {
+                                            List<bool> updatedList =
+                                                List.from(value);
+                                            updatedList[index] = true;
+                                            isAcknowledged.value = updatedList;
+                                            context.read<OrdersBloc>().add(
+                                                Orderacknowledge(
+                                                    orderId:
+                                                        widget.order[index].id!));
+                                          }
+                                        },
+                                        child: Text(
+                                          value[index] ? "Approved ✔️" : 'Approve ',
+                                          style: TextStyle(
+                                              color: value[index] == true
+                                                  ? Colors.green
+                                                  : Colors.red),
+                                        ))
+                                  ],
+                                ),
                               ),
-                            ):
-                        //   },
-                        // ):
-                
-                        SizedBox.shrink()
-                      
-                    
-                    
+                          ],
+                        )
+                        : SizedBox.shrink()
                   ],
                 ),
               ),

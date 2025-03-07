@@ -128,7 +128,7 @@ class _SearchscreenState extends State<Searchscreen> {
               ),
             ),
           ),
-          //chekcing that entering this screen is from homescreen searchbar if no only make the search bar pinned
+          //cheking that entering this screen is from homescreen searchbar if no only make the search bar pinned
           if (!widget.searchfromDashboard)
             SliverPersistentHeader(
               pinned: true,
@@ -173,13 +173,13 @@ class _SearchscreenState extends State<Searchscreen> {
                   if (state.errormsg ==
                       'Exception: Please provide a product name to search') {
                     log(state.frombottomnav.toString());
-                    List<ProductsModel>? productList =
-                        (state.productList as List<ProductRegModel>)
-                            .map((item) => item.products)
-                            .toList();
+                    // List<ProductsModel>? productList =
+                    //     (state.productList as List<ProductRegodel>)
+                    //         .map((item) => item.products)
+                    //         .toList();
 
-                    List<ProductsModel> allProducts = productList
-                        .where((product) => product.isAvailable == true)
+                    List<ProductRegModel> allProducts =state. productList!
+                        .where((product) => product.products.isAvailable == true)
                         .toList();
                     ProductGrid(
                       productdetail: allProducts,
@@ -200,7 +200,7 @@ class _SearchscreenState extends State<Searchscreen> {
 
                 if ((state.productList?.isEmpty ?? true) &&
                     state.frombottomnav) {
-                  return SliverToBoxAdapter(child: Text('data'));
+                  return SliverToBoxAdapter(child: Text('No products'));
                 }
 
                 if ((state.searchList?.isEmpty ?? true) &&
@@ -231,17 +231,22 @@ class _SearchscreenState extends State<Searchscreen> {
 
                 if ((state.productList?.isNotEmpty ?? false) &&
                     state.frombottomnav) {
-                  List<ProductsModel> productList =
-                      (state.productList as List<ProductRegModel>)
-                          .map((item) => item.products)
-                          .toList();
 
-                  List<ProductsModel> allProducts = productList
-                      .where((product) => product.isAvailable == true)
-                      .toList();
+                      List<ProductRegModel> productList = state.productList!
+    .where((e) => e.products.isAvailable == true)
+    .toList();
+
+            
+                      // (state.productList a      List<ProductRegModel> productList =state.productList.map((e) => e.products.isAvailable==true,).toList();s List<ProductRegModel>)
+                      //     .map((item) => item.products)
+                      //     .toList();
+
+              //  state.productList.
+              //         .where((product) => product.isAvailable == true)
+              //         .toList();
 
                   return ProductGrid(
-                    productdetail: allProducts,
+                    productdetail:productList,
                     bySearch: !state.frombottomnav,
                   );
                 }
@@ -249,7 +254,7 @@ class _SearchscreenState extends State<Searchscreen> {
                 if ((state.searchList?.isNotEmpty ?? false) &&
                     (state.frombottomnav == false)) {
                   log('ddddddd');
-                  List<ProductsModel>? searchList = state.searchList;
+                  List<ProductRegModel>? searchList = state.searchList;
                   return ProductGrid(
                     productdetail: searchList,
                     bySearch: !state.frombottomnav,

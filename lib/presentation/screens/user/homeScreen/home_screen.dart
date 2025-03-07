@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/domain/category/model/category_model.dart';
@@ -13,6 +16,7 @@ import 'package:grocery_app/presentation/screens/user/search/searchscreen.dart';
 import 'package:grocery_app/presentation/screens/user/widgets/category_content.dart';
 import 'package:grocery_app/presentation/screens/user/widgets/clipper.dart';
 
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -21,21 +25,39 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  //  final Shader _linearGradient = const LinearGradient(
+  //   colors: [ Colors.deepPurple,Colors.yellow,],
+  //   begin: Alignment.centerLeft,
+  //   end: Alignment.bottomRight,
+  // ).createShader(const Rect.fromLTWH(0.0, 50.0, 320.0, 80.0));
+
   late final TextEditingController searchController;
   @override
   void initState() {
+
     searchController = TextEditingController();
+      log('hh');
+  
+    WidgetsBinding.instance.addPostFrameCallback((_){
+     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    });
+
     super.initState();
   }
-
+    
+    
   @override
   void dispose() {
     searchController.dispose();
     super.dispose();
   }
 
+ 
   @override
   Widget build(BuildContext context) {
+ 
+ 
     ValueNotifier<int?> indexOfSelcted = ValueNotifier(null);
     return Scaffold(
       appBar: AppBar(
@@ -57,11 +79,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
+      
           BlocBuilder<CategoryBloc, CategoryState>(
             builder: (context, state) {
               if (state is CategoryLoading) {
                 return Center(
-                    child: CircleAvatar(child: CircularProgressIndicator()));
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: CircleAvatar(child: CircularProgressIndicator()),
+                    ));
               }
               if (state is CategoryLoaded) {
                 List<CategoryModel>? categories = state.categoryList;
@@ -100,11 +126,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 9),
                       child: Text(
-                        "categories",
+                        "Categories",
                         style: TextStyle(
-                            fontSize: 19, fontWeight: FontWeight.w500),
+                            fontSize: 18,fontWeight: FontWeight.w500, color: Colors.black54),
                       ),
                     ),
                     // scrolling categories
@@ -157,7 +183,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               if (state is CategoryError) {
                 return Center(
-                  child: Text(state.msg),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(state.msg),
+                  ),
                 );
               } else {
                 return Center(child: Text("Please wait or try again"));
@@ -169,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context, state) {
               if (state is UserDashboardLoading) {
                 return CircleAvatar(
-                  child: CircularProgressIndicator(),
+                  child: Center(child: CircularProgressIndicator()),
                 );
               }
               //dasbord api result ui
@@ -206,23 +235,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           options: CarouselOptions(
                               autoPlayAnimationDuration:
                                   Duration(milliseconds: 400),
-                              height: MediaQuery.sizeOf(context).height * 0.27,
+                              height: MediaQuery.sizeOf(context).height * 0.28
+                              ,
                               autoPlay: true,
                               viewportFraction: 1),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 6),
                       child: Row(
                         spacing: 3,
                         children: [
                           Text(
-                            "trending now",
+                            "Trending now",
                             style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w500),
+                                fontSize: 18, fontWeight: FontWeight.w500,color: Colors.black54),
                           ),
-                          Icon(Icons.chevron_right)
+                          Icon(Icons.chevron_right,color: Colors.black54,)
                         ],
                       ),
                     ),
@@ -251,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8.0,top: 8,right:8 ),
-                                  child: SizedBox(width: double.infinity,height:MediaQuery.sizeOf(context).height*.18,
+                                  child: SizedBox(width: double.infinity,height:MediaQuery.sizeOf(context).height*.19,
                                     child: CachedNetworkImage(
                                       imageUrl: state.dashboardData?.trendingProducts[index].image ?? "",
                                       placeholder: (context, url) => SpinKitPulse(
@@ -263,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 8.0,right: 8,bottom: 4,top: 4),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       
                                     children: [
@@ -299,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       options: CarouselOptions(
                           autoPlayAnimationDuration:
                               Duration(milliseconds: 100),
-                          height: MediaQuery.sizeOf(context).height * 0.27,
+                          height: MediaQuery.sizeOf(context).height * 0.26,
                           autoPlay: true,
                           viewportFraction: .47),
                     ),
@@ -307,7 +337,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
               if(state is UserDashboardError){
-                return Center(child: Text(state.message??''),);
+                return Center(child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(state.message??''),
+                ),);
               }
               return Text("loading");
             },

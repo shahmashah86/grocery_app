@@ -49,6 +49,8 @@ dependencies:
   permission_handler: ^11.3.1
   hive_flutter: ^1.1.0
   intl: ^0.20.2
+  curved_labeled_navigation_bar: ^2.0.6
+  multi_dropdown: ^3.0.1
  
 
 

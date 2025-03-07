@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
 
@@ -13,12 +15,13 @@ class Registration extends StatefulWidget {
 
 class _RegistrationState extends State<Registration> {
    final regFormkey = GlobalKey<FormState>();
-  TextEditingController? usernameController;
-  TextEditingController? emailControler;
-  TextEditingController? passwordController;
+  late final TextEditingController usernameController;
+  late TextEditingController emailControler;
+  late TextEditingController passwordController;
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
                 
     usernameController = TextEditingController();
@@ -26,10 +29,21 @@ class _RegistrationState extends State<Registration> {
     emailControler = TextEditingController();
     super.initState();
   }
+  @override
+  void dispose() {
+  usernameController.dispose();
+  passwordController.dispose();
+  emailControler.dispose();
+
+
+        // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: Colors.amber,
       body: Stack(children: [
         SizedBox(
           height: double.infinity,
@@ -126,6 +140,17 @@ BlocConsumer<AuthBloc, AuthState>(
                       }
   },
   builder: (context, state) {
+
+    if(state is AuthLoading){
+   return SizedBox(
+                              height: 50,
+                              width: 50,
+                              child: SpinKitFadingCircle(color: Colors.white,),
+                            );
+    }
+
+
+
       return TextButton(
                           style: ButtonStyle(
                             backgroundColor:

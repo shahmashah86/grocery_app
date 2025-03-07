@@ -32,47 +32,102 @@ class _GetOrderByidScreenState extends State<GetOrderByidScreen> {
       body: BlocBuilder<OrdersBloc, OrdersState>(
         builder: (context, state) {
           if (state is Orderssuccess) {
-            log(state.isLoading.toString(),name: 'loading state of order by id of user');
-            if (state.isLoading==true) {
+            log(state.isLoading.toString(),
+                name: 'loading state of order by id of user');
+            if (state.isLoading == true) {
               return Center(child: CircularProgressIndicator());
             }
-            if (state.isLoading==false&& state.ordersbyId.isNotEmpty) {
+            if (state.isLoading == false && state.ordersbyId.isNotEmpty) {
               final OrdersModel order = state.ordersbyId.first;
-                   DateTime parsedDate = DateTime.parse(order.dateTime);
-                String formattedDate = DateFormat("dd-MMM-yyyy").format(parsedDate);
+              DateTime parsedDate = DateTime.parse(order.dateTime);
+              String formattedDate =
+                  DateFormat("dd-MMM-yyyy").format(parsedDate);
               log(order.toString(), name: 'inside getorderby id');
               return SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(spacing: 5,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Spacer(),
                           Text(
-                            formattedDate,
+                            '📅 $formattedDate',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                             ),
                           )
                         ],
                       ),
-                   
-                      Divider(thickness: .5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Total Items",
-                              style: TextStyle(color: Colors.black54)),
-                          Spacer(),
-                          Text(
-                            order.totalItems.toString() ,
-                            style: TextStyle(
-                              fontSize: 20,
+                      // Divider(thickness: .5),
+                      Text(
+                        'Items:',
+                        style: TextStyle(fontSize: 19),
+                      ),
+                      ...List.generate(order.product!.length, (index) {
+                        return Container(
+                          decoration:
+                              BoxDecoration
+                              (color: Colors.blueGrey.shade50,
+                              borderRadius: BorderRadius.circular(10)
+                              ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                children: [
+                                  Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                    spacing: 5,
+                                    children: [
+                                      Row(
+                                        
+                                        children: [
+                                        
+                                          Text(
+                                            order?.product?[index].products!
+                                                    .productName ??
+                                                '',
+                                            style: TextStyle(
+                                              fontSize: 19,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    
+                                      Row(
+                                                         
+                                        children: [
+                                       
+                                       
+                                          Text(
+                                            '₹ ${order?.product?[index].soldPrice .toString()}' ,
+                                                   
+                                               
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                   Row(
+                                     children: [   Text('Qty '),
+                                       CircleAvatar(backgroundColor: Colors.amber.shade50,
+                                        child: Center(child: Text(order.product?[index].quantity.toString()??''),),),
+                                  ],
+                                   )
+                                ],
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                      Divider(thickness: .5),
+                        );
+                      }),
+                      Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -80,94 +135,25 @@ class _GetOrderByidScreenState extends State<GetOrderByidScreen> {
                               style: TextStyle(color: Colors.black54)),
                           Spacer(),
                           Text(
-                            order?.totalAmount.toString() ?? '',
+                           '₹${order?.totalAmount.toString() ?? ''}',
                             style: TextStyle(
                               fontSize: 20,
                             ),
                           ),
                         ],
                       ),
-                             Divider(thickness: .7),      
-                      Divider(thickness: .7),
-                      Text('Items:',style: TextStyle(fontSize: 19),),
-                     ...List.generate( order!.product!.length, (index){
-                      return  Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Product",
-                                      style:
-                                          TextStyle(color: Colors.black54)),
-                                  Spacer(),
-                                  Text(
-                                    order?.product?[index].products!
-                                            .productName ??
-                                        '',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                             
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("quantity",
-                                      style:
-                                          TextStyle(color: Colors.black54)),
-                                  Spacer(),
-                                  Text(
-                                    order?.product?[index].quantity
-                                            .toString() ??
-                                        '',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                             
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Price",
-                                      style:
-                                          TextStyle(color: Colors.black54)),
-                                  Spacer(),
-                                  Text(
-                                    order?.product?[index].soldPrice
-                                            .toString() ??
-                                        '',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Divider(
-                                thickness: .5,
-                              ),
-                            ],
-                          );
-                                
-                     })
-                     
                     ],
                   ),
                 ),
               );
             }
-             if(state.iserror ){
+            if (state.iserror) {
               return Text(state.errormessage);
             }
-           
-           
           }
-         if(state is OrdersError){
-              return Text(state.errormessage);
-            }
+          if (state is OrdersError) {
+            return Text(state.errormessage);
+          }
           return Text('Please wait or try again');
         },
       ),

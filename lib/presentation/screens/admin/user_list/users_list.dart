@@ -87,8 +87,10 @@ class _UsersListState extends State<UsersList> {
                            users[index].name ?? users[index].email!,
                            style: TextStyle(fontSize: 17),
                          ),
-                             Text(users[index].phoneNumber ?? '',
-                                 style: TextStyle(fontSize: 16)),
+                         users[index].phoneNumber!=null?
+                             Text(users[index].phoneNumber??'',
+                                 style: TextStyle(fontSize: 16
+                                )):SizedBox.shrink()
                            ],
                          ),
                            ],

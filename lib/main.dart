@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/data/databases/entity/cart_entity.dart';
 
@@ -26,7 +27,9 @@ void main() async {
 // Box
 cartBox=  await Hive.openBox<CartEntity>("cartBox");
 
-  runApp(MultiBlocProvider(providers: [
+
+SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
+   runApp(MultiBlocProvider(providers: [
     BlocProvider.value(value: di.getIt<AuthBloc>()),
     BlocProvider.value(value: di.getIt<AdminDashboardBloc>()),
       BlocProvider.value(value: di.getIt<OrdersBloc>()),
@@ -35,6 +38,9 @@ cartBox=  await Hive.openBox<CartEntity>("cartBox");
          BlocProvider.value(value: di.getIt<UserDashboardBloc>()),
                 BlocProvider.value(value: di.getIt<CartBloc>()),
   ], child: const MyApp()));
+
+});
+ 
 }
 
 class MyApp extends StatefulWidget {

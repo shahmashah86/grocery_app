@@ -110,14 +110,14 @@ class UserOrders extends StatelessWidget {
                                   Spacer(),
                                   Text(
                                     orderlistofUser[index].acknowledged == true
-                                        ? "Acknowledged"
-                                        : 'Acknowledge',
+                                        ? "Approved"
+                                        : 'Approve',
                                     style: TextStyle(
                                         color: orderlistofUser[index]
                                                     .acknowledged ==
                                                 true
                                             ? Colors.green.shade700
-                                            : Colors.indigo),
+                                            : Colors.red),
                                   )
                                 ],
                               )

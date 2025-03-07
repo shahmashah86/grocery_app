@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
 import 'package:grocery_app/presentation/screens/admin/homscreen/admin_homescreen.dart';
 import 'package:grocery_app/presentation/screens/authentication/registration.dart';
@@ -39,12 +41,16 @@ class _LoginState extends State<Login> {
     resetFocusNode = FocusNode();
     usernameFocusNode = FocusNode();
     passwordFocusNode = FocusNode();
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
+   
+   
     super.initState();
   }
 
   @override
   void dispose() {
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     log('changed. didpose.');
     usernameController.dispose();
     passwordController.dispose();
@@ -59,7 +65,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final logFormkey = GlobalKey<FormState>();
 
-    return Scaffold(
+    return Scaffold(backgroundColor: Colors.amber.shade600,
       body: Stack(children: [
         SizedBox(
           height: double.infinity,
@@ -220,29 +226,7 @@ class _LoginState extends State<Login> {
                               message =
                                   state.errormsg;
                             }
-                //                   showDialog(
-                // context: context,
-                // builder: (BuildContext context) {
-                //   return AlertDialog(
-                //     content: Text(message),
-                    
-                //     actions: [
-                //       TextButton(
-                //           onPressed: () {
-                //             usernameController.clear();
-                //             passwordController.clear();                           
-                //              Navigator.pop(context);
-                //           },
-                //           style: ButtonStyle(
-                //             backgroundColor:
-                //                 WidgetStatePropertyAll(Colors.black12),
-                //           ),
-                //           child: Text("Retry"))
-                //     ],
-                //   );
                 
-                // }
-                // );
                     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
         content: Text(state.errormsg),
@@ -268,7 +252,7 @@ class _LoginState extends State<Login> {
                             return SizedBox(
                               height: 50,
                               width: 50,
-                              child: CircularProgressIndicator(),
+                              child: SpinKitFadingCircle(color: Colors.white,),
                             );
                           }
 
@@ -292,7 +276,7 @@ class _LoginState extends State<Login> {
                                 },
                                 child: Center(child: Text("submit"))),
                             SizedBox(
-                              height: 22,
+                              height:MediaQuery.sizeOf(context).height*.01,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -311,7 +295,7 @@ class _LoginState extends State<Login> {
                               ],
                             ),
                             SizedBox(
-                              height: 12,
+                              height: MediaQuery.sizeOf(context).height*.01,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/domain/common/enums/enums.dart';
@@ -44,12 +45,28 @@ class _AllOrdersState extends State<AllOrders> {
 
 
             if (state.orderScreenType == OrderScreenType.allOrders) {
-              List<OrdersModel>? orderList = state.allordersList;
+
+              if(state.isLoading){
+                        return Center(child: CircularProgressIndicator());
+
+              }
+              if(state.allordersList.isNotEmpty){
+                
+              List<OrdersModel>? orderList = state.allordersList
+    .where((element) => element.userId != null)
+    .toList();
                
+
               return Content(
                 order: orderList,
                 fromallordersScreen: true,
               );
+
+              }
+              if(state.allordersList.isEmpty){
+                return Center(child: Text("No order made by any user"),);
+              }
+            
             }
             if (state.orderScreenType == OrderScreenType.userWiseOrders) {
               if(state.isLoading==true){

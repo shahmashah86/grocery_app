@@ -4,12 +4,25 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grocery_app/presentation/screens/onboarding/onboarding2.dart';
 
 
-class Onboarding1 extends StatelessWidget {
+class Onboarding1 extends StatefulWidget {
   const Onboarding1({super.key});
 
+  @override
+  State<Onboarding1> createState() => _Onboarding1State();
+}
+
+class _Onboarding1State extends State<Onboarding1> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +56,7 @@ class Onboarding1 extends StatelessWidget {
                   color: const Color.fromARGB(255, 82, 81, 81)),
             )),
         Positioned(
-            bottom: 30,
+            bottom: 50,
             right: MediaQuery.of(context).size.width * 0.1,
             child: InkWell(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context){
               return Onboarding2();

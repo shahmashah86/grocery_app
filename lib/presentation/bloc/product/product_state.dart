@@ -18,7 +18,7 @@ final class ProductLoaded extends ProductState {
   final int? productId;
   final List<ProductRegModel>? productList;
   final List<ProductsModel>? stockList;
-  final List<ProductsModel>? searchList;
+  final List<ProductRegModel>? searchList;
   final List<ProductsModel> product;
 
   final bool frombottomnav;
@@ -63,7 +63,7 @@ final class ProductLoaded extends ProductState {
     int? productId,
     List<ProductRegModel>? productList,
     List<ProductsModel>? stockList,
-    List<ProductsModel>? searchList,
+    List<ProductRegModel>? searchList,
     List<ProductsModel>? product,
     bool? frombottomnav,
     String? errormsg,

@@ -51,6 +51,20 @@ class AdminProductDescription extends StatelessWidget {
                         height: MediaQuery.sizeOf(context).height * 0.3,
                       ),
                     ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                              
+                              Text(state.product.first.productName!,style: TextStyle(color: Colors.black,fontSize: 20),),
+                              Spacer(),
+                               Row(
+                                 children: [
+                                   Text('${state.product.first.price.toString()}/${state.product.first.unit.toString()}'),
+                                 ],
+                               )
+                            ]),
+                      ),
                     Container(
                       height: MediaQuery.sizeOf(context).height * 0.52,
                       width: double.infinity,
@@ -60,28 +74,16 @@ class AdminProductDescription extends StatelessWidget {
                           color: Colors.amber.shade50),
                       padding: EdgeInsets.all(8),
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 35,
+                        spacing: 15,
                         children: [
-                          Row(children: [
-                            Text("Product Name:"),
-                            Spacer(),
-                            Text(state.product.first.productName!)
-                          ]),
+                        
+                         
+                         
                          
                           Row(children: [
-                            Text("Price:"),
-                            Spacer(),
-                            Text(state.product.first.price.toString())
-                          ]),
-                          Row(children: [
-                            Text("Unit:"),
-                            Spacer(),
-                            Text(state.product.first.unit.toString())
-                          ]),
-                          Row(children: [
-                            Text("Stock Quantity:"),
-                            Spacer(),
-                            Text(state.product.first.stockQuantity.toString())
+                            Text("Stock Quantity:  "),
+                       
+                            Text(state.product.first.stockQuantity.toString(),style: TextStyle(fontSize: 16),)
                           ]),
                                     Text("description:"),
                             

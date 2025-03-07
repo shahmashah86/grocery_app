@@ -34,7 +34,7 @@ class Onboarding2 extends StatelessWidget {
           ),
         ),
         Positioned(
-            bottom: 30,
+            bottom: 50,
             right: MediaQuery.of(context).size.width * 0.1,
             child: InkWell(
                 onTap: () => Navigator.push(context,

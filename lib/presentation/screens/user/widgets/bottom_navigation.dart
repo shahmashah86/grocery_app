@@ -1,3 +1,5 @@
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +21,7 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   // int  = 0;
-  ValueNotifier<int> _currentindex = ValueNotifier(0);
+  final ValueNotifier<int> _currentindex = ValueNotifier(0);
   DateTime? lastPressed;
   final List<Widget> _screens = [
     HomeScreen(),
@@ -80,65 +82,95 @@ class _BottomNavigationState extends State<BottomNavigation> {
         valueListenable: _currentindex,
         builder: (context, value, child) => Scaffold(
           body: _screens[_currentindex.value],
-          bottomNavigationBar: Stack(clipBehavior: Clip.none, children: [
-            ClipPath(
-              clipper: CustomClipperssBottomNav(),
-              child: Card(
-                clipBehavior: Clip.hardEdge,
-                child: SizedBox(height: MediaQuery.sizeOf(context).height*.08,
-                  child: BottomNavigationBar(
-                      iconSize: 26,
-                      selectedIconTheme:
-                          IconThemeData(color: Colors.grey.shade700),
-                      selectedFontSize: 12,
-                                
-                      unselectedIconTheme:
-                          IconThemeData(color: Colors.grey.shade700),
-                      selectedLabelStyle: TextStyle(color: Colors.black),
-                               
-                      onTap: (value) => _currentindex.value = value,
-                      currentIndex: _currentindex.value,
-                      type: BottomNavigationBarType.fixed,
-                      backgroundColor:
-                               
-                          Colors.amber.shade200,
-                      items: [
-                        BottomNavigationBarItem(
+           bottomNavigationBar:CurvedNavigationBar(animationDuration: Duration(milliseconds: 500),
+            backgroundColor: Colors.white,
+            buttonBackgroundColor: Colors.amber,color: Colors.amber.shade200,
+            items:[ 
+           CurvedNavigationBarItem(
                             label: 'Home',
-                            icon: Icon(
+                            child: Icon(
                               Icons.home_outlined,
                             )),
-                        BottomNavigationBarItem(
+                    CurvedNavigationBarItem(
                             label: 'Search',
-                            icon: Icon(
+                            child:  Icon(
                               Icons.search_outlined,
                             )),
-                        BottomNavigationBarItem(
+                        CurvedNavigationBarItem(
                             label: 'Cart',
-                            icon: Icon(
+                            child: Icon(
                               Icons.shopping_cart_outlined,
                             )),
-                        BottomNavigationBarItem(
+                        CurvedNavigationBarItem(
                             label: 'Person',
-                            icon: Icon(
+                            child: Icon(
                               Icons.person_outline,
-                            )),
-                      ]),
-                ),
-              ),
-            ),
-            Positioned(
-                left: MediaQuery.sizeOf(context).width * .4,
-                bottom: MediaQuery.sizeOf(context).height * .09,
-                child: SizedBox(height:  MediaQuery.sizeOf(context).height * .065,
-                  child: FloatingActionButton(
-                      backgroundColor: Colors.amber.shade400,
-                      foregroundColor: Colors.grey.shade700,
-                      shape: CircleBorder(),
-                      onPressed: () {},
-                      child: Icon(_icon[_currentindex.value])),
-                )),
-          ]),
+                            )),],
+                                          onTap: (value) => _currentindex.value = value,
+                      index: _currentindex.value,
+                     
+                    
+           ) ,
+
+          // bottomNavigationBar: Stack(clipBehavior: Clip.none, children: [
+          //   ClipPath(
+          //     clipper: CustomClipperssBottomNav(),
+          //     child: Card(
+          //       clipBehavior: Clip.hardEdge,
+          //       child: SizedBox(height: MediaQuery.sizeOf(context).height*.08,
+          //         child: BottomNavigationBar(
+          //             iconSize: 26,
+          //             selectedIconTheme:
+          //                 IconThemeData(color: Colors.grey.shade700),
+          //             selectedFontSize: 12,
+                                
+          //             unselectedIconTheme:
+          //                 IconThemeData(color: Colors.grey.shade700),
+          //             selectedLabelStyle: TextStyle(color: Colors.black),
+                               
+          //             onTap: (value) => _currentindex.value = value,
+          //             currentIndex: _currentindex.value,
+          //             type: BottomNavigationBarType.fixed,
+          //             backgroundColor:
+                               
+          //                 Colors.amber.shade200,
+          //             items: [
+          //               BottomNavigationBarItem(
+          //                   label: 'Home',
+          //                   icon: Icon(
+          //                     Icons.home_outlined,
+          //                   )),
+          //               BottomNavigationBarItem(
+          //                   label: 'Search',
+          //                   icon: Icon(
+          //                     Icons.search_outlined,
+          //                   )),
+          //               BottomNavigationBarItem(
+          //                   label: 'Cart',
+          //                   icon: Icon(
+          //                     Icons.shopping_cart_outlined,
+          //                   )),
+          //               BottomNavigationBarItem(
+          //                   label: 'Person',
+          //                   icon: Icon(
+          //                     Icons.person_outline,
+          //                   )),
+          //             ]),
+          //       ),
+          //     ),
+          //   ),
+          //   Positioned(
+          //       left: MediaQuery.sizeOf(context).width * .4,
+          //       bottom: MediaQuery.sizeOf(context).height * .09,
+          //       child: SizedBox(height:  MediaQuery.sizeOf(context).height * .065,
+          //         child: FloatingActionButton(
+          //             backgroundColor: Colors.amber.shade400,
+          //             foregroundColor: Colors.grey.shade700,
+          //             shape: CircleBorder(),
+          //             onPressed: () {},
+          //             child: Icon(_icon[_currentindex.value])),
+          //       )),
+          // ]),
         ),
       ),
     );

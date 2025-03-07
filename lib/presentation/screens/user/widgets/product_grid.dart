@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
+import 'package:grocery_app/domain/products/model/product_reg_model.dart';
 import 'package:grocery_app/domain/products/model/products_model.dart';
 import 'package:grocery_app/main.dart';
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
@@ -11,7 +12,7 @@ import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/product_description/product_description.dart';
 
 class ProductGrid extends StatelessWidget {
-  final List<ProductsModel>? productdetail;
+  final List<ProductRegModel>? productdetail;
   final bool? bySearch;
   const ProductGrid({super.key, this.productdetail, this.bySearch});
 
@@ -38,7 +39,7 @@ class ProductGrid extends StatelessWidget {
 
                 context
                     .read<ProductBloc>()
-                    .add(Productget(productId: productdetail![index].id!));
+                    .add(Productget(productId: productdetail![index].products.id!));
               },
               child: Container(
                 clipBehavior: Clip.hardEdge,
@@ -51,12 +52,12 @@ class ProductGrid extends StatelessWidget {
                     bySearch == true
                         ?
                         //for showing available and unailable image
-                        productdetail![index].isAvailable == true
+                        productdetail![index].products.isAvailable == true
                             ? CachedNetworkImage(
                                 width: MediaQuery.of(context).size.width * 0.56,
                                 height:
                                     MediaQuery.of(context).size.height * 0.27,
-                                imageUrl: productdetail?[index].image ?? '',
+                                imageUrl: productdetail?[index].products.image ?? '',
                                 fit: BoxFit.cover,
                                 errorWidget: (context, url, error) => Icon(
                                   Icons.error,
@@ -74,7 +75,7 @@ class ProductGrid extends StatelessWidget {
                                         0.56,
                                     height: MediaQuery.of(context).size.height *
                                         0.27,
-                                    imageUrl: productdetail?[index].image ?? '',
+                                    imageUrl: productdetail?[index].products.image ?? '',
                                     errorWidget: (context, url, error) => Icon(
                                       Icons.block,
                                       size: 40,
@@ -111,7 +112,7 @@ class ProductGrid extends StatelessWidget {
                         : CachedNetworkImage(
                             width: MediaQuery.of(context).size.width * 0.56,
                             height: MediaQuery.of(context).size.height * 0.27,
-                            imageUrl: productdetail?[index].image ?? '',
+                            imageUrl: productdetail![index].products.image ??'',
                             errorWidget: (context, url, error) => Icon(
                               Icons.block,
                               size: 40,
@@ -131,30 +132,30 @@ class ProductGrid extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  productdetail?[index].productName ?? '',
+                                  productdetail?[index].products.productName ?? '',
                                   style: TextStyle(
                                       fontSize: 17, color: Colors.black),
                                 ),
                                 Text(
-                                  productdetail?[index].productDescription ??
+                                  productdetail?[index].products.productDescription ??
                                       '',
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                    "Price: ${productdetail?[index].price ?? ''}"),
+                                    "Price: ${productdetail?[index].products.price ?? ''}"),
                               ],
                             ),
                           ),
                         ),
                         IconButton(
                           onPressed: () {
-                            if (productdetail?[index].isAvailable == true) {
+                            if (productdetail?[index].products.isAvailable == true) {
                               CartModel cartItems = CartModel(
-                                id: productdetail?[index].id ?? 0,
+                                id: productdetail?[index].products.id ?? 0,
                                 prodName:
-                                    productdetail?[index].productName ?? '',
-                                price: productdetail?[index].price ?? 0,
-                                url: productdetail?[index].image ?? '',
+                                    productdetail?[index].products.productName ?? '',
+                                price: productdetail?[index].products.price ?? 0,
+                                url: productdetail?[index].products.image ?? '',
                               );
 
                               bool itemExists = cartBox.values
