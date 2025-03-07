@@ -155,7 +155,7 @@ class _GetallcategoryState extends State<Getallcategory> {
           }
 
           if (state is CategoryLoaded && (state.categoryList?.isNotEmpty??false)) {
-            log('categoryLoaded');
+          
             List<CategoryModel>? categories = state.categoryList ?? [];
             return GridView.builder(
                 padding: EdgeInsets.all(10),
