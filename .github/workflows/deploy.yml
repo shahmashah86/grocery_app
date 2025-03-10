@@ -26,7 +26,7 @@ jobs:
 
 
       - name: Build Flutter Web
-        run: flutter build web --release --base-href="/sample_git_hub_page/" # your repository name
+        run: flutter build web --release --base-href="/grocery_app/" # your repository name
 
 
       - name: Deploy to GitHub Pages
