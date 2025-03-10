@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/domain/products/model/product_reg_model.dart';
-import 'package:grocery_app/domain/products/model/products_model.dart';
+
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/screens/user/cart/cart.dart';
@@ -45,7 +45,7 @@ class _SearchscreenState extends State<Searchscreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 170,
+            expandedHeight: MediaQuery.sizeOf(context).height*.16,
             floating: false,
             backgroundColor: Colors.amber.shade200,
             actions: [

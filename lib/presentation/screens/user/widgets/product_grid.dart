@@ -27,7 +27,7 @@ class ProductGrid extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          childAspectRatio: 0.6,
+          childAspectRatio: 0.61,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
@@ -37,9 +37,8 @@ class ProductGrid extends StatelessWidget {
                   return ProductDescription();
                 }));
 
-                context
-                    .read<ProductBloc>()
-                    .add(Productget(productId: productdetail![index].products.id!));
+                context.read<ProductBloc>().add(
+                    Productget(productId: productdetail![index].products.id!));
               },
               child: Container(
                 clipBehavior: Clip.hardEdge,
@@ -55,12 +54,12 @@ class ProductGrid extends StatelessWidget {
                         productdetail![index].products.isAvailable == true
                             ? CachedNetworkImage(
                                 width: MediaQuery.of(context).size.width * 0.56,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.27,
-                                imageUrl: productdetail?[index].products.image ?? '',
+                                height: 200,
+                                imageUrl:
+                                    productdetail?[index].products.image ?? '',
                                 fit: BoxFit.cover,
                                 errorWidget: (context, url, error) => Icon(
-                                  Icons.error,
+                                  Icons.image_not_supported_outlined,
                                   size: 60,
                                   color: Colors.black45,
                                 ),
@@ -73,11 +72,12 @@ class ProductGrid extends StatelessWidget {
                                   CachedNetworkImage(
                                     width: MediaQuery.of(context).size.width *
                                         0.56,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.27,
-                                    imageUrl: productdetail?[index].products.image ?? '',
+                                    height: 200,
+                                    imageUrl:
+                                        productdetail?[index].products.image ??
+                                            '',
                                     errorWidget: (context, url, error) => Icon(
-                                      Icons.block,
+                                      Icons.image_not_supported_outlined,
                                       size: 40,
                                     ),
                                     fit: BoxFit.cover,
@@ -88,22 +88,19 @@ class ProductGrid extends StatelessWidget {
                                   Container(
                                     width: MediaQuery.of(context).size.width *
                                         0.56,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.27,
+                                    height: 200,
                                     color: Colors.white.withOpacity(
-                                        0.6), // Light overlay effect on the image
+                                        0.8), // Light overlay effect on the image
                                   ),
                                   Positioned(
-                                    bottom: MediaQuery.of(context).size.height *
-                                        0.08,
-                                    left: MediaQuery.of(context).size.width *
-                                        0.10,
+                                    bottom: 30,
+                                    left: 22,
                                     child: Text(
-                                      'Unavailable',
+                                      'unavailable',
                                       style: TextStyle(
                                         color: Colors.black26,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 23,
+                                        fontSize: 24,
                                       ),
                                     ),
                                   ),
@@ -111,10 +108,11 @@ class ProductGrid extends StatelessWidget {
                               )
                         : CachedNetworkImage(
                             width: MediaQuery.of(context).size.width * 0.56,
-                            height: MediaQuery.of(context).size.height * 0.27,
-                            imageUrl: productdetail![index].products.image ??'',
+                            height: 200,
+                            imageUrl:
+                                productdetail![index].products.image ?? '',
                             errorWidget: (context, url, error) => Icon(
-                              Icons.block,
+                              Icons.image_not_supported_outlined,
                               size: 40,
                             ),
                             fit: BoxFit.cover,
@@ -127,34 +125,53 @@ class ProductGrid extends StatelessWidget {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(
-                                left: 10, bottom: 4, top: 4),
+                                left: 10, bottom: 2, top: 4),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  productdetail?[index].products.productName ?? '',
+                                  productdetail?[index].products.productName ??
+                                      '',
                                   style: TextStyle(
                                       fontSize: 17, color: Colors.black),
                                 ),
+                                // Text(
+                                //   productdetail?[index].products.productDescription ??
+                                //       '',
+                                //   overflow: TextOverflow.ellipsis,
+                                // ),
                                 Text(
-                                  productdetail?[index].products.productDescription ??
-                                      '',
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                    "Price: ${productdetail?[index].products.price ?? ''}"),
+                                    "₹: ${productdetail?[index].products.price ?? ''}"),
+                                productdetail?[index].products.stockQuantity ==
+                                        0
+                                    ? Row(
+                                        children: [
+                                          Icon(
+                                            Icons.warning,size: 14,
+                                            color: Colors.red,
+                                          ),
+                                          Text('stockout',style: TextStyle(color:Colors.red),),
+                                        ],
+                                      )
+                                    : SizedBox.shrink()
                               ],
                             ),
                           ),
                         ),
                         IconButton(
                           onPressed: () {
-                            if (productdetail?[index].products.isAvailable == true) {
+                            if (productdetail?[index].products.isAvailable ==
+                                    true &&
+                                productdetail?[index].products.stockQuantity !=
+                                    0) {
                               CartModel cartItems = CartModel(
                                 id: productdetail?[index].products.id ?? 0,
-                                prodName:
-                                    productdetail?[index].products.productName ?? '',
-                                price: productdetail?[index].products.price ?? 0,
+                                prodName: productdetail?[index]
+                                        .products
+                                        .productName ??
+                                    '',
+                                price:
+                                    productdetail?[index].products.price ?? 0,
                                 url: productdetail?[index].products.image ?? '',
                               );
 

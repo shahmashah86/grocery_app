@@ -11,9 +11,9 @@ class Apiservice {
   static Dio dio = Dio()
     ..options = BaseOptions(
         baseUrl: ApiEndpoints.baseurl,
-        connectTimeout: const Duration(seconds: 60),
-        receiveTimeout: const Duration(seconds: 60),
-        sendTimeout: Duration(seconds: 60));
+        connectTimeout: const Duration(seconds: 360),
+        receiveTimeout: const Duration(seconds: 360),
+        sendTimeout: Duration(seconds: 360));
 
   //Post Request
   static Future<Response> post(
@@ -31,7 +31,16 @@ class Apiservice {
 
       return response;
     } on DioException catch (e) {
-      log(e.response?.statusCode.toString() ?? "Other code");
+
+       if (e.type == DioExceptionType.connectionError) {
+        return Future.error(
+            "Connnection error:Please check your internet connection");
+      }
+      if (e.type == DioExceptionType.connectionTimeout) {
+        return Future.error(
+            "Please check your internet connection and try again");
+      }
+      log(e.response?.statusCode.toString() ?? "Other code",name: 'post req error');
       log(e.response?.statusMessage.toString() ?? "Other code");
       log(e.response?.data.toString() ?? "Other code");
      
@@ -70,6 +79,10 @@ class Apiservice {
       return response;
     } on DioException catch (e) {
       log(e.toString(), name: 'eror');
+       if (e.type == DioExceptionType.connectionError) {
+        return Future.error(
+            "Connnection error:Please check your internet connection");
+      }
       if (e.type == DioExceptionType.connectionError) {
         return Future.error(
             "Connnection error:Please check your internet connection");

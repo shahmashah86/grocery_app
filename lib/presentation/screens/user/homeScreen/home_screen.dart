@@ -39,10 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
     searchController = TextEditingController();
       log('hh');
   
-    WidgetsBinding.instance.addPostFrameCallback((_){
-     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    });
-
+    // WidgetsBinding.instance.addPostFrameCallback((_){
+    //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    // });
+//  ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
     super.initState();
   }
     
@@ -276,50 +276,53 @@ class _HomeScreenState extends State<HomeScreen> {
                             
                               ),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0,top: 8,right:8 ),
-                                  child: SizedBox(width: double.infinity,height:MediaQuery.sizeOf(context).height*.19,
-                                    child: CachedNetworkImage(
-                                      imageUrl: state.dashboardData?.trendingProducts[index].image ?? "",
-                                      placeholder: (context, url) => SpinKitPulse(
-                                        color: Colors.white,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0,top: 8,right:8 ),
+                                    child: SizedBox(width: double.infinity,height:MediaQuery.sizeOf(context).height*.19,
+                                      child: CachedNetworkImage(
+                                        imageUrl: state.dashboardData?.trendingProducts[index].image ?? "",
+                                        placeholder: (context, url) => SpinKitPulse(
+                                          color: Colors.white,
+                                        ),
+                                        errorWidget: (context, url, error) => Icon(Icons.error),
+                                        fit: BoxFit.cover,
                                       ),
-                                      errorWidget: (context, url, error) => Icon(Icons.error),
-                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        
+                                      children: [
+                                        Expanded(
+                                          child: Text(maxLines: 1,overflow: TextOverflow.ellipsis,
+                                            state.dashboardData!.trendingProducts[index].productName ?? "",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.indigo,
+                                            ),
+                                          ),
+                                        ),
                                       
-                                    children: [
-                                      Expanded(
-                                        child: Text(maxLines: 1,overflow: TextOverflow.ellipsis,
-                                          state.dashboardData!.trendingProducts[index].productName ?? "",
+                                        Text(
+                                          "₹${state.dashboardData?.trendingProducts[index].price.toString()}",
                                           style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            
                                             color: Colors.indigo,
                                           ),
                                         ),
-                                      ),
-                                    
-                                      Text(
-                                        "₹${state.dashboardData?.trendingProducts[index].price.toString()}",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          
-                                          color: Colors.indigo,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );

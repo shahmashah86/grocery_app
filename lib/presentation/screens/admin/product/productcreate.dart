@@ -284,20 +284,26 @@ class _ProductcreateState extends State<Productcreate> {
                     if (state is CategoryLoaded) {
                       List<CategoryModel>? category = state.categoryList ?? [];
                       if (widget.productToEdit != null) {
-                        final selectedIds = widget.productToEdit!.categories;
-                        for(int i in selectedIds){
-                        controller.selectWhere(
-                          (item) {
-                            if(item.value.id == i
-                            ){
-                             return true;
-                            }
-                            else{
-                              return false;
-                            }
-                          },
-                        );
-                        }
+                      
+                      final List selectedIds = widget.productToEdit!.categories;
+                      log(selectedIds.toString());
+
+controller.selectWhere((item) => selectedIds.contains(item.value.id));
+
+                        // final selectedIds = widget.productToEdit!.categories;
+                        // for(int i in selectedIds){
+                        // controller.selectWhere(
+                        //   (item) {
+                        //     if(item.value.id == 1
+                        //     ){
+                        //      return true;
+                        //     }
+                        //     else{
+                        //       return false;
+                        //     }
+                        //   },
+                        // );
+                        // }
                       }
                       return MultiDropdown<CategoryModel>(
                         items: category
@@ -548,7 +554,8 @@ class _ProductcreateState extends State<Productcreate> {
                                       ProductUpdation(
                                           productsToUpdate: products,
                                           idToUpdate: widget.productIdToupdate!,
-                                          imageFile: _image.value??    (widget.productimage != null ? File(widget.productimage!) : null)));
+                                          imageFile: _image.value
+                                          ));
 
                                   Navigator.pop(context);
                                 }

@@ -118,6 +118,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
         emit(currentState.copyWith(
           message: '',
           isLoading: true,
+          errormessage: '',
           iserror: false,
           allordersList: currentState.allordersList,
           usersorderList: currentState.usersorderList,

@@ -1,0 +1,37 @@
+name: Deploy Flutter Web to GitHub Pages
+
+
+on:
+  push:
+    branches:
+      - feature_get_a_product
+
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+
+      - name: Install dependencies
+        run: flutter pub get
+
+
+      - name: Build Flutter Web
+        run: flutter build web --release --base-href="/sample_git_hub_page/" # your repository name
+
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build/web
+

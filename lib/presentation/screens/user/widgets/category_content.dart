@@ -121,7 +121,7 @@ class CategoryContent extends StatelessWidget {
                         child: Column(children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.55,
-                            height: MediaQuery.of(context).size.height * 0.25,
+                            height: 200,
                             child: CachedNetworkImage(
                               fit: BoxFit.cover,
                               placeholder: (context, url) => SpinKitPulse(
@@ -141,7 +141,7 @@ class CategoryContent extends StatelessWidget {
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 10, bottom: 4, top: 4),
+                                      left: 10, bottom: 5, top: 4),
                                   child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -156,14 +156,10 @@ class CategoryContent extends StatelessWidget {
                                               fontSize: 17,
                                               color: Colors.black),
                                         ),
-                                        Text(
-                                            categorywiseProducts?[index]
-                                                    .productDescription ??
-                                                "",
-                                            overflow: TextOverflow.ellipsis),
-                                        Text(categorywiseProducts?[index]
+                                        
+                                        Text('₹${categorywiseProducts?[index]
                                                 .price
-                                                .toString() ??
+                                                .toString()}' ??
                                             "")
                                       ]),
                                 ),
