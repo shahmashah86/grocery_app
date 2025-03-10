@@ -4,7 +4,7 @@ name: Deploy Flutter Web to GitHub Pages
 on:
   push:
     branches:
-      - feature_get_a_product
+      - staging
 
 
 jobs:
