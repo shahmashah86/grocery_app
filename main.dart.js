@@ -105613,7 +105613,7 @@ A.vm.prototype={
 H(a){var s,r,q,p=null,o=A.bh(p,p,B.o,A.aC(255,244,227,201),p,p,p,1/0,p,p,p,p,1/0),n=t.w,m=A.ab(a,p,n).w
 m=A.tT(A.bh(p,A.ko("assets/images/face.jpeg",p,B.ap,p,p),B.o,B.iw,p,p,p,m.a.b*0.52,p,p,p,p,1/0),B.bk,new A.SJ(p))
 s=A.fY(A.ab(a,p,n).w.a.b*0.36,A.I("Expolre Healthy Options",p,p,p,A.am(p,p,B.FR,p,p,p,p,p,p,p,p,30,p,p,B.K,p,p,!0,p,p,p,p,p,p,p,p),B.eG,p),p,p,10,p,p,p)
-r=A.fY(A.ab(a,p,n).w.a.b*0.28,A.bh(p,A.I("Healthy living starts here.Simplify your\ngrocery shopping here!!",p,p,p,A.am(p,p,B.GW,p,p,p,p,p,p,p,p,20,p,p,B.K,p,p,!0,p,p,p,p,p,p,p,p),p,p),B.o,p,p,p,p,p,p,new A.af(10,0,0,0),p,p,p),p,p,p,p,p,p)
+r=A.fY(A.ab(a,p,n).w.a.b*0.28,A.bh(p,A.I("Healthy living starts here.Simplify your\ngrocery shopping here!!!",p,p,p,A.am(p,p,B.GW,p,p,p,p,p,p,p,p,20,p,p,B.K,p,p,!0,p,p,p,p,p,p,p,p),p,p),B.o,p,p,p,p,p,p,new A.af(10,0,0,0),p,p,p),p,p,p,p,p,p)
 n=A.ab(a,p,n).w
 q=A.bw(10)
 return A.dJ(p,p,A.dV(B.an,A.a([o,m,s,r,A.fY(50,A.cv(!1,p,!0,A.bh(p,A.ay(A.I("Skip Now",p,p,p,A.am(p,p,p,p,p,p,p,p,p,p,p,p,p,p,B.K,p,p,!0,p,p,p,p,p,p,p,p),p,p),p,p),B.o,p,p,new A.bs(B.bB,p,p,q,p,p,p,B.F),p,50,p,p,p,p,100),p,!0,p,p,p,p,p,p,p,p,p,p,new A.ari(a),p,p,p,p,p,p,p),p,p,p,n.a.a*0.1,p,p)],t.p),B.t,B.aj),p,p,p)}}
