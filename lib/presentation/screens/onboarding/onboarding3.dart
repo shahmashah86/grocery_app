@@ -41,7 +41,7 @@ class Onboarding3 extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.only(left: 10),
               child: Text(
-                "Healthy living starts here.Simplify your\ngrocery shopping here!!",
+                "Healthy living starts here.Simplify your\ngrocery shopping here!!!",
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
