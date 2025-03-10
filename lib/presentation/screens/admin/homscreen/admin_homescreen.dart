@@ -376,31 +376,12 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                             ],
                           ),
                         ),
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Row(
                             children: [SizedBox(width: 10,),
-                              // InkWell(
-                              //   child: Row(
-                              //     mainAxisAlignment: MainAxisAlignment.end,
-                              //     children: [
-                              //       Text(
-                              //         "Trending now",
-                              //         style: TextStyle(fontSize: 19),
-                              //       ),
-                              //       Icon(Icons.chevron_right)
-                              //     ],
-                              //   ),
-                              //   onTap: () => Navigator.push(context,
-                              //       MaterialPageRoute(builder: (context) {
-                              //     final List<ProductsModel> trendingProducts =
-                              //         state.dashboardData.trendingProducts;
-                              //     log(trendingProducts.toString());
                               
-                              //     return TrendingProducts(products: trendingProducts);
-                              //   })),
-                              // ),
                                 InkWell(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    // mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
                                         "User Orders",
@@ -432,28 +413,39 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                          
                              return Padding(
                                padding: const EdgeInsets.only(bottom: 8,top: 8),
-                               child: Container(padding: EdgeInsets.all(15),
-                                 height: MediaQuery.sizeOf(context).height * 0.1,
-                                 width: double.infinity,
-                                 decoration: BoxDecoration(color: Colors.amber.shade50),
-                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                 spacing: 4,
-                                 mainAxisAlignment: MainAxisAlignment.start,
-                                   children: [
-                                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                       children: [ 
-                                        Text("User id: ${orders[index].userId.toString()} "),
-                                         Text(formattedDate),
-                                       ],
-                                     ), 
+                               child: InkWell(onTap: () {
+                                  context.read<OrdersBloc>().add(OrdersListGet());
+                                    Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                 
+                              
+                                
+                                    return AllOrders();
+                                  }));
+                               },
+                                 child: Container(padding: EdgeInsets.all(15),
+                                   height: 80,
+                                   width: double.infinity,
+                                   decoration: BoxDecoration(color: Colors.amber.shade50),
+                                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                   spacing: 4,
+                                   mainAxisAlignment: MainAxisAlignment.start,
+                                     children: [
                                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                       children: [ 
-                                        Text("Total: ₹${orders[index].totalAmount.toString()} "),
-                                         Text(orders[index].acknowledged==true?'Approved ✔️':'Approve',style: 
-                                         TextStyle(color: orders[index].acknowledged==true?Colors.green:Colors.red),),
-                                       ],
-                                     )
-                                   ],
+                                         children: [ 
+                                          Text("User id: ${orders[index].userId.toString()} "),
+                                           Text(formattedDate),
+                                         ],
+                                       ), 
+                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                         children: [ 
+                                          Text("Total: ₹${orders[index].totalAmount.toString()} "),
+                                           Text(orders[index].acknowledged==true?'Approved ✔️':'Approve',style: 
+                                           TextStyle(color: orders[index].acknowledged==true?Colors.green:Colors.red),),
+                                         ],
+                                       )
+                                     ],
+                                   ),
                                  ),
                                ),
                              );

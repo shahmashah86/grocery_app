@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/presentation/screens/admin/homscreen/admin_homescreen.dart';
 import 'package:grocery_app/presentation/screens/authentication/login.dart';
-import 'package:grocery_app/presentation/screens/onboarding/onboarding1.dart';
+import 'package:grocery_app/presentation/screens/onboarding/onbarding_pageview.dart';
+
 
 import 'package:grocery_app/presentation/screens/user/widgets/bottom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ? BottomNavigation()
                 : Login();
       }
-      return Onboarding1();
+      return OnbardingPageview();
 
     }), (route) => false);
     return tokenFromAuth;

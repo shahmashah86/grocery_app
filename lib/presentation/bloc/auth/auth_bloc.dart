@@ -26,7 +26,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
   //user signin
   _signin(AuthSignin event, Emitter<AuthState> emit) async {
+    
+   
     try {
+
       emit(AuthLoading());
       var response = await authRepository.signinWithUserandPass(
           username: event.username, password: event.password);
@@ -45,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       emit(AuthError(errormsg: e.toString()));
-      log(e.toString());
+      log(e.toString(),name: 'autherror');
     }
   }
 

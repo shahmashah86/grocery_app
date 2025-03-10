@@ -163,7 +163,7 @@ class _CartState extends State<Cart> {
                                           fontWeight: FontWeight.w500),
                                     ),
                                     Text(
-                                      state.cartItems![index].price.toString(),
+                                      '₹${state.cartItems![index].price.toString()}',
                                       style: TextStyle(fontSize: 17),
                                     ),
                                     Row(
@@ -355,7 +355,7 @@ class _CartState extends State<Cart> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'something is wrong please try again!',
+                                      state.errormessage,
                                     ),
                                     duration: Duration(seconds: 2),
                                   ),
@@ -365,7 +365,7 @@ class _CartState extends State<Cart> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'something is wrong please try again!',
+                                      state.errormessage,
                                     ),
                                     duration: Duration(seconds: 2),
                                   ),

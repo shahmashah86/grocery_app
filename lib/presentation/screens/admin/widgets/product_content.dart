@@ -121,17 +121,18 @@ class ProductContent extends StatelessWidget {
                                               '',
                                           style: TextStyle(
                                               overflow: TextOverflow.ellipsis,
-                                              fontSize: 20,
+                                              fontSize: 18,
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                          "Price:${products[index].products.price}",
+                                          "₹${products[index].products.price}/${products[index].products.unit}",
                                           style: TextStyle(fontSize: 16),
                                         ),
-                                        Text(
-                                          "Unit: ${products[index].products.unit}",
-                                          style: TextStyle(fontSize: 16),
-                                        )
+                                        // Text(
+                                        //   "Unit: ${products[index].products.unit}",
+                                        //   style: TextStyle(fontSize: 16),
+                                        // ),
+                                           products[index].products.isAvailable==false?Text("Unavailable"):SizedBox.shrink()
                                       ],
                                     ),
                                     // Spacer(),

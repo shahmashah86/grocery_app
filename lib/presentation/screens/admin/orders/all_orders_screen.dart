@@ -7,7 +7,7 @@ import 'package:grocery_app/domain/common/enums/enums.dart';
 
 import 'package:grocery_app/domain/orders/model/order_model.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
-import 'package:grocery_app/presentation/screens/admin/widgets/content.dart';
+import 'package:grocery_app/presentation/screens/admin/widgets/order_content.dart';
 
 class AllOrders extends StatefulWidget {
   const AllOrders({super.key});

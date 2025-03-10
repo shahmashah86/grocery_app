@@ -156,8 +156,8 @@ class AuthRepositoryImpl implements AuthRepository {
       throw "Something wrong with the request or code";
     } catch (e) {
       log(e.runtimeType.toString());
-      log(e.toString());
-      throw "Something wrong with the request or code";
+      log(e.toString(),name: 'error from repo impl');
+      rethrow;
     }
   }
 
