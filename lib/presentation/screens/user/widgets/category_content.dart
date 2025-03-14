@@ -203,7 +203,7 @@ class CategoryContent extends StatelessWidget {
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
-                                          duration: Duration(seconds: 1),
+                                          duration: Duration(seconds: 4),
                                           behavior: SnackBarBehavior.floating,
                                         ));
                                       } else {
