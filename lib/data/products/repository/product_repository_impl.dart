@@ -185,7 +185,7 @@ class ProductRepositoryImpl extends ProductRepository {
   }
 
   @override
-  Future getproductbysearch(String prodName) async {
+  Future<List<ProductRegModel>> getproductbysearch(String prodName) async {
     try {
       String? token = await readtokenFromPref();
       final Response response = await Apiservice.get(

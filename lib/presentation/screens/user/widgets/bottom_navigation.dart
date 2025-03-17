@@ -9,6 +9,7 @@ import 'package:grocery_app/presentation/bloc/user_dashboard/user_dashboard_bloc
 import 'package:grocery_app/presentation/screens/user/cart/cart.dart';
 import 'package:grocery_app/presentation/screens/user/homeScreen/home_screen.dart';
 import 'package:grocery_app/presentation/screens/user/profile/user_profile.dart';
+import 'package:grocery_app/presentation/screens/user/search/product_search_screen.dart';
 import 'package:grocery_app/presentation/screens/user/search/searchscreen.dart';
 import 'package:grocery_app/presentation/screens/user/widgets/clipper.dart';
 
@@ -25,9 +26,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
   DateTime? lastPressed;
   final List<Widget> _screens = [
     HomeScreen(),
-    Searchscreen(
-      searchfromDashboard: false,
-    ),
+    // Searchscreen(
+    //   searchfromDashboard: false,
+    // ),
+    ProductSearchScreen(fromBottomNav: true,),
     Cart(),
     UserProfile()
   ];

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grocery_app/domain/cart/cart_model/cart_model.dart';
 import 'package:grocery_app/domain/products/model/product_reg_model.dart';
-import 'package:grocery_app/domain/products/model/products_model.dart';
 import 'package:grocery_app/main.dart';
 import 'package:grocery_app/presentation/bloc/cart/cart_bloc.dart';
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
@@ -13,8 +12,8 @@ import 'package:grocery_app/presentation/screens/user/product_description/produc
 
 class ProductGrid extends StatelessWidget {
   final List<ProductRegModel>? productdetail;
-  final bool? bySearch;
-  const ProductGrid({super.key, this.productdetail, this.bySearch});
+  // final bool? bySearch;
+  const ProductGrid({super.key, this.productdetail,});
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +47,8 @@ class ProductGrid extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    bySearch == true
-                        ?
+                    // bySearch == true
+                    //     ?
                         //for showing available and unailable image
                         productdetail![index].products.isAvailable == true
                             ? CachedNetworkImage(
@@ -105,21 +104,21 @@ class ProductGrid extends StatelessWidget {
                                     ),
                                   ),
                                 ],
-                              )
-                        : CachedNetworkImage(
-                            width: MediaQuery.of(context).size.width * 0.56,
-                            height: 200,
-                            imageUrl:
-                                productdetail![index].products.image ?? '',
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.image_not_supported_outlined,
-                              size: 40,
-                            ),
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => SpinKitPulse(
-                              color: Colors.white,
-                            ),
-                          ),
+                              ),
+                        // : CachedNetworkImage(
+                        //     width: MediaQuery.of(context).size.width * 0.56,
+                        //     height: 200,
+                        //     imageUrl:
+                        //         productdetail![index].products.image ?? '',
+                        //     errorWidget: (context, url, error) => Icon(
+                        //       Icons.image_not_supported_outlined,
+                        //       size: 40,
+                        //     ),
+                        //     fit: BoxFit.cover,
+                        //     placeholder: (context, url) => SpinKitPulse(
+                        //       color: Colors.white,
+                        //     ),
+                        //   ),
                     Row(
                       children: [
                         Expanded(

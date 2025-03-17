@@ -221,7 +221,7 @@ class _UserProfileState extends State<UserProfile> {
                           return Stack(children: [
                             CircleAvatar(
                               backgroundColor: Colors.grey.shade200,
-                              radius: 55,
+                              radius: 40,
                               backgroundImage: state.imageUrl != ''
                                   ? NetworkImage(state.imageUrl)
                                   : null,

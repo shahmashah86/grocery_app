@@ -36,7 +36,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           isLoading: true,
           isError: false,
           frombottomnav: true,
-          productList: currentState.productList,
           stockList: currentState.stockList,
           searchList: currentState.searchList,
           errormsg: '',
@@ -353,10 +352,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             searchList: currentstate.searchList,
             errormsg: '',
             frombottomnav: false));
-
+        
         final response =
             await productRegRepository.getproductbysearch(event.productName);
-        log(response.toString(), name: 'response');
+        log(response.toString(), name: 'product Search response');
 
         emit(currentstate.copyWith(
           isLoading: false,
@@ -378,7 +377,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           message: '',
           productList: currentstate.productList,
           stockList: currentstate.stockList,
-          searchList: currentstate.searchList,
+          searchList:  currentstate.productList,
           errormsg: e.toString(),
           frombottomnav: currentstate.frombottomnav,
         ));

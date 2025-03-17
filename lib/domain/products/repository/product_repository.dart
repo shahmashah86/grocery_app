@@ -9,6 +9,6 @@ abstract class ProductRepository {
   Future productDeletion(int id);
   Future uploadImage({int id,String productName,File? imageFile});
   Future  getInventoryList();
-  Future getproductbysearch(String prodName);
+  Future<List<ProductRegModel>> getproductbysearch(String prodName);
   Future getProduct(int productId);
 }

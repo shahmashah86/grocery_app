@@ -27,6 +27,7 @@ import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
+import 'package:grocery_app/presentation/bloc/product_search/product_search_bloc.dart';
 import 'package:grocery_app/presentation/bloc/user_dashboard/user_dashboard_bloc.dart';
 
 final getIt = GetIt.instance;
@@ -52,4 +53,7 @@ void setup() {
   getIt.registerSingleton<UserDashboardBloc>(
       UserDashboardBloc(getIt<DashboardRepo>()));
   getIt.registerSingleton<CartBloc>(CartBloc(getIt<CartRespository>()));
+    getIt.registerSingleton<ProductSearchBloc>(ProductSearchBloc(getIt<ProductRepository>()));
+  
+
 }

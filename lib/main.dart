@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/data/databases/entity/cart_entity.dart';
 
-
 import 'package:grocery_app/presentation/bloc/admin_dashboard/admin_dashboard_bloc.dart';
 
 import 'package:grocery_app/presentation/bloc/auth/auth_bloc.dart';
@@ -13,34 +12,35 @@ import 'package:grocery_app/presentation/bloc/category/category_bloc.dart';
 
 import 'package:grocery_app/presentation/bloc/product/product_bloc.dart';
 import 'package:grocery_app/presentation/bloc/orders/orders_bloc.dart';
+import 'package:grocery_app/presentation/bloc/product_search/product_search_bloc.dart';
 import 'package:grocery_app/presentation/bloc/user_dashboard/user_dashboard_bloc.dart';
 import 'package:grocery_app/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'injection/di.dart' as di;
-late final Box<CartEntity> cartBox ;
+
+late final Box<CartEntity> cartBox;
 
 void main() async {
   di.setup();
   WidgetsFlutterBinding.ensureInitialized();
-    await Hive.initFlutter();
+  await Hive.initFlutter();
   Hive.registerAdapter(CartEntityAdapter());
 // Box
-cartBox=  await Hive.openBox<CartEntity>("cartBox");
+  cartBox = await Hive.openBox<CartEntity>("cartBox");
 
-
-SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
-   runApp(MultiBlocProvider(providers: [
-    BlocProvider.value(value: di.getIt<AuthBloc>()),
-    BlocProvider.value(value: di.getIt<AdminDashboardBloc>()),
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MultiBlocProvider(providers: [
+      BlocProvider.value(value: di.getIt<AuthBloc>()),
+      BlocProvider.value(value: di.getIt<AdminDashboardBloc>()),
       BlocProvider.value(value: di.getIt<OrdersBloc>()),
       BlocProvider.value(value: di.getIt<CategoryBloc>()),
       BlocProvider.value(value: di.getIt<ProductBloc>()),
-         BlocProvider.value(value: di.getIt<UserDashboardBloc>()),
-                BlocProvider.value(value: di.getIt<CartBloc>()),
-  ], child: const MyApp()));
-
-});
- 
+      BlocProvider.value(value: di.getIt<UserDashboardBloc>()),
+      BlocProvider.value(value: di.getIt<CartBloc>()),
+        BlocProvider.value(value: di.getIt<ProductSearchBloc>()),
+    ], child: const MyApp()));
+  });
 }
 
 class MyApp extends StatefulWidget {
